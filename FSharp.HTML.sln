@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.HTML", "FSharp.HTML\FSharp.HTML.fsproj", "{8DDC6528-DF60-4052-B9A4-8E5EEEDC8030}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.HTML.Test", "FSharp.HTML.Test\FSharp.HTML.Test.fsproj", "{05156953-5895-42F9-92D4-60558354012C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8DDC6528-DF60-4052-B9A4-8E5EEEDC8030}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DDC6528-DF60-4052-B9A4-8E5EEEDC8030}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DDC6528-DF60-4052-B9A4-8E5EEEDC8030}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DDC6528-DF60-4052-B9A4-8E5EEEDC8030}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05156953-5895-42F9-92D4-60558354012C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05156953-5895-42F9-92D4-60558354012C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05156953-5895-42F9-92D4-60558354012C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05156953-5895-42F9-92D4-60558354012C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {760B61CC-7CFF-4932-8686-A12CB8A7E4A9}
+	EndGlobalSection
+EndGlobal

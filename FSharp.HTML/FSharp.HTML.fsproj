@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<Version>0.0.1</Version>
+		<Description>a parse for HTML5 based on the official W3C specification.</Description>
+		<Company>34696643@qq.com</Company>
+		<Authors>xp44m</Authors>
+		<Copyright>xp44mm</Copyright>
+		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/xp44mm/FSharp.HTML</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/xp44mm/FSharp.HTML</PackageProjectUrl>
+		<PackageReleaseNotes>define types</PackageReleaseNotes>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageTags>html; parser</PackageTags>
+		<PackageReadmeFile>readme.md</PackageReadmeFile>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Compile Include="TagNames.fs" />
+		<Compile Include="TextParser.fs" />
+		<Compile Include="HtmlAttribute.fs" />
+		<Compile Include="HtmlNode.fs" />
+		<Compile Include="HtmlDocument.fs" />
+		<Compile Include="HtmlToken.fs" />
+		<Compile Include="InsertionMode.fs" />
+		<Compile Include="UnicodeHelper.fs" />
+		<Compile Include="HtmlCharRefs.fs" />
+		<Compile Include="HtmlState.fs" />
+		<Compile Include="HtmlTokenizer.fs" />
+		<Compile Include="HtmlTokenUtils.fs" />
+		<None Include="semiNode.fslex" />
+		<Compile Include="SemiNodeDFA.fs" />
+		<None Include="html.fsyacc" />
+		<Compile Include="HtmlParseTable.fs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="readme.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="FslexFsyacc.Runtime" Version="1.2.0" />
+	</ItemGroup>
+
+</Project>

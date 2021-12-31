@@ -1,0 +1,17 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.HtmlTokenUtils
+type token = HtmlToken
+%}
+
+last="</area>"|"</base>"|"</br>"|"</col>"|"</embed>"|"</hr>"|"</img>"|"</input>"|"</link>"|"</meta>"|"</param>"|"</source>"|"</track>"|"</wbr>"|"<area>"|"<base>"|"<br>"|"<col>"|"<embed>"|"<hr>"|"<img>"|"<input>"|"<link>"|"<meta>"|"<param>"|"<source>"|"<track>"|"<wbr>"|CDATA|COMMENT|DOCTYPE|TAGEND|TAGSELFCLOSING|TEXT
+first="<area>"|"<base>"|"<br>"|"<col>"|"<embed>"|"<hr>"|"<img>"|"<input>"|"<link>"|"<meta>"|"<param>"|"<source>"|"<track>"|"<wbr>"|CDATA|COMMENT|TAGSELFCLOSING|TAGSTART|TEXT
+
+any = <last> | <first>
+
+%%
+
+<last> / <first> { [lexbuf.Head;SEMICOLON] }
+EOF              {[]}
+<any>            { lexbuf }

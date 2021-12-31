@@ -1,0 +1,94 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.HtmlTokenUtils
+%}
+
+document:
+    | DOCTYPE ";" nodes {s0,List.rev s2}
+    |             nodes {"",List.rev s0}
+
+nodes:
+    | nodes ";" node {s2::s0}
+    |           node {[s0]}
+    | (* empty *)    {[]}
+
+node:
+    | TEXT    {HtmlText s0}
+    | COMMENT {HtmlComment s0}
+    | CDATA   {HtmlCData s0}
+    | element {s0}
+
+element:
+    | TAGSELFCLOSING {
+        let name,attrs = s0
+        HtmlElement(name, attrs,[])
+    }
+    | TAGSTART nodes TAGEND {
+        let name,attrs = s0
+        if s2 = name then
+            HtmlElement(name, attrs,s1)
+        else failwithf "%A ... %s" s0 s2
+    }
+    | voidElement    {s0}
+
+voidElement:
+    | "<area>"               {HtmlElement(fst s0,snd s0, [])}
+    | "<area>" "</area>"     {HtmlElement(fst s0,snd s0, [])}
+    | "<base>"               {HtmlElement(fst s0,snd s0, [])}
+    | "<base>" "</base>"     {HtmlElement(fst s0,snd s0, [])}
+    | "<br>"                 {HtmlElement(fst s0,snd s0, [])}
+    | "<br>" "</br>"         {HtmlElement(fst s0,snd s0, [])}
+    | "<col>"                {HtmlElement(fst s0,snd s0, [])}
+    | "<col>" "</col>"       {HtmlElement(fst s0,snd s0, [])}
+    | "<embed>"              {HtmlElement(fst s0,snd s0, [])}
+    | "<embed>" "</embed>"   {HtmlElement(fst s0,snd s0, [])}
+    | "<hr>"                 {HtmlElement(fst s0,snd s0, [])}
+    | "<hr>" "</hr>"         {HtmlElement(fst s0,snd s0, [])}
+    | "<img>"                {HtmlElement(fst s0,snd s0, [])}
+    | "<img>" "</img>"       {HtmlElement(fst s0,snd s0, [])}
+    | "<input>"              {HtmlElement(fst s0,snd s0, [])}
+    | "<input>" "</input>"   {HtmlElement(fst s0,snd s0, [])}
+    | "<link>"               {HtmlElement(fst s0,snd s0, [])}
+    | "<link>" "</link>"     {HtmlElement(fst s0,snd s0, [])}
+    | "<meta>"               {HtmlElement(fst s0,snd s0, [])}
+    | "<meta>" "</meta>"     {HtmlElement(fst s0,snd s0, [])}
+    | "<param>"              {HtmlElement(fst s0,snd s0, [])}
+    | "<param>" "</param>"   {HtmlElement(fst s0,snd s0, [])}
+    | "<source>"             {HtmlElement(fst s0,snd s0, [])}
+    | "<source>" "</source>" {HtmlElement(fst s0,snd s0, [])}
+    | "<track>"              {HtmlElement(fst s0,snd s0, [])}
+    | "<track>" "</track>"   {HtmlElement(fst s0,snd s0, [])}
+    | "<wbr>"                {HtmlElement(fst s0,snd s0, [])}
+    | "<wbr>" "</wbr>"       {HtmlElement(fst s0,snd s0, [])}
+
+%%
+
+"<area>"  : "string*HtmlAttribute list"
+"<base>"  : "string*HtmlAttribute list"
+"<br>"    : "string*HtmlAttribute list"
+"<col>"   : "string*HtmlAttribute list"
+"<embed>" : "string*HtmlAttribute list"
+"<hr>"    : "string*HtmlAttribute list"
+"<img>"   : "string*HtmlAttribute list"
+"<input>" : "string*HtmlAttribute list"
+"<link>"  : "string*HtmlAttribute list"
+"<meta>"  : "string*HtmlAttribute list"
+"<param>" : "string*HtmlAttribute list"
+"<source>": "string*HtmlAttribute list"
+"<track>" : "string*HtmlAttribute list"
+"<wbr>"   : "string*HtmlAttribute list"
+
+TAGEND: "string"
+TAGSTART: "string*HtmlAttribute list"
+
+CDATA             : "string"
+COMMENT           : "string"
+DOCTYPE           : "string"
+TEXT              : "string"
+TAGSELFCLOSING    : "string*HtmlAttribute list"
+document          : "string*HtmlNode list"
+element           : "HtmlNode"
+node              : "HtmlNode"
+nodes             : "HtmlNode list"
+voidElement       : "HtmlNode"
