@@ -34,7 +34,7 @@ type SemiNodeDFATest(output:ITestOutputHelper) =
         let name = "SemiNodeDFA"
         let moduleName = $"FSharp.HTML.{name}"
 
-        let y = fslex.toFslexDFA()
+        let y = fslex.toFslexDFAFile()
         let result = y.generate(moduleName)
 
         let outputDir = Path.Combine(sourcePath, $"{name}.fs")
@@ -44,12 +44,9 @@ type SemiNodeDFATest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``2 - valid DFA``() =
         let fslex = FslexFile.parse text
-        let y = fslex.toFslexDFA()
+        let y = fslex.toFslexDFAFile()
 
-        Should.equal y.nextStates       SemiNodeDFA.nextStates
-        Should.equal y.lexemesFromFinal SemiNodeDFA.lexemesFromFinal
-        Should.equal y.universalFinals  SemiNodeDFA.universalFinals
-        Should.equal y.indicesFromFinal SemiNodeDFA.indicesFromFinal
-        Should.equal y.header           SemiNodeDFA.header
-        Should.equal y.semantics        SemiNodeDFA.semantics
+        Should.equal y.nextStates SemiNodeDFA.nextStates
+        Should.equal y.header     SemiNodeDFA.header
+        Should.equal y.rules      SemiNodeDFA.rules
 

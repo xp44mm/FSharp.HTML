@@ -44,7 +44,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="FslexFsyacc.Runtime" Version="1.2.0" />
+	  <PackageReference Include="FslexFsyacc.Runtime" Version="1.2.4" />
 	</ItemGroup>
 
 </Project>

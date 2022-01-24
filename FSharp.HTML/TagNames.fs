@@ -1,32 +1,5 @@
 ﻿module FSharp.HTML.TagNames
 
-let voidElements = set [
-  "area"
-  "base"
-  "br"
-  "col"
-  "embed"
-  "hr"
-  "img"
-  "input"
-  "link"
-  "meta"
-  "param"
-  "source"
-  "track"
-  "wbr"
-]
-
-let rawTextElements = set [
-    "script"
-    "style"
-    ]
-
-let escapableRawTextElements = set [
-    "textarea"
-    "title"
-    ]
-
 let htmlTags = set [
   "a"
   "abbr"
@@ -469,6 +442,70 @@ let mathmlTags = set [
 
 let allTagNames = 
     htmlTags + mathmlTags + svgTags
+
+let voidElements = set [
+  "area"
+  "base"
+  "br"
+  "col"
+  "embed"
+  "hr"
+  "img"
+  "input"
+  "link"
+  "meta"
+  "param"
+  "source"
+  "track"
+  "wbr"
+]
+
+let rawTextElements = set [
+    "script"
+    "style"
+    ]
+
+let escapableRawTextElements = set [
+    "textarea"
+    "title"
+    ]
+
+let optionalStartTags = [
+    "html"
+    "head"
+    "body"
+
+    "colgroup"
+    "tbody"
+
+]
+
+let optionalEndTags = [
+    "html"
+    "head"
+    "body"
+
+    "li"
+    "dt"
+    "dd"
+    "p"
+    "rt"
+    "rp"
+
+    "optgroup"
+    "option"
+
+    "colgroup"
+    "caption"
+    "thead"
+    "tbody"
+    "tfoot"
+    "tr"
+    "td"
+    "th"
+]
+
+
 
 let specialTagNames = 
     voidElements

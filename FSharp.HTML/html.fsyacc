@@ -5,8 +5,9 @@ open FSharp.HTML.HtmlTokenUtils
 %}
 
 document:
-    | DOCTYPE ";" nodes {s0,List.rev s2}
+    | DOCTYPE           {s0,[]}
     |             nodes {"",List.rev s0}
+    | DOCTYPE ";" nodes {s0,List.rev s2}
 
 nodes:
     | nodes ";" node {s2::s0}

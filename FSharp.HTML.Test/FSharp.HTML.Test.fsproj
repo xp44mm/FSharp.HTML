@@ -9,18 +9,20 @@
 
 	<ItemGroup>
 		<Compile Include="CodeGeneratorTest.fs" />
-		<Compile Include="HtmlParseTableTest.fs" />
 		<Compile Include="HtmlTokenizerTest.fs" />
-		<Compile Include="HtmlFsyaccTest.fs" />
+		<Compile Include="HtmlParseTableTest.fs" />
 		<Compile Include="SemiNodeDFATest.fs" />
+		
 		<Compile Include="WellFormedHtmlTest.fs" />
 		<Compile Include="OptionalTagsTest.fs" />
+		<Compile Include="HtmlFsyaccTest.fs" />
+		
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.xUnit" Version="1.2.1" />
-		<PackageReference Include="FslexFsyacc" Version="1.2.0" />
+		<PackageReference Include="FslexFsyacc" Version="1.2.4" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">

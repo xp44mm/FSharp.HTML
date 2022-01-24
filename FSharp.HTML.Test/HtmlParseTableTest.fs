@@ -23,6 +23,7 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
         if Regex.IsMatch(sym,@"^\w+$") then
             sym
         else Quotation.quote sym
+
     ///符号类
     let clazz symbols =
         symbols
@@ -33,36 +34,42 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
     let projPath = Path.Combine(solutionPath,@"FSharp.HTML")
     let filePath = Path.Combine(projPath, "html.fsyacc")
     let text = File.ReadAllText(filePath)
+    let rawFsyacc = FsyaccFile.parse text
+    let fsyacc = NormFsyaccFile.fromRaw rawFsyacc
 
     [<Fact>]
-    member _.``0-产生式冲突``() =
-        let fsyacc = FsyaccFile.parse text
-        let tbl = AmbiguousTable.create fsyacc.mainProductions
-        let pconflicts = ConflictFactory.productionConflict tbl.ambiguousTable
-        show pconflicts
-        Assert.True(pconflicts.IsEmpty)
+    member _.``1 - 显示冲突状态的冲突项目``() =
+        let collection =
+            AmbiguousCollection.create <| fsyacc.getMainProductions()
+        let conflicts =
+            collection.filterConflictedClosures()
+        show conflicts
+
+        //Should.equal y conflicts
 
     [<Fact>]
-    member _.``1-符号多用警告``() =
-        let fsyacc = FsyaccFile.parse text
-        let tbl = AmbiguousTable.create fsyacc.mainProductions
-        let warning = ConflictFactory.overloadsWarning tbl
-        //show warning
-        Assert.True(warning.IsEmpty)
+    member _.``2 - 汇总冲突的产生式``() =
+        let collection =
+            AmbiguousCollection.create <| fsyacc.getMainProductions()
+        let conflicts =
+            collection.filterConflictedClosures()
 
-    [<Fact>]
-    member _.``2-优先级冲突``() =
-        let fsyacc = FsyaccFile.parse text
-        let tbl = AmbiguousTable.create fsyacc.mainProductions
-        //show tbl.kernelProductions
-        let srconflicts = ConflictFactory.shiftReduceConflict tbl
-        //show srconflicts
-        Assert.True(srconflicts.IsEmpty)
+        let productions =
+            AmbiguousCollection.gatherProductions conflicts
+        // production -> %prec
+        let pprods =
+            ProductionUtils.precedenceOfProductions collection.grammar.terminals productions
+            |> List.ofArray
+        //优先级应该据此结果给出，不能少，也不应该多。
+        let y = [
+            ]
+
+        Should.equal y pprods
+
 
     [<Fact>]
     member _.``3 - print the template of type annotaitions``() =
-        let fsyacc = FsyaccFile.parse text
-        let grammar = Grammar.from fsyacc.mainProductions
+        let grammar = Grammar.from <| fsyacc.getMainProductions()
 
         let symbols = 
             grammar.symbols
@@ -81,8 +88,7 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
         let name = "HtmlParseTable"
         let moduleName = $"FSharp.HTML.{name}"
 
-        let fsyacc = FsyaccFile.parse text
-        let parseTbl = fsyacc.toFsyaccParseTable()
+        let parseTbl = fsyacc.toFsyaccParseTableFile()
         //解析表数据
         let fsharpCode = parseTbl.generate(moduleName)
         let outputDir = Path.Combine(projPath, $"{name}.fs")
@@ -90,32 +96,26 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
         File.WriteAllText(outputDir,fsharpCode)
         output.WriteLine("output path:"+outputDir)
 
-    [<Fact>]
-    member _.``6 - valid ParseTable``() =
-        let fsyacc = FsyaccFile.parse text
-        let t = fsyacc.toFsyaccParseTable()
-
-        Should.equal t.header        HtmlParseTable.header
-        Should.equal t.productions   HtmlParseTable.productions
-        Should.equal t.actions       HtmlParseTable.actions
-        Should.equal t.kernelSymbols HtmlParseTable.kernelSymbols
-        Should.equal t.semantics     HtmlParseTable.semantics
-        Should.equal t.declarations  HtmlParseTable.declarations
-
+    //[<Fact>]
+    //member _.``6 - valid ParseTable``() =
+    //    let t = fsyacc.toFsyaccParseTable()
+    //    Should.equal t.header        HtmlParseTable.header
+    //    Should.equal t.productions   HtmlParseTable.productions
+    //    Should.equal t.actions       HtmlParseTable.actions
+    //    Should.equal t.kernelSymbols HtmlParseTable.kernelSymbols
+    //    Should.equal t.semantics     HtmlParseTable.semantics
+    //    Should.equal t.declarations  HtmlParseTable.declarations
 
     [<Fact>]
     member _.``7 - list all tokens``() =
-        let fsyacc = FsyaccFile.parse text
-        let grammar = Grammar.from fsyacc.mainProductions        
+        let grammar = Grammar.from <| fsyacc.getMainProductions()     
         let tokens = 
             grammar.symbols - grammar.nonterminals
         output.WriteLine($"any={clazz tokens}")
 
     [<Fact>]
     member _.``8 - first or last token of node``() =
-        let fsyacc = FsyaccFile.parse text
-
-        let grammar = Grammar.from fsyacc.mainProductions
+        let grammar = Grammar.from <| fsyacc.getMainProductions()
         let last = grammar.lasts.["node"] |> Set.add "DOCTYPE"
         let first = grammar.firsts.["node"]
 
