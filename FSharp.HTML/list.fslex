@@ -1,0 +1,35 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.ListTokenUtils
+type token = HtmlToken
+%}
+
+utagselfclosing = TAGSELFCLOSING | ["<li/>" "<script/>" "<template/>"]
+
+utagstart = TAGSTART | ["<li>" "<ol>" "<ul>" "<menu>"]
+
+utagend = TAGEND | ["</ol>" "</ul>" "</menu>" "</li>" "</script>" "</template>"]
+
+any = DOCTYPE|COMMENT|TEXT|CDATA|EOF|
+      <utagselfclosing>|<utagstart>|<utagend>
+
+precede = [
+        "</script>" "<script/>"
+        "</template>" "<template/>"
+        "<ol>" "<ul>" "<menu>"
+        "</li>" "<li/>"
+        ]
+
+%%
+
+<precede> COMMENT* / ["<li>" "<li/>"] { lexbuf }
+<precede> COMMENT* / "</ol>"          { lexbuf }
+<precede> COMMENT* / "</ul>"          { lexbuf }
+<precede> COMMENT* / "</menu>"        { lexbuf }
+
+<any> / ["<li>" "<li/>"] { lexbuf @ [TagEnd "li"] }
+<any> / "</ol>"          { lexbuf @ [TagEnd "li"] }
+<any> / "</ul>"          { lexbuf @ [TagEnd "li"] }
+<any> / "</menu>"        { lexbuf @ [TagEnd "li"] }
+<any>                    { lexbuf }

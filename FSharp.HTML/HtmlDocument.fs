@@ -6,7 +6,7 @@ open FSharp.HTML
 open System.Runtime.CompilerServices
 
 /// Represents an HTML document
-[<StructuredFormatDisplay("{_Print}")>]
+//[<StructuredFormatDisplay("{_Print}")>]
 type HtmlDocument =
     | HtmlDocument of docType:string * elements:HtmlNode list
 
@@ -25,20 +25,20 @@ type HtmlDocument =
     static member New(children:seq<_>) =
         HtmlDocument("", List.ofSeq children)
 
-    override x.ToString() =
-        match x with
-        | HtmlDocument(docType, elements) ->
-            (if String.IsNullOrEmpty docType then "" else "<!DOCTYPE " + docType + ">" + Environment.NewLine)
-            +
-            (elements |> List.map (fun x -> x.ToString()) |> String.Concat)
+    //override x.ToString() =
+    //    match x with
+    //    | HtmlDocument(docType, elements) ->
+    //        (if String.IsNullOrEmpty docType then "" else "<!DOCTYPE " + docType + ">" + Environment.NewLine)
+    //        +
+    //        (elements |> List.map (fun x -> x.ToString()) |> String.Concat)
 
-    /// <exclude />
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    [<CompilerMessage("This method is intended for use in generated code only.", 10001, IsHidden=true, IsError=false)>]
-    member x._Print =
-        let str = x.ToString()
-        if str.Length > 512 then str.Substring(0, 509) + "..."
-        else str
+    ///// <exclude />
+    //[<EditorBrowsable(EditorBrowsableState.Never)>]
+    //[<CompilerMessage("This method is intended for use in generated code only.", 10001, IsHidden=true, IsError=false)>]
+    //member x._Print =
+    //    let str = x.ToString()
+    //    if str.Length > 512 then str.Substring(0, 509) + "..."
+    //    else str
 
 // --------------------------------------------------------------------------------------
 

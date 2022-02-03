@@ -24,7 +24,9 @@ module TextParser =
     type TextReader with
     
         member x.PeekChar() = x.Peek() |> char
+
         member x.ReadChar() = x.Read() |> char
+
         member x.ReadNChar(n) =
             let buffer = Array.zeroCreate n
             x.ReadBlock(buffer, 0, n) |> ignore
@@ -32,9 +34,9 @@ module TextParser =
     
     
 
-[<AutoOpen>]
-module Utils =
+//[<AutoOpen>]
+//module Utils =
 
-    let inline toLower (s:string) = s.ToLowerInvariant()
-    let inline getNameSet names = names |> Seq.map toLower |> Set.ofSeq
+//    let inline toLower (s:string) = s.ToLowerInvariant()
+//    let inline getNameSet names = names |> Seq.map toLower |> Set.ofSeq
 

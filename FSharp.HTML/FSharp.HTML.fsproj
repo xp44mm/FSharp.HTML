@@ -19,32 +19,70 @@
 
 	<ItemGroup>
 		<Compile Include="TagNames.fs" />
-		<Compile Include="TextParser.fs" />
 		<Compile Include="HtmlAttribute.fs" />
 		<Compile Include="HtmlNode.fs" />
 		<Compile Include="HtmlDocument.fs" />
 		<Compile Include="HtmlToken.fs" />
-		<Compile Include="InsertionMode.fs" />
-		<Compile Include="UnicodeHelper.fs" />
-		<Compile Include="HtmlCharRefs.fs" />
-		<Compile Include="HtmlState.fs" />
-		<Compile Include="HtmlTokenizer.fs" />
 		<Compile Include="HtmlTokenUtils.fs" />
+		<None Include="list.fslex" />
+		<Compile Include="ListTokenUtils.fs" />
+		<Compile Include="ListDFA.fs" />
+		<None Include="ruby.fslex" />
+		<Compile Include="RubyTokenUtils.fs" />
+		<Compile Include="RubyDFA.fs" />
+		<None Include="optgroup.fslex" />
+		<Compile Include="OptgroupTokenUtils.fs" />
+		<Compile Include="OptgroupDFA.fs" />
+		<None Include="option.fslex" />
+		<Compile Include="OptionTokenUtils.fs" />
+		<Compile Include="OptionDFA.fs" />
+		<None Include="colgroup.fslex" />
+		<Compile Include="ColgroupTokenUtils.fs" />
+		<Compile Include="ColgroupDFA.fs" />
+		<None Include="caption.fslex" />
+		<Compile Include="CaptionTokenUtils.fs" />
+		<Compile Include="CaptionDFA.fs" />
+		<Content Include="thead.fslex" />
+		<Compile Include="TheadTokenUtils.fs" />
+		<Compile Include="TheadDFA.fs" />
+		<None Include="tbody.fslex" />
+		<Compile Include="TbodyTokenUtils.fs" />
+		<Compile Include="TbodyDFA.fs" />
+		<None Include="tr.fslex" />
+		<Compile Include="TrTokenUtils.fs" />
+		<Compile Include="TrDFA.fs" />
+		<None Include="td.fslex" />
+		<Compile Include="TdTokenUtils.fs" />
+		<Compile Include="TdDFA.fs" />
+		<None Include="paragraph.fslex" />
+		<Compile Include="ParagraphTokenUtils.fs" />
+		<Compile Include="ParagraphDFA.fs" />
+		<None Include="dl.fslex" />
+		<Compile Include="DlTokenUtils.fs" />
+		<Compile Include="DlDFA.fs" />
 		<None Include="semiNode.fslex" />
 		<Compile Include="SemiNodeDFA.fs" />
 		<None Include="html.fsyacc" />
+		<Compile Include="HtmlFsyaccUtils.fs" />
 		<Compile Include="HtmlParseTable.fs" />
+		
+		<Compile Include="TextParser.fs" />
+		
+		<Compile Include="UnicodeHelper.fs" />
+		
+		<Compile Include="HtmlCharRefs.fs" />
+		<Compile Include="InsertionMode.fs" />
+		<Compile Include="HtmlState.fs" />
+
+		<Compile Include="HtmlTokenizer.fs" />
+		<None Include="readme.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="readme.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <PackageReference Include="FslexFsyacc.Runtime" Version="1.2.4" />
+		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.5" />
 	</ItemGroup>
 
 </Project>

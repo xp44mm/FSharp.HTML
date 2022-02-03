@@ -22,10 +22,26 @@ type OptionalTagsTest(output:ITestOutputHelper) =
         |> fun txt -> new StringReader(txt)
         |> HtmlTokenizer.tokenise
         |> List.map HtmlTokenUtils.adapt
+        |> ListDFA.analyze
+        |> Seq.concat
         |> SemiNodeDFA.analyze
         |> Seq.concat
         |> HtmlParseTable.parse
         //|> fun (tp,ls) -> HtmlDocument(tp,ls)
+
+    [<Fact>]
+    member _.``ListElementsWithoutListContainer``() =
+        let simpleHtml = @"<!DOCTYPE html><li>hello<li>world<ul>how<li>do</ul>you</body><!--do-->"
+        let result = parse simpleHtml
+        let expected =
+            //HtmlDocument.New
+                [ HtmlNode.NewElement
+                      ("ul",
+                       [ HtmlNode.NewElement("li", [ HtmlNode.NewElement("div")])
+                         HtmlNode.NewElement("li")]) ]
+        snd result |> Should.equal expected
+
+
     [<Fact>]
     member _.``Can handle unclosed divs inside lis correctly``() =
         let simpleHtml = "<ul><li><div></li><li></li></ul>"

@@ -1,0 +1,47 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.TheadTokenUtils
+type token = HtmlToken
+%}
+
+utagstart = [ 
+    "<table>" "<thead>" "<tbody>" "<tfoot>" 
+    ]
+
+utagend = [ 
+    "</table>" "</caption>" "</colgroup>" "</thead>" "</tbody>" "</tfoot>" 
+    ]
+
+utagselfclosing = [ 
+    "<caption/>" "<colgroup/>" "<thead/>" "<tbody/>" "<tfoot/>" 
+    ]
+
+any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
+    | TAGSELFCLOSING | <utagselfclosing> 
+    | TAGSTART | <utagstart> 
+    | TAGEND | <utagend>
+
+precede = [ 
+    "<table>" 
+    "</caption>" "<caption/>"
+    "</colgroup>" "<colgroup/>"
+     "</thead>" "<thead/>"
+     "</tbody>" "<tbody/>"
+     "</tfoot>" "<tfoot/>"
+    ]
+
+%%
+
+<precede> COMMENT*  / [ "<thead>" "<thead/>" ] { lexbuf }
+<precede> COMMENT*  / [ "<tbody>" "<tbody/>" ] { lexbuf }
+<precede> COMMENT*  / [ "<tfoot>" "<tfoot/>" ] { lexbuf }
+<precede> COMMENT*  / "</table>"               { lexbuf }
+
+<any> / [ "<thead>" "<thead/>" ] { lexbuf @ [TagEnd "thead|tbody|tfoot"] }
+<any> / [ "<tbody>" "<tbody/>" ] { lexbuf @ [TagEnd "thead|tbody|tfoot"] }
+<any> / [ "<tfoot>" "<tfoot/>" ] { lexbuf @ [TagEnd "thead|tbody|tfoot"] }
+<any> / "</table>"               { lexbuf @ [TagEnd "thead|tbody|tfoot"] }
+
+<any> { lexbuf }
+

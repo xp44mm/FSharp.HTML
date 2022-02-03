@@ -1,0 +1,28 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.DlTokenUtils
+type token = HtmlToken
+%}
+
+utagstart = [ "<dt>" "<dd>" "<div>" "<dl>" ] 
+
+utagend = [ "</dt>" "</dd>" "</dl>" "</div>" ]
+
+utagselfclosing = [ "<dt/>" "<dd/>" ]
+
+any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
+    | TAGSTART | <utagstart> 
+    | TAGEND | <utagend>
+    | TAGSELFCLOSING | <utagselfclosing> 
+
+content = COMMENT|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND
+
+follow = ["<dt>" "<dt/>" "<dd>" "<dd/>"]
+
+%%
+
+["<div>" "<dl>" "</dt>" "<dt/>" "</dd>" "<dd/>"] COMMENT* / <follow> { lexbuf }
+<any> / <follow>                       { lexbuf @ [TagEnd "dt|dd"] }
+["<dt>" "<dd>"] <content>* / ["</div>" "</dl>"] { lexbuf @ [TagEnd "dt|dd"] }
+<any>                                  { lexbuf }

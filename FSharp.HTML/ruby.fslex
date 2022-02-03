@@ -1,0 +1,33 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.RubyTokenUtils
+type token = HtmlToken
+%}
+
+content = COMMENT|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND
+
+follows = [ "</ruby>" 
+            "<rt>" "<rp>" "<ruby>"
+            "<rt/>" "<rp/>" "<ruby/>"]
+
+utagselfclosing = TAGSELFCLOSING | [ "<ruby/>" "<rt/>" "<rp/>"]
+
+utagstart = TAGSTART | [ "<rt>" "<rp>" "<ruby>" ]
+
+utagend = TAGEND | [ "</rt>" "</rp>" "</ruby>" ]
+
+any = DOCTYPE|COMMENT|TEXT|CDATA|<utagselfclosing>|
+      <utagstart>|<utagend>| EOF
+
+%%
+
+"<rt>" <content> * "</rt>"     { lexbuf }
+"<rt>" <content> * / <follows> { lexbuf @ [TagEnd "rt"] }
+
+"<rp>" <content> * "</rp>"     { lexbuf }
+"<rp>" <content> * / <follows> { lexbuf @ [TagEnd "rp"] }
+
+<any>                          { lexbuf }
+
+

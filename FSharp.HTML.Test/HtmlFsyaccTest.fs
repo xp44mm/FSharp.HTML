@@ -17,7 +17,13 @@ type HtmlFsyaccTest(output:ITestOutputHelper) =
         let rdr = new StringReader(inp)
         rdr
         |> HtmlTokenizer.tokenise
-        |> List.map HtmlTokenUtils.adapt
+        |> List.choose (HtmlTokenUtils.adapt>>HtmlTokenUtils.unifyVoidElement)
+
+        |> ListDFA.analyze
+        |> Seq.concat
+        |> SemiNodeDFA.analyze
+        |> Seq.concat
+
         |> HtmlParseTable.parse
 
     [<Fact>]

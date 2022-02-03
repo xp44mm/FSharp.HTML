@@ -5,27 +5,38 @@ open System
 /// Tokenises a stream into a sequence of HTML tokens.
 let tokenise reader =
     let state = HtmlState.Create reader
+
     let rec data (state:HtmlState) =
         match state.Peek() with
         | '<' ->
-            if state.ContentLength > 0
-            then state.Emit();
-            else state.Pop(); tagOpen state
-        | TextParser.EndOfFile _ -> state.Tokens := EOF :: !state.Tokens
+            if state.ContentLength > 0 then
+                state.Emit();
+            else 
+                state.Pop(); 
+                tagOpen state
+        | TextParser.EndOfFile _ -> 
+            state.Tokens := EOF :: !state.Tokens
         | '&' ->
-            if state.ContentLength > 0
-            then state.Emit();
+            if state.ContentLength > 0 then
+                state.Emit();
             else
                 state.InsertionMode := CharRefMode
                 charRef state
         | _ ->
             match !state.InsertionMode with
-            | DefaultMode -> state.Cons(); data state
-            | ScriptMode -> script state;
-            | CharRefMode -> charRef state
-            | DocTypeMode -> docType state
-            | CommentMode -> comment state
-            | CDATAMode -> data state
+            | DefaultMode -> 
+                state.Cons(); 
+                data state
+            | ScriptMode -> 
+                script state;
+            | CharRefMode -> 
+                charRef state
+            | DocTypeMode -> 
+                docType state
+            | CommentMode -> 
+                comment state
+            | CDATAMode -> 
+                data state
     and script state =
         match state.Peek() with
         | TextParser.EndOfFile _ -> data state
@@ -227,7 +238,9 @@ let tokenise reader =
             state.Pop();
             state.InsertionMode := DocTypeMode
             state.Emit()
-        | _ -> state.Cons(); docType state
+        | _ -> 
+            state.Cons(); 
+            docType state
     and comment state =
         match state.Peek() with
         | '-' -> state.Pop(); commentEndDash state;
@@ -363,9 +376,10 @@ let tokenise reader =
         | _ -> state.NewAttribute(); attributeName state
 
     let next = ref (state.Reader.Peek())
+
     while !next <> -1 do
-            data state
-            next := state.Reader.Peek()
+        data state
+        next := state.Reader.Peek()
 
     !state.Tokens |> List.rev
 

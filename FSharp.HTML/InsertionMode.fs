@@ -7,12 +7,13 @@ type InsertionMode =
     | CommentMode
     | DocTypeMode
     | CDATAMode
-    override x.ToString() =
-        match x with
-        | DefaultMode -> "default"
-        | ScriptMode -> "script"
-        | CharRefMode -> "charref"
-        | CommentMode -> "comment"
-        | DocTypeMode -> "doctype"
-        | CDATAMode -> "cdata"
+
+    //override x.ToString() =
+    //    match x with
+    //    | DefaultMode -> "default"
+    //    | ScriptMode -> "script"
+    //    | CharRefMode -> "charref"
+    //    | CommentMode -> "comment"
+    //    | DocTypeMode -> "doctype"
+    //    | CDATAMode -> "cdata"
 

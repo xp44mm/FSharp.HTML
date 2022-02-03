@@ -6,7 +6,7 @@ open System.Text
 open System.Runtime.CompilerServices
 
 /// Represents an HTML node. The names of elements are always normalized to lowercase
-[<StructuredFormatDisplay("{_Print}")>]
+//[<StructuredFormatDisplay("{_Print}")>]
 type HtmlNode =
     | HtmlElement of name:string * attributes:HtmlAttribute list * elements:HtmlNode list
     | HtmlText of content:string
@@ -26,7 +26,10 @@ type HtmlNode =
     /// <param name="name">The name of the element</param>
     /// <param name="attrs">The HtmlAttribute(s) of the element</param>
     static member NewElement(name:string, attrs:seq<_>) =
-        let attrs = attrs |> Seq.map HtmlAttribute.New |> Seq.toList
+        let attrs = 
+            attrs 
+            |> Seq.map(fun (n,v) -> HtmlAttribute(n,v) )
+            |> Seq.toList
         HtmlElement(name.ToLowerInvariant(), attrs, [])
 
     /// <summary>
@@ -45,7 +48,10 @@ type HtmlNode =
     /// <param name="attrs">The HtmlAttribute(s) of the element</param>
     /// <param name="children">The children elements of this element</param>
     static member NewElement(name:string, attrs:seq<_>, children:seq<_>) =
-        let attrs = attrs |> Seq.map HtmlAttribute.New |> Seq.toList
+        let attrs = 
+            attrs 
+            |> Seq.map (fun (n,v) -> HtmlAttribute(n,v) )
+            |> Seq.toList
         HtmlElement(name.ToLowerInvariant(), attrs, List.ofSeq children)
 
     /// <summary>
@@ -66,72 +72,72 @@ type HtmlNode =
     /// <param name="content">The actual content</param>
     static member NewCData content = HtmlCData(content)
 
-    override x.ToString() =
-        let isVoidElement =
-            let set =
-                [| "area"; "base"; "br"; "col"; "command"; "embed"; "hr"; "img"; "input"
-                   "keygen"; "link"; "meta"; "param"; "source"; "track"; "wbr" |]
-                |> Set.ofArray
-            fun name -> Set.contains name set
-        let rec serialize (sb:StringBuilder) indentation canAddNewLine html =
-            let append (str:string) = sb.Append str |> ignore
-            let appendEndTag name =
-                append "</"
-                append name
-                append ">"
-            let newLine plus =
-                sb.AppendLine() |> ignore
-                String(' ', indentation + plus) |> append
-            match html with
-            | HtmlElement(name, attributes, elements) ->
-                let onlyText = elements |> List.forall (function HtmlText _ -> true | _ -> false)
-                if canAddNewLine && not onlyText then
-                    newLine 0
-                append "<"
-                append name
-                for HtmlAttribute(name, value) in attributes do
-                    append " "
-                    append name
-                    append "=\""
-                    append value
-                    append "\""
-                if isVoidElement name then
-                    append " />"
-                elif elements.IsEmpty then
-                    append ">"
-                    appendEndTag name
-                else
-                    append ">"
-                    if not onlyText then
-                        newLine 2
-                    let mutable canAddNewLine = false
-                    for element in elements do
-                        serialize sb (indentation + 2) canAddNewLine element
-                        canAddNewLine <- true
-                    if not onlyText then
-                        newLine 0
-                    appendEndTag name
-            | HtmlText str -> append str
-            | HtmlComment str ->
-                    append "<!--"
-                    append str
-                    append "-->"
-            | HtmlCData str ->
-                    append "<![CDATA["
-                    append str
-                    append "]]>"
+    //override x.ToString() =
+    //    let isVoidElement =
+    //        let set =
+    //            [| "area"; "base"; "br"; "col"; "command"; "embed"; "hr"; "img"; "input"
+    //               "keygen"; "link"; "meta"; "param"; "source"; "track"; "wbr" |]
+    //            |> Set.ofArray
+    //        fun name -> Set.contains name set
+    //    let rec serialize (sb:StringBuilder) indentation canAddNewLine html =
+    //        let append (str:string) = sb.Append str |> ignore
+    //        let appendEndTag name =
+    //            append "</"
+    //            append name
+    //            append ">"
+    //        let newLine plus =
+    //            sb.AppendLine() |> ignore
+    //            String(' ', indentation + plus) |> append
+    //        match html with
+    //        | HtmlElement(name, attributes, elements) ->
+    //            let onlyText = elements |> List.forall (function HtmlText _ -> true | _ -> false)
+    //            if canAddNewLine && not onlyText then
+    //                newLine 0
+    //            append "<"
+    //            append name
+    //            for HtmlAttribute(name, value) in attributes do
+    //                append " "
+    //                append name
+    //                append "=\""
+    //                append value
+    //                append "\""
+    //            if isVoidElement name then
+    //                append " />"
+    //            elif elements.IsEmpty then
+    //                append ">"
+    //                appendEndTag name
+    //            else
+    //                append ">"
+    //                if not onlyText then
+    //                    newLine 2
+    //                let mutable canAddNewLine = false
+    //                for element in elements do
+    //                    serialize sb (indentation + 2) canAddNewLine element
+    //                    canAddNewLine <- true
+    //                if not onlyText then
+    //                    newLine 0
+    //                appendEndTag name
+    //        | HtmlText str -> append str
+    //        | HtmlComment str ->
+    //                append "<!--"
+    //                append str
+    //                append "-->"
+    //        | HtmlCData str ->
+    //                append "<![CDATA["
+    //                append str
+    //                append "]]>"
 
-        let sb = StringBuilder()
-        serialize sb 0 false x |> ignore
-        sb.ToString()
+    //    let sb = StringBuilder()
+    //    serialize sb 0 false x |> ignore
+    //    sb.ToString()
 
     /// <exclude />
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    [<CompilerMessage("This method is intended for use in generated code only.", 10001, IsHidden=true, IsError=false)>]
-    member x._Print =
-        let str = x.ToString()
-        if str.Length > 512 then str.Substring(0, 509) + "..."
-        else str
+    //[<EditorBrowsable(EditorBrowsableState.Never)>]
+    //[<CompilerMessage("This method is intended for use in generated code only.", 10001, IsHidden=true, IsError=false)>]
+    //member x._Print =
+    //    let str = x.ToString()
+    //    if str.Length > 512 then str.Substring(0, 509) + "..."
+    //    else str
 // --------------------------------------------------------------------------------------
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -150,8 +156,6 @@ module HtmlNode =
         | HtmlElement(elements = elements) -> elements
         | _ -> []
 
-
-
     /// Gets all of the attributes of this node
     let attributes n =
         match n with
@@ -163,8 +167,11 @@ module HtmlNode =
     /// </summary>
     /// <param name="name">The name of the attribute to return.</param>
     /// <param name="n">The given node</param>
-    let inline tryGetAttribute name n =
-        n |> attributes |> List.tryFind (HtmlAttribute.name >> ((=) (toLower name)))
+    let inline tryGetAttribute (name:string) n =
+        let name = name.ToLowerInvariant()
+        n 
+        |> attributes 
+        |> List.tryFind (function HtmlAttribute(nm,_) -> nm = name)
     
     /// <summary>
     /// Returns the attribute with the given name. If the
@@ -183,7 +190,11 @@ module HtmlNode =
     /// <param name="name">The name of the attribute to get the value from</param>
     /// <param name="n">The given node</param>
     let inline attributeValue name n = 
-        defaultArg (n |> tryGetAttribute name |> Option.map HtmlAttribute.value) ""
+        let x = 
+            n 
+            |> tryGetAttribute name 
+            |> Option.map (function HtmlAttribute(_,value) -> value)
+        defaultArg x ""
 
     /// <summary>
     /// Returns true if the current node has an attribute that
@@ -192,9 +203,11 @@ module HtmlNode =
     /// <param name="name">The name of the attribute</param>
     /// <param name="value">The value of the attribute</param>
     /// <param name="n">The given html node</param>
-    let inline hasAttribute name value n = 
+    let inline hasAttribute (name:string) (value:string) n = 
         match tryGetAttribute name n with
-        | Some attr -> toLower (HtmlAttribute.value attr) = toLower value
+        | Some (HtmlAttribute(_,v)) -> 
+            let x = v.ToLowerInvariant()
+            x = value.ToLowerInvariant()
         | None -> false
 
 // --------------------------------------------------------------------------------------

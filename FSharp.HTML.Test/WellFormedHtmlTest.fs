@@ -27,6 +27,8 @@ type WellFormedHtmlTest(output:ITestOutputHelper) =
         |> fun txt -> new StringReader(txt)
         |> HtmlTokenizer.tokenise
         |> List.map HtmlTokenUtils.adapt
+        |> ListDFA.analyze
+        |> Seq.concat
         |> SemiNodeDFA.analyze
         |> Seq.concat
         |> HtmlParseTable.parse
@@ -85,8 +87,8 @@ type WellFormedHtmlTest(output:ITestOutputHelper) =
         let node = parse html |> snd |> List.head
         let expected =
             [
-                HtmlAttribute.New("itemscope", "")
-                HtmlAttribute.New("itemtype", "http://schema.org/Place")
+                HtmlAttribute("itemscope", "")
+                HtmlAttribute("itemtype", "http://schema.org/Place")
             ]
         let result =
             match node with
@@ -100,8 +102,8 @@ type WellFormedHtmlTest(output:ITestOutputHelper) =
         let node = parse html |> snd |> List.head
         let expected =
             [
-                HtmlAttribute.New("class", "foo")
-                HtmlAttribute.New("style", "font-size: 0.7em")
+                HtmlAttribute("class", "foo")
+                HtmlAttribute("style", "font-size: 0.7em")
             ]
         node.Attributes() |> Should.equal expected
 

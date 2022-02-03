@@ -1,0 +1,20 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.ParagraphTokenUtils
+type token = HtmlToken
+%}
+
+content = COMMENT|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND
+
+any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
+    | TAGSELFCLOSING 
+    | TAGSTART 
+    | TAGEND |["</p>" "<p>" "<p/>" BLOCKTAG] 
+
+%%
+
+"<p>" <content> * "</p>" { lexbuf }
+"<p>" <content> * / [ BLOCKTAG "<p>" "<p/>" EOF ]  { lexbuf @ [TagEnd "p"] }
+
+<any>  { lexbuf }

@@ -1,0 +1,28 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.OptionTokenUtils
+type token = HtmlToken
+%}
+
+utagselfclosing = [ "<option/>" "<optgroup/>" ]
+
+utagstart = [ "<option>" "<optgroup>" ]
+
+utagend = [ "</option>" "</optgroup>" "</select>" "</datalist>" ]
+
+follows = <utagselfclosing>|<utagstart>|[ "</optgroup>" "</select>" "</datalist>" ]
+
+any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
+    | TAGSELFCLOSING | <utagselfclosing> 
+    | TAGSTART | <utagstart> 
+    | TAGEND | <utagend>
+
+%%
+
+"<option>" TEXT * "</option>" { lexbuf }
+"<option>" TEXT * / <follows> { lexbuf @ [TagEnd "option"] }
+<any>                         { lexbuf }
+
+
+

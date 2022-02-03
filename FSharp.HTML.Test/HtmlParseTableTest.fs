@@ -96,15 +96,13 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
         File.WriteAllText(outputDir,fsharpCode)
         output.WriteLine("output path:"+outputDir)
 
-    //[<Fact>]
-    //member _.``6 - valid ParseTable``() =
-    //    let t = fsyacc.toFsyaccParseTable()
-    //    Should.equal t.header        HtmlParseTable.header
-    //    Should.equal t.productions   HtmlParseTable.productions
-    //    Should.equal t.actions       HtmlParseTable.actions
-    //    Should.equal t.kernelSymbols HtmlParseTable.kernelSymbols
-    //    Should.equal t.semantics     HtmlParseTable.semantics
-    //    Should.equal t.declarations  HtmlParseTable.declarations
+    [<Fact>]
+    member _.``6 - valid ParseTable``() =
+        let t = fsyacc.toFsyaccParseTableFile()
+        Should.equal t.header        HtmlParseTable.header
+        Should.equal t.actions       HtmlParseTable.actions
+        Should.equal t.rules HtmlParseTable.rules
+        Should.equal t.declarations  HtmlParseTable.declarations
 
     [<Fact>]
     member _.``7 - list all tokens``() =

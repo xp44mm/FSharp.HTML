@@ -505,7 +505,3 @@ let optionalEndTags = [
     "th"
 ]
 
-
-
-let specialTagNames = 
-    voidElements

@@ -1,0 +1,39 @@
+﻿%{
+open System
+open FSharp.HTML
+open FSharp.HTML.TdTokenUtils
+type token = HtmlToken
+%}
+
+utagstart = [ 
+    "<tr>" "<th>" "<td>"
+    ]
+
+utagend = [ 
+    "</tr>" "</th>" "</td>"
+    ]
+
+utagselfclosing = [ 
+    "<th/>" "<td/>"
+    ]
+
+any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
+    | TAGSELFCLOSING | <utagselfclosing> 
+    | TAGSTART | <utagstart> 
+    | TAGEND | <utagend>
+
+precede = [
+    "<tr>"
+    "</th>" "<th/>"
+    "</td>" "<td/>"
+    ]
+
+follow = ["<th>" "<th/>" "<td>" "<td/>" "</tr>" ]
+
+%%
+
+<precede> COMMENT* / <follow>  { lexbuf }
+<any>              / <follow>  { lexbuf @ [TagEnd "th|td"] }
+<any>                          { lexbuf }
+
+
