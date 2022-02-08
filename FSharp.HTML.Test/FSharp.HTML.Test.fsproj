@@ -9,8 +9,7 @@
 
 	<ItemGroup>
 		<Compile Include="CodeGeneratorTest.fs" />
-		<Compile Include="HtmlTokenizerTest.fs" />
-		<Compile Include="UnifyVoidElementTest.fs" />
+		<Compile Include="AttributeDFATest.fs" />
 		<Compile Include="HtmlParseTableTest.fs" />
 		<Compile Include="SemiNodeDFATest.fs" />
 		<Compile Include="ListDFATest.fs" />
@@ -25,12 +24,11 @@
 		<Compile Include="TdDFATest.fs" />
 		<Compile Include="ParagraphDFATest.fs" />
 		<Compile Include="DlDFATest.fs" />
-		
-		<Compile Include="WellFormedHtmlTest.fs" />
-		<Compile Include="OptionalTagsTest.fs" />
+		<Compile Include="UnifyVoidElementTest.fs" />
 		<Compile Include="HtmlFsyaccTest.fs" />
 		<Compile Include="ListAnalyzerTest.fs" />
-		<Compile Include="DlParserTest.fs" />
+		<Compile Include="DlAnalyzerTest.fs" />
+		
 		<Compile Include="RubyAnalyzerTest.fs" />
 		<Compile Include="OptgroupAnalyzerTest.fs" />
 		<Compile Include="OptionAnalyzerTest.fs" />
@@ -41,8 +39,17 @@
 		<Compile Include="TrAnalyzerTest.fs" />
 		<Compile Include="TdAnalyzerTest.fs" />
 		<Compile Include="ParagraphAnalyzerTest.fs" />
-		<Compile Include="DlAnalyzerTest.fs" />
 		
+		<Compile Include="TryTokenizerTest.fs" />
+		<Compile Include="TokenizerTest.fs" />
+		<Compile Include="HtmlTokenizerTest.fs" />
+		
+		<!--
+		
+		<Compile Include="WellFormedHtmlTest.fs" />
+		<Compile Include="OptionalTagsTest.fs" />
+		
+		-->
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 

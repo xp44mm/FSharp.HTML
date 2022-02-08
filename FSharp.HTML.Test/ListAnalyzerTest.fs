@@ -21,16 +21,17 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         text
 
     let parse txt =
-        //path
-        //|> readAllText
         txt
-        |> fun txt -> new StringReader(txt)
-        |> HtmlTokenizer.tokenise
-        |> List.map HtmlTokenUtils.adapt
+        |> Tokenizer.tokenize
+        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
+        // 临时措施
+        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
         |> ListDFA.analyze
         |> Seq.concat
+
         |> SemiNodeDFA.analyze
         |> Seq.concat
+
         |> HtmlParseTable.parse
         //|> fun (tp,ls) -> HtmlDocument(tp,ls)
 
@@ -38,11 +39,11 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
     member _.``ListElementsWithoutListContainer``() =
         let simpleHtml = @"<!DOCTYPE html><body><ul><li>hello<li>world</li><li>how<li>do</ul>you</body><!--do-->"
         let y = parse simpleHtml |> snd
-        let e = [HtmlElement("body",[],[HtmlElement("ul",[],[HtmlElement("li",[],[HtmlText "hello"]);HtmlElement("li",[],[HtmlText "world"]);HtmlElement("li",[],[HtmlText "how"]);HtmlElement("li",[],[HtmlText "do"])]);HtmlText "you"]);HtmlComment "do"]
+        let e = [HtmlElement("body",[],[HtmlElement("ul",[],[HtmlElement("li",[],[HtmlText "hello"]);HtmlElement("li",[],[HtmlText "world"]);HtmlElement("li",[],[HtmlText "how"]);HtmlElement("li",[],[HtmlText "do"])]);HtmlText "you"]);HtmlComment "<!--do-->"]
         Should.equal e y
     [<Fact>]
     member _.``MDN Demo``() =
-        let simpleHtml = """
+        let x = """
         <p>Apollo astronauts:</p>
         
         <ul>
@@ -52,10 +53,13 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
             <li>Edgar Mitchell</li>
             <li>Alan Shepard
         </ul>
-        
         """
-        let y = parse simpleHtml |> snd
+        //let z = Tokenizer.tokenize x |> Seq.toList
+        //show z
+
+        let y = parse x |> snd
         show y
+
         //let e = [HtmlElement("body",[],[HtmlText "you";HtmlElement("ul",[],[HtmlElement("li",[],[HtmlText "do"]);HtmlElement("li",[],[HtmlText "how"]);HtmlElement("li",[],[HtmlText "world"]);HtmlElement("li",[],[HtmlText "hello"])])]);HtmlComment "do"]
        
         //Should.equal e y
@@ -74,11 +78,12 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``MDN menu``() =
         let simpleHtml = """
-<menu>
-<li><button onclick="copy()">Copy</button>
-<li><button onclick="cut()">Cut</button></li>
-<li><button onclick="paste()">Paste</button>
-</menu>        """
+        <menu>
+        <li><button onclick="copy()">Copy</button>
+        <li><button onclick="cut()">Cut</button></li>
+        <li><button onclick="paste()">Paste</button>
+        </menu>        
+        """
         let y = parse simpleHtml |> snd
         show y
 

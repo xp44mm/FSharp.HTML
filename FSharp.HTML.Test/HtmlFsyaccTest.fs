@@ -14,13 +14,13 @@ type HtmlFsyaccTest(output:ITestOutputHelper) =
         |> output.WriteLine
 
     let parse inp =
-        let rdr = new StringReader(inp)
-        rdr
-        |> HtmlTokenizer.tokenise
-        |> List.choose (HtmlTokenUtils.adapt>>HtmlTokenUtils.unifyVoidElement)
+        inp
+        |> Tokenizer.tokenize
+        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
 
         |> ListDFA.analyze
         |> Seq.concat
+
         |> SemiNodeDFA.analyze
         |> Seq.concat
 

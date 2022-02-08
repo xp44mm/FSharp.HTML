@@ -17,9 +17,10 @@ type OptgroupAnalyzerTest(output:ITestOutputHelper) =
 
     let parse txt =
         txt
-        |> fun txt -> new StringReader(txt)
-        |> HtmlTokenizer.tokenise
-        |> List.map HtmlTokenUtils.adapt
+        |> Tokenizer.tokenize
+        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
+        // 临时措施
+        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
 
         |> OptgroupDFA.analyze
         |> Seq.concat

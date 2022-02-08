@@ -17,9 +17,10 @@ type ParagraphAnalyzerTest(output:ITestOutputHelper) =
 
     let evade txt =
         txt
-        |> fun txt -> new StringReader(txt)
-        |> HtmlTokenizer.tokenise
-        |> List.choose (HtmlTokenUtils.adapt>>HtmlTokenUtils.unifyVoidElement)
+        |> Tokenizer.tokenize
+        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
+        // 临时措施
+        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
 
         |> ParagraphDFA.analyze
         |> Seq.concat
@@ -63,9 +64,10 @@ type ParagraphAnalyzerTest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``basis``() =
         let x = """
+<div>
 <p>Geckos are a group.
-
 <p>Some species live in houses.
+</div>
 """
         //let mutable ls = ResizeArray()
         //try

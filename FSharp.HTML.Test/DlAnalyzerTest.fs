@@ -17,12 +17,17 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
 
     let evade txt =
         txt
-        |> fun txt -> new StringReader(txt)
-        |> HtmlTokenizer.tokenise
-        |> List.choose (HtmlTokenUtils.adapt>>HtmlTokenUtils.unifyVoidElement)
+        |> Tokenizer.tokenize
+        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
+        // 临时措施
+        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
+
 
         |> DlDFA.analyze
         |> Seq.concat
+
+        //|> ListDFA.analyze
+        //|> Seq.concat
 
 
     let parse txt =
@@ -31,7 +36,9 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
 
         |> SemiNodeDFA.analyze
         |> Seq.concat
+
         |> HtmlParseTable.parse
+
 
     [<Fact>]
     member _.``well formed``() =
@@ -158,3 +165,12 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
 
         //Should.equal e y
 
+    [<Fact>]
+    member _.``ListElementsWithoutListContainer``() =
+        let simpleHtml = """<!DOCTYPE html><body><dl>
+            <dt>hello<dd>world</dd><dt>how<dd>do</dl>you</body><!--do-->
+            """
+        let y = parse simpleHtml |> snd
+        show y
+        let e = [HtmlElement("body",[],[HtmlElement("dl",[],[HtmlElement("dt",[],[HtmlText "hello"]);HtmlElement("dd",[],[HtmlText "world"]);HtmlElement("dt",[],[HtmlText "how"]);HtmlElement("dd",[],[HtmlText "do"])]);HtmlText "you"]);HtmlComment "<!--do-->"]
+        Should.equal e y

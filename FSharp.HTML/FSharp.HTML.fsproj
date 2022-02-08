@@ -65,16 +65,19 @@
 		<None Include="html.fsyacc" />
 		<Compile Include="HtmlFsyaccUtils.fs" />
 		<Compile Include="HtmlParseTable.fs" />
-		
-		<Compile Include="TextParser.fs" />
-		
+		<Compile Include="TryTokenizer.fs" />
+		<None Include="attribute.fslex" />
+		<Compile Include="AttributeDFA.fs" />
+		<Compile Include="Consumption.fs" />
+		<Compile Include="Tokenizer.fs" />
 		<Compile Include="UnicodeHelper.fs" />
-		
 		<Compile Include="HtmlCharRefs.fs" />
+		
+		<!--<Compile Include="TextParser.fs" />
 		<Compile Include="InsertionMode.fs" />
 		<Compile Include="HtmlState.fs" />
-
-		<Compile Include="HtmlTokenizer.fs" />
+		<Compile Include="HtmlTokenizer.fs" />-->
+		
 		<None Include="readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>

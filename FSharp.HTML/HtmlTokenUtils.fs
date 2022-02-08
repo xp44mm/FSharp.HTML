@@ -1,11 +1,11 @@
 ﻿module FSharp.HTML.HtmlTokenUtils
 open FSharp.Literals
 
-let adapt (token:HtmlToken) =
-    match token with
-    | Tag (true ,name,attrs) -> TagSelfClosing(name,attrs)
-    | Tag (false,name,attrs) -> TagStart(name,attrs)
-    | _ -> token
+//let adapt (token:HtmlToken) =
+//    match token with
+//    | Tag (true ,name,attrs) -> TagSelfClosing(name,attrs)
+//    | Tag (false,name,attrs) -> TagStart(name,attrs)
+//    | _ -> token
 
 let unifyVoidElement (token:HtmlToken) =
     match token with

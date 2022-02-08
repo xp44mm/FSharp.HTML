@@ -2240,7 +2240,7 @@ module HtmlCharRefs =
           "&zwnj;", "\u200C";
         |] |> Map.ofArray
 
-    let (|Number|Lookup|) (orig:string) =
+    let private (|Number|Lookup|) (orig:string) =
         let s = orig.TrimEnd([|';'|])
         if s.Length > 2
         then

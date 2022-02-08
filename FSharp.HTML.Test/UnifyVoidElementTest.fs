@@ -15,10 +15,9 @@ type UnifyVoidElementTest(output:ITestOutputHelper) =
 
     let evade txt =
         txt
-        |> fun txt -> new StringReader(txt)
-        |> HtmlTokenizer.tokenise
-        |> List.choose (HtmlTokenUtils.adapt>>HtmlTokenUtils.unifyVoidElement)
-
+        |> Tokenizer.tokenize
+        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
+        |> Seq.toList
     [<Fact>]
     member _.``self closing``() =
         let x = "<br/>"
