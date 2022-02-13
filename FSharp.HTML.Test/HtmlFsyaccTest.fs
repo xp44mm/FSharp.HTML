@@ -12,11 +12,12 @@ type HtmlFsyaccTest(output:ITestOutputHelper) =
         res
         |> Render.stringify
         |> output.WriteLine
-
-    let parse inp =
-        inp
+    let parse txt =
+        txt
         |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
+        |> HtmlTokenUtils.preamble
+        |> snd
+        |> Seq.choose HtmlTokenUtils.unifyVoidElement
 
         |> ListDFA.analyze
         |> Seq.concat
@@ -26,13 +27,6 @@ type HtmlFsyaccTest(output:ITestOutputHelper) =
 
         |> HtmlParseTable.parse
 
-    [<Fact>]
-    member _.``The DOCTYPE``() =
-        let x = "<!DOCTYPE html>"
-        let y = parse(x)
-        show y
-        //Should.equal y [DocType " html"]
-        
     [<Fact>]
     member _.``Void elements``() =
         let x = """<br rel="author license" href="/about">"""

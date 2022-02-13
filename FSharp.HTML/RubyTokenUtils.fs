@@ -1,10 +1,9 @@
 ﻿module FSharp.HTML.RubyTokenUtils
 
-open FSharp.Literals
-
-let rubyTagNames = set [
-    "rt";"rp";"ruby"
-]
+let endTag = set["rp";"rt";"ruby"]
+let selfClosingTag = set["rp";"rt";"ruby"]
+let startTag = set["rp";"rt";"ruby"]
+let id = set["COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
 
 let getTag (token:HtmlToken) =
     match token with
@@ -12,17 +11,19 @@ let getTag (token:HtmlToken) =
     | Comment _ -> "COMMENT"
     | Text _ -> "TEXT"
     | CData _ -> "CDATA"
-    | TagSelfClosing _ -> "TAGSELFCLOSING"
+    | TagSelfClosing (name,_) -> 
+        if selfClosingTag.Contains name then
+            $"<{name}/>"
+        else "TAGSELFCLOSING"
     | TagStart (name,_) -> 
-        if name = "rt" || name = "rp" then
+        if startTag.Contains name then
             $"<{name}>"
         else "TAGSTART"
-    | TagEnd name ->  
-        if rubyTagNames.Contains name then
+    | TagEnd name ->
+        if endTag.Contains name then
             $"</{name}>"
         else "TAGEND"
+
     | EOF -> "EOF"
     | SEMICOLON -> ";"
-
-    | _ -> failwith (Literal.stringify token)
 

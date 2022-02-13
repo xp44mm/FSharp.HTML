@@ -15,23 +15,49 @@ type ColgroupAnalyzerTest(output:ITestOutputHelper) =
         |> Render.stringify
         |> output.WriteLine
 
-    let evade txt =
+    let parse txt =
         txt
         |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
-        // 临时措施
-        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
+        |> HtmlTokenUtils.preamble
+        |> snd
+        |> Seq.choose HtmlTokenUtils.unifyVoidElement
+
+        |> ListDFA.analyze
+        |> Seq.concat
+
+        |> RubyDFA.analyze
+        |> Seq.concat
+
+        |> OptgroupDFA.analyze
+        |> Seq.concat
+
+        |> OptionDFA.analyze
+        |> Seq.concat
 
         |> ColgroupDFA.analyze
         |> Seq.concat
 
-    let parse txt =
-        txt
-        |> evade
-
         |> SemiNodeDFA.analyze
         |> Seq.concat
+
         |> HtmlParseTable.parse
+
+    [<Fact>]
+    member _.``well-formed``() =
+        let x = """
+<table>
+<caption>Superheros and sidekicks</caption>
+<colgroup>
+    <col>
+    <col span="2" class="batman">
+    <col span="2" class="flash">
+    </colgroup>
+<tr>
+</tr>
+</table>
+"""
+        let y = parse x
+        show y
 
     [<Fact>]
     member _.``basis``() =
@@ -42,11 +68,8 @@ type ColgroupAnalyzerTest(output:ITestOutputHelper) =
     <col span="2" class="batman">
     <col span="2" class="flash">
 <tr>
-    <td> </td>
 </tr>
 </table>
 """
-        let y = parse x |> snd
+        let y = parse x
         show y
-        let e = [HtmlElement("table",[],[HtmlElement("caption",[],[HtmlText "Superheros and sidekicks"]);HtmlElement("colgroup",[],[HtmlElement("col",[],[]);HtmlElement("col",[HtmlAttribute("span","2");HtmlAttribute("class","batman")],[]);HtmlElement("col",[HtmlAttribute("span","2");HtmlAttribute("class","flash")],[])]);HtmlElement("tr",[],[HtmlElement("td",[],[])])])]
-        Should.equal e y

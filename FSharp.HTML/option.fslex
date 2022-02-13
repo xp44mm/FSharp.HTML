@@ -5,23 +5,23 @@ open FSharp.HTML.OptionTokenUtils
 type token = HtmlToken
 %}
 
-utagselfclosing = [ "<option/>" "<optgroup/>" ]
+follow = [ 
+	"<option>" "<option/>"
+	"<optgroup>" "<optgroup/>" "</optgroup>" 
+	"</select>" 
+	"</datalist>" 
+	]
 
-utagstart = [ "<option>" "<optgroup>" ]
-
-utagend = [ "</option>" "</optgroup>" "</select>" "</datalist>" ]
-
-follows = <utagselfclosing>|<utagstart>|[ "</optgroup>" "</select>" "</datalist>" ]
-
-any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
-    | TAGSELFCLOSING | <utagselfclosing> 
-    | TAGSTART | <utagstart> 
-    | TAGEND | <utagend>
+any = COMMENT|TEXT|CDATA|EOF
+    | TAGSTART
+    | TAGEND
+    | TAGSELFCLOSING
+    | <follow> | "</option>"
 
 %%
 
 "<option>" TEXT * "</option>" { lexbuf }
-"<option>" TEXT * / <follows> { lexbuf @ [TagEnd "option"] }
+"<option>" TEXT * / <follow>  { lexbuf @ [TagEnd "option"] }
 <any>                         { lexbuf }
 
 

@@ -172,5 +172,5 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
             """
         let y = parse simpleHtml |> snd
         show y
-        let e = [HtmlElement("body",[],[HtmlElement("dl",[],[HtmlElement("dt",[],[HtmlText "hello"]);HtmlElement("dd",[],[HtmlText "world"]);HtmlElement("dt",[],[HtmlText "how"]);HtmlElement("dd",[],[HtmlText "do"])]);HtmlText "you"]);HtmlComment "<!--do-->"]
+        let e = [HtmlElement("body",[],[HtmlElement("dl",[],[HtmlElement("dt",[],[HtmlText "hello"]);HtmlElement("dd",[],[HtmlText "world"]);HtmlElement("dt",[],[HtmlText "how"]);HtmlElement("dd",[],[HtmlText "do"])]);HtmlText "you"]);HtmlComment "do"]
         Should.equal e y

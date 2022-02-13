@@ -1,6 +1,6 @@
 module FSharp.HTML.SemiNodeDFA
 let header = "open System\r\nopen FSharp.HTML\r\nopen FSharp.HTML.HtmlTokenUtils\r\ntype token = HtmlToken"
-let nextStates = [|0u,[|"CDATA",1u;"COMMENT",1u;"DOCTYPE",1u;"EOF",3u;"TAGEND",1u;"TAGSELFCLOSING",1u;"TAGSTART",4u;"TEXT",1u|];1u,[|"CDATA",2u;"COMMENT",2u;"TAGSELFCLOSING",2u;"TAGSTART",2u;"TEXT",2u|]|]
+let nextStates = [|0u,[|"CDATA",1u;"COMMENT",1u;"EOF",3u;"TAGEND",1u;"TAGSELFCLOSING",1u;"TAGSTART",4u;"TEXT",1u|];1u,[|"CDATA",2u;"COMMENT",2u;"TAGSELFCLOSING",2u;"TAGSTART",2u;"TEXT",2u|]|]
 let rules:(uint32[]*uint32[]*string)[] = [|[|2u|],[|1u|],"[lexbuf.Head;SEMICOLON]";[|3u|],[||],"[]";[|1u;4u|],[||],"lexbuf"|]
 open System
 open FSharp.HTML

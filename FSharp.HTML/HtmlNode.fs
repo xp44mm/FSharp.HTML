@@ -1,8 +1,5 @@
 ﻿namespace FSharp.HTML
 
-open System
-open System.ComponentModel
-open System.Text
 open System.Runtime.CompilerServices
 
 /// Represents an HTML node. The names of elements are always normalized to lowercase

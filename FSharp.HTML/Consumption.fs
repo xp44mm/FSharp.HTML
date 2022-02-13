@@ -47,6 +47,7 @@ let consumeNestedCss (inp:string) =
             Regex("^[^/\"<]+") |> tryRegexMatch
             tryMultiLineComment
             tryDoubleStringLiteral
+            fun inp -> Some(inp.[0..0],inp.[1..])
         |]
         |> Array.map(fun f -> 
             f 
@@ -77,7 +78,6 @@ let consumeNestedCss (inp:string) =
     loop "" inp
 
 let consumeNestedJavaScript (inp:string) =
-
     let continueTries = 
         [|
             Regex("^[^\"'`/<]+") |> tryRegexMatch
@@ -87,6 +87,7 @@ let consumeNestedJavaScript (inp:string) =
             trySingleLineComment
             tryMultiLineComment
             // todo: regular expression literal
+            fun inp -> Some(inp.[0..0],inp.[1..])
         |]
         |> Array.map(fun f -> 
             f 

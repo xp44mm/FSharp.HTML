@@ -505,3 +505,6 @@ let optionalEndTags = [
     "th"
 ]
 
+let phrasing = set [
+    "a"; "em"; "strong"; "small"; "mark"; "abbr"; "dfn"; "i"; "b"; "s"; "u"; "code"; "var"; "samp"; "kbd"; "sup"; "sub"; "q"; "cite"; "span"; "bdo"; "bdi"; "br"; "wbr"; "ins"; "del"; "img"; "embed"; "object"; "iframe"; "map"; "area"; "script"; "noscript"; "ruby"; "video"; "audio"; "input"; "textarea"; "select"; "button"; "label"; "output"; "datalist"; "keygen"; "progress"; "command"; "canvas"; "time"; "meter";
+]

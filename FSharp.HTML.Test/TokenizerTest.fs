@@ -27,7 +27,7 @@ type TokenizerTest(output:ITestOutputHelper) =
         let x = "<!DOCTYPE html>"
         let y = Tokenizer.tokenize x |> Seq.exactlyOne
         show y
-        let e = DocType x
+        let e = DocType "html"
         Should.equal y e
 
     [<Fact>]
@@ -36,7 +36,7 @@ type TokenizerTest(output:ITestOutputHelper) =
 
         let y = Tokenizer.tokenize x |> Seq.exactlyOne
         show y
-        let e = Comment x
+        let e = Comment " where is this comment in the DOM? "
         Should.equal y e
 
     [<Fact>]
@@ -45,7 +45,7 @@ type TokenizerTest(output:ITestOutputHelper) =
 
         let y = Tokenizer.tokenize x |> Seq.exactlyOne
         show y
-        let e = CData x
+        let e = CData "x<y"
         Should.equal y e
 
     [<Fact>]

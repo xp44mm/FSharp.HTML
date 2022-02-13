@@ -5,21 +5,15 @@ open FSharp.HTML.OptgroupTokenUtils
 type token = HtmlToken
 %}
 
-utagselfclosing = TAGSELFCLOSING | "<optgroup/>"
-utagstart = TAGSTART | "<optgroup>" 
-utagend = TAGEND | [ "</optgroup>" "</select>" ]
+content = CDATA|COMMENT|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND
+follow = [ "<optgroup>" "<optgroup/>" "</select>" ]
 
-content = COMMENT|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND
-
-follows = [ "<optgroup>" "<optgroup/>" "</select>" ]
-
-any = DOCTYPE|COMMENT|TEXT|CDATA|EOF|
-      <utagselfclosing>|<utagstart>|<utagend>
+any = <content>|<follow>|EOF
 
 %%
 
 "<optgroup>" <content> * "</optgroup>" { lexbuf }
-"<optgroup>" <content> * / <follows>   { lexbuf @ [TagEnd "optgroup"] }
+"<optgroup>" <content> * / <follow>   { lexbuf @ [TagEnd "optgroup"] }
 <any>                                  { lexbuf }
 
 

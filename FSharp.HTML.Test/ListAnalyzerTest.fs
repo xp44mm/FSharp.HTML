@@ -15,17 +15,13 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         |> Render.stringify
         |> output.WriteLine
 
-    let readAllText path =
-        let path = Path.Combine(__SOURCE_DIRECTORY__, path)
-        let text = File.ReadAllText(path)
-        text
-
     let parse txt =
         txt
         |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
-        // 临时措施
-        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
+        |> HtmlTokenUtils.preamble
+        |> snd
+        |> Seq.choose HtmlTokenUtils.unifyVoidElement
+
         |> ListDFA.analyze
         |> Seq.concat
 
@@ -33,19 +29,15 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         |> Seq.concat
 
         |> HtmlParseTable.parse
-        //|> fun (tp,ls) -> HtmlDocument(tp,ls)
 
     [<Fact>]
     member _.``ListElementsWithoutListContainer``() =
-        let simpleHtml = @"<!DOCTYPE html><body><ul><li>hello<li>world</li><li>how<li>do</ul>you</body><!--do-->"
-        let y = parse simpleHtml |> snd
-        let e = [HtmlElement("body",[],[HtmlElement("ul",[],[HtmlElement("li",[],[HtmlText "hello"]);HtmlElement("li",[],[HtmlText "world"]);HtmlElement("li",[],[HtmlText "how"]);HtmlElement("li",[],[HtmlText "do"])]);HtmlText "you"]);HtmlComment "<!--do-->"]
-        Should.equal e y
+        let x = @"<!DOCTYPE html><body><ul><li>hello<li>world</li><li>how<li>do</ul>you</body><!--do-->"
+        let y = parse x
+        show y
     [<Fact>]
     member _.``MDN Demo``() =
         let x = """
-        <p>Apollo astronauts:</p>
-        
         <ul>
             <li>Neil Armstrong</li>
             <li>Alan Bean</li>
@@ -57,7 +49,7 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         //let z = Tokenizer.tokenize x |> Seq.toList
         //show z
 
-        let y = parse x |> snd
+        let y = parse x
         show y
 
         //let e = [HtmlElement("body",[],[HtmlText "you";HtmlElement("ul",[],[HtmlElement("li",[],[HtmlText "do"]);HtmlElement("li",[],[HtmlText "how"]);HtmlElement("li",[],[HtmlText "world"]);HtmlElement("li",[],[HtmlText "hello"])])]);HtmlComment "do"]
@@ -72,7 +64,7 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         <li>third item
 </ol>
         """
-        let y = parse simpleHtml |> snd
+        let y = parse simpleHtml
         show y
 
     [<Fact>]
@@ -84,6 +76,6 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         <li><button onclick="paste()">Paste</button>
         </menu>        
         """
-        let y = parse simpleHtml |> snd
+        let y = parse simpleHtml
         show y
 

@@ -1,35 +1,34 @@
 ﻿module FSharp.HTML.ListTokenUtils
 
-open FSharp.Literals
-
-let listTagNames = set [
-    "li";"script";"template"
-    ]
-
-let parentTagNames = set [
-    "ol";"ul";"menu";
-    ]
+let id = set ["COMMENT";"WS"];
+let selfClosingTag = set ["li";"script";"template"];
+let startTag = set ["li";"menu";"ol";"ul"]
+let endTag = set ["li";"menu";"ol";"script";"template";"ul"];
 
 let getTag (token:HtmlToken) =
     match token with
     | DocType _ -> "DOCTYPE"
     | Comment _ -> "COMMENT"
-    | Text _ -> "TEXT"
+    | Text t -> 
+        if t.Trim() = "" then
+            "WS"
+        else "TEXT"
     | CData _ -> "CDATA"
     | TagSelfClosing (name,_) -> 
-        if listTagNames.Contains name then
+        if selfClosingTag.Contains name then
             $"<{name}/>"
         else "TAGSELFCLOSING"
     | TagStart (name,_) -> 
-        if name = "li" || parentTagNames.Contains name then
+        if startTag.Contains name then
             $"<{name}>"
         else "TAGSTART"
     | TagEnd name ->
-        if listTagNames.Contains name || parentTagNames.Contains name then
+        if endTag.Contains name then
             $"</{name}>"
         else "TAGEND"
+
     | EOF -> "EOF"
+
     | SEMICOLON -> ";"
 
-    | _ -> failwith (Literal.stringify token)
 

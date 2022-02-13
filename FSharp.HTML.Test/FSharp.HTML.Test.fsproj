@@ -24,45 +24,43 @@
 		<Compile Include="TdDFATest.fs" />
 		<Compile Include="ParagraphDFATest.fs" />
 		<Compile Include="DlDFATest.fs" />
+		
+		<Compile Include="TryTokenizerTest.fs" />
+		<Compile Include="TokenizerTest.fs" />
+		<Compile Include="HtmlTokenizerTest.fs" />
+		<Compile Include="HtmlTokenUtilsTest.fs" />
 		<Compile Include="UnifyVoidElementTest.fs" />
 		<Compile Include="HtmlFsyaccTest.fs" />
-		<Compile Include="ListAnalyzerTest.fs" />
-		<Compile Include="DlAnalyzerTest.fs" />
 		
+		<Compile Include="ListAnalyzerTest.fs" />
 		<Compile Include="RubyAnalyzerTest.fs" />
 		<Compile Include="OptgroupAnalyzerTest.fs" />
 		<Compile Include="OptionAnalyzerTest.fs" />
 		<Compile Include="ColgroupAnalyzerTest.fs" />
 		<Compile Include="CaptionAnalyzerTest.fs" />
+		
+		<!--
+		<Compile Include="DlAnalyzerTest.fs" />		
 		<Compile Include="TheadAnalyzerTest.fs" />
 		<Compile Include="TbodyAnalyzerTest.fs" />
 		<Compile Include="TrAnalyzerTest.fs" />
 		<Compile Include="TdAnalyzerTest.fs" />
 		<Compile Include="ParagraphAnalyzerTest.fs" />
+		<Compile Include="WellFormedHtmlTest.fs" />-->
 		
-		<Compile Include="TryTokenizerTest.fs" />
-		<Compile Include="TokenizerTest.fs" />
-		<Compile Include="HtmlTokenizerTest.fs" />
-		
-		<!--
-		
-		<Compile Include="WellFormedHtmlTest.fs" />
-		<Compile Include="OptionalTagsTest.fs" />
-		
-		-->
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.xUnit" Version="1.2.1" />
-		<PackageReference Include="FslexFsyacc" Version="1.2.5" />
+		<PackageReference Include="FslexFsyacc" Version="1.2.6" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="coverlet.collector" Version="3.1.1">
+		<PackageReference Include="coverlet.collector" Version="3.1.2">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -70,6 +68,10 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\FSharp.HTML\FSharp.HTML.fsproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="FSharp.Core" Version="6.0.3" />
 	</ItemGroup>
 
 </Project>

@@ -5,44 +5,24 @@ open FSharp.HTML.CaptionTokenUtils
 type token = HtmlToken
 %}
 
+content = COMMENT|TEXT|CDATA|TAGSELFCLOSING|TAGSTART|TAGEND
 
-utagselfclosing = [ 
-    "<table/>" 
-    "<caption/>" 
-    "<colgroup/>" 
-    "<thead/>" 
-    "<tbody/>" 
-    "<tfoot/>" 
-    "<tr/>" 
-    ]
+follow = [
+    "<table>" "</table>"  "<table/>" 
+    "<caption>"   "<caption/>" 
+    "<colgroup>"    "<colgroup/>" 
+    "<thead>"     "<thead/>" 
+    "<tbody>"    "<tbody/>" 
+    "<tfoot>"     "<tfoot/>" 
+    "<tr>"  "<tr/>" 
+]
 
-utagstart =  [ 
-    "<table>" 
-    "<caption>" 
-    "<colgroup>" 
-    "<thead>" 
-    "<tbody>" 
-    "<tfoot>" 
-    "<tr>" 
-    ]
-
-utagend = [ 
-    "</caption>"
-    "</table>"
-    ]
-
-follows = <utagselfclosing>|<utagstart>| "</table>"
-content = COMMENT|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND|CDATA
-
-any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
-    | TAGSELFCLOSING | <utagselfclosing> 
-    | TAGSTART | <utagstart> 
-    | TAGEND | <utagend>
+any = <content>|<follow>|EOF
 
 %%
 
 "<caption>" <content> * "</caption>" { lexbuf }
-"<caption>" <content> * / <follows>  { lexbuf @ [TagEnd "caption"] }
+"<caption>" <content> * / <follow>   { lexbuf @ [TagEnd "caption"] }
 
 <any>  { lexbuf }
 

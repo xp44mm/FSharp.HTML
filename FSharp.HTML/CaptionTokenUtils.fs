@@ -1,31 +1,9 @@
 ﻿module FSharp.HTML.CaptionTokenUtils
 
-open FSharp.Literals
-
-let cTagNames = set [
-    "table"
-    "caption"
-    "colgroup"
-    "thead"
-    "tbody"
-    "tfoot"
-    "tr"
-    ]
-
-let sTagNames = set [
-    "table"
-    "caption"
-    "colgroup"
-    "thead"
-    "tbody"
-    "tfoot"
-    "tr"
-    ]
-
-let eTagNames = set [
-    "table"
-    "caption"
-    ]
+let endTag = set["caption";"table"]
+let selfClosingTag = set["caption";"colgroup";"table";"tbody";"tfoot";"thead";"tr"]
+let startTag = set["caption";"colgroup";"table";"tbody";"tfoot";"thead";"tr"]
+let id = set["CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
 
 let getTag (token:HtmlToken) =
     match token with
@@ -34,19 +12,18 @@ let getTag (token:HtmlToken) =
     | Text _ -> "TEXT"
     | CData _ -> "CDATA"
     | TagSelfClosing (name,_) -> 
-        if cTagNames.Contains name then
+        if selfClosingTag.Contains name then
             $"<{name}/>"
         else "TAGSELFCLOSING"
     | TagStart (name,_) -> 
-        if sTagNames.Contains name then
+        if startTag.Contains name then
             $"<{name}>"
         else "TAGSTART"
-    | TagEnd name ->  
-        if eTagNames.Contains name then
+    | TagEnd name ->
+        if endTag.Contains name then
             $"</{name}>"
         else "TAGEND"
+
     | EOF -> "EOF"
     | SEMICOLON -> ";"
-
-    | _ -> failwith (Literal.stringify token)
 

@@ -4,15 +4,13 @@ open FSharp.HTML
 open FSharp.HTML.HtmlTokenUtils
 %}
 
-document:
-    | DOCTYPE           {s0,[]}
-    |             nodes {"",List.rev s0}
-    | DOCTYPE ";" nodes {s0,List.rev s2}
+children : 
+    | nodes       {List.rev s0}
+    | (* empty *) {[]}
 
 nodes:
     | nodes ";" node {s2::s0}
     |           node {[s0]}
-    | (* empty *)    {[]}
 
 node:
     | TEXT    {HtmlText s0}
@@ -25,24 +23,22 @@ element:
         let name,attrs = s0
         HtmlElement(name, attrs,[])
     }
-    | TAGSTART nodes TAGEND {
+    | TAGSTART children TAGEND {
         let name,attrs = s0
         let el = HtmlFsyaccUtils.htmlNode name s2
-        el attrs (List.rev s1)
+        el attrs s1
     }
 
 %%
 
-TAGSTART: "string*HtmlAttribute list"
-TAGEND: "string"
-TAGSELFCLOSING    : "string*HtmlAttribute list"
+TAGSTART       : "string*HtmlAttribute list"
+TAGEND         : "string"
+TAGSELFCLOSING : "string*HtmlAttribute list"
+CDATA          : "string"
+COMMENT        : "string"
+TEXT           : "string"
+node           : "HtmlNode"
+element        : "HtmlNode"
+children       : "HtmlNode list"
+nodes          : "HtmlNode list"
 
-CDATA             : "string"
-COMMENT           : "string"
-DOCTYPE           : "string"
-TEXT              : "string"
-document          : "string*HtmlNode list"
-element           : "HtmlNode"
-node              : "HtmlNode"
-nodes             : "HtmlNode list"
-voidElement       : "HtmlNode"

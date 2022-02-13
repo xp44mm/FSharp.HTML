@@ -20,14 +20,40 @@ type AttributeDFATest(output:ITestOutputHelper) =
     let sourcePath = Path.Combine(solutionPath, @"FSharp.HTML")
     let filePath = Path.Combine(sourcePath, @"attribute.fslex") // **input**
     let text = File.ReadAllText(filePath)
-            
+    let fslex = FslexFile.parse text
+
+    
+    [<Fact>]
+    member _.``0 = compiler test``() =
+        let hdr,dfs,rls = FslexCompiler.parseToStructuralData text
+        show hdr
+        show dfs
+        show rls
+        
+    [<Fact>]
+    member _.``1 = verify``() =
+        let y = fslex.verify()
+
+        Assert.True(y.undeclared.IsEmpty)
+        Assert.True(y.unused.IsEmpty)
+
+    [<Fact>]
+    member _.``2 = universal characters``() =
+        let res = fslex.getRegularExpressions()
+
+        let y = 
+            res
+            |> Array.collect(fun re -> re.getCharacters())
+            |> Set.ofArray
+
+        show y
+
     [<Fact(Skip="once and for all!")>] //
-    member _.``1 - generate DFA``() =
+    member _.``3 = generate DFA``() =
 
         let name = "AttributeDFA" // **input**
         let moduleName = $"FSharp.HTML.{name}"
 
-        let fslex = FslexFile.parse text
         let y = fslex.toFslexDFAFile()
         let result = y.generate(moduleName)
 
@@ -36,8 +62,7 @@ type AttributeDFATest(output:ITestOutputHelper) =
         output.WriteLine("dfa output path:" + outputDir)
 
     [<Fact>]
-    member _.``2 - valid DFA``() =
-        let fslex = FslexFile.parse text
+    member _.``4 = valid DFA``() =
         let y = fslex.toFslexDFAFile()
 
         Should.equal y.nextStates AttributeDFA.nextStates

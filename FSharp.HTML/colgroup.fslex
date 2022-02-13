@@ -5,19 +5,18 @@ open FSharp.HTML.ColgroupTokenUtils
 type token = HtmlToken
 %}
 
-utagselfclosing = TAGSELFCLOSING | "<col/>"
-utagstart = TAGSTART | "<colgroup>"
-utagend = TAGEND | "</colgroup>"
-
-any = DOCTYPE|COMMENT|TEXT|CDATA|EOF|
-      <utagselfclosing>|<utagstart>|<utagend>
-
+any = COMMENT|TEXT|CDATA|EOF
+    | TAGSTART
+    | TAGEND
+    | TAGSELFCLOSING
+    | WS
+    | ["<colgroup>" "</colgroup>" "<col/>"]
 %%
 
-["<colgroup>" "<col/>"] COMMENT * / "<col/>" { lexbuf }
-"<col/>" COMMENT * "</colgroup>"             { lexbuf }
+["<colgroup>" "<col/>"] [COMMENT WS]* / "<col/>"    { lexbuf }
+["<colgroup>" "<col/>"] [COMMENT WS]* "</colgroup>" { lexbuf }
 
-<any> / "<col/>"   { lexbuf @ [ TagStart("colgroup",[]) ] }
-"<col/>"           { lexbuf @ [ TagEnd "colgroup" ] }
-<any>   { lexbuf }
+<any> / "<col/>" { lexbuf @ [ TagStart("colgroup",[]) ] }
+"<col/>"         { lexbuf @ [ TagEnd "colgroup" ] }
+<any>            { lexbuf }
 

@@ -1,11 +1,31 @@
 ﻿module FSharp.HTML.HtmlTokenUtils
 open FSharp.Literals
+open FSharp.Idioms
 
-//let adapt (token:HtmlToken) =
-//    match token with
-//    | Tag (true ,name,attrs) -> TagSelfClosing(name,attrs)
-//    | Tag (false,name,attrs) -> TagStart(name,attrs)
-//    | _ -> token
+let preamble (tokens:HtmlToken seq) =
+    let iterator = Iterator(tokens.GetEnumerator())
+    let rec loop () =
+        match iterator.tryNext() with
+        | Some(Text t) when t.Trim() = "" -> loop () 
+        | Some(DocType _) as sm ->
+            let rest =
+                iterator.tryNext()
+                |> Seq.unfold(
+                    Option.map(fun v -> v,iterator.tryNext())
+                )
+                |> Seq.skipWhile(function
+                    | Text t when t.Trim() = "" -> true
+                    | _ -> false
+                )
+            sm,rest
+        | maybe -> 
+            let rest =
+                maybe
+                |> Seq.unfold(
+                    Option.map(fun v -> v,iterator.tryNext())
+                )
+            None,rest
+    loop()
 
 let unifyVoidElement (token:HtmlToken) =
     match token with
@@ -31,7 +51,6 @@ let getTag (token:HtmlToken) =
     | TagEnd _ -> "TAGEND"
     | SEMICOLON -> ";"
     | EOF -> "EOF"
-    | _ -> failwith (Literal.stringify token)
 
 let getLexeme (token:HtmlToken) =
     match token with

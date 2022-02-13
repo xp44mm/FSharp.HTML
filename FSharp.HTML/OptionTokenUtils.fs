@@ -1,17 +1,10 @@
 ﻿module FSharp.HTML.OptionTokenUtils
 
-open FSharp.Literals
+let endTag = set["datalist";"optgroup";"option";"select"]
+let selfClosingTag = set["optgroup";"option"]
+let startTag = set["optgroup";"option"]
+let id = set["TEXT"]
 
-let sTagNames = set [
-   "option";"optgroup"
-]
-
-let endTagNames = 
-    set [
-        "select";"datalist"
-    ] + sTagNames
-
-// 注意是否会有自封闭元素
 let getTag (token:HtmlToken) =
     match token with
     | DocType _ -> "DOCTYPE"
@@ -19,19 +12,18 @@ let getTag (token:HtmlToken) =
     | Text _ -> "TEXT"
     | CData _ -> "CDATA"
     | TagSelfClosing (name,_) -> 
-        if sTagNames.Contains name then
+        if selfClosingTag.Contains name then
             $"<{name}/>"
         else "TAGSELFCLOSING"
     | TagStart (name,_) -> 
-        if sTagNames.Contains name then
+        if startTag.Contains name then
             $"<{name}>"
         else "TAGSTART"
-    | TagEnd name ->  
-        if endTagNames.Contains name then
+    | TagEnd name ->
+        if endTag.Contains name then
             $"</{name}>"
         else "TAGEND"
+
     | EOF -> "EOF"
     | SEMICOLON -> ";"
-
-    | _ -> failwith (Literal.stringify token)
 

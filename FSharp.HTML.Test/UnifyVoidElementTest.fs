@@ -18,6 +18,8 @@ type UnifyVoidElementTest(output:ITestOutputHelper) =
         |> Tokenizer.tokenize
         |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
         |> Seq.toList
+
+
     [<Fact>]
     member _.``self closing``() =
         let x = "<br/>"

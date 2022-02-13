@@ -23,6 +23,14 @@
 		<Compile Include="HtmlNode.fs" />
 		<Compile Include="HtmlDocument.fs" />
 		<Compile Include="HtmlToken.fs" />
+
+		<Compile Include="TryTokenizer.fs" />
+		<None Include="attribute.fslex" />
+		<Compile Include="AttributeDFA.fs" />
+		<Compile Include="Consumption.fs" />
+		<Compile Include="Tokenizer.fs" />
+
+
 		<Compile Include="HtmlTokenUtils.fs" />
 		<None Include="list.fslex" />
 		<Compile Include="ListTokenUtils.fs" />
@@ -65,19 +73,10 @@
 		<None Include="html.fsyacc" />
 		<Compile Include="HtmlFsyaccUtils.fs" />
 		<Compile Include="HtmlParseTable.fs" />
-		<Compile Include="TryTokenizer.fs" />
-		<None Include="attribute.fslex" />
-		<Compile Include="AttributeDFA.fs" />
-		<Compile Include="Consumption.fs" />
-		<Compile Include="Tokenizer.fs" />
+
 		<Compile Include="UnicodeHelper.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
-		
-		<!--<Compile Include="TextParser.fs" />
-		<Compile Include="InsertionMode.fs" />
-		<Compile Include="HtmlState.fs" />
-		<Compile Include="HtmlTokenizer.fs" />-->
-		
+
 		<None Include="readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
@@ -85,7 +84,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.5" />
+		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="FSharp.Core" Version="6.0.3" />
 	</ItemGroup>
 
 </Project>

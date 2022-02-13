@@ -2,11 +2,12 @@
 
 type HtmlToken =
     | DocType of string
-    | Tag of isSelfClosing:bool * name:string * attrs:HtmlAttribute list
+    //| Tag of isSelfClosing:bool * name:string * attrs:HtmlAttribute list
     | TagEnd of name:string
     | Text of string
     | Comment of string
     | CData of string
+
     | EOF
 
     | TagSelfClosing of name:string * attrs:HtmlAttribute list

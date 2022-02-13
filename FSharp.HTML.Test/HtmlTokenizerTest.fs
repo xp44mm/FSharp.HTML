@@ -20,7 +20,7 @@ type HtmlTokenizerTest(output:ITestOutputHelper) =
         let x = "<!DOCTYPE html>"
         let y = tokenlist x
         show y
-        Should.equal y [DocType x]
+        Should.equal y [DocType "html"]
         
     [<Fact>]
     member _.``Void elements``() =
@@ -80,12 +80,12 @@ type HtmlTokenizerTest(output:ITestOutputHelper) =
         let x = """<![CDATA[x<y]]>"""
         let y = tokenlist x
         show y
-        Should.equal y [CData x]
+        Should.equal y [CData "x<y"]
 
     [<Fact>]
     member _.``Comments``() =
         let x = """<!-- where is this comment in the DOM? -->"""
         let y = tokenlist x
         show y
-        Should.equal y [Comment x]
+        Should.equal y [Comment " where is this comment in the DOM? "]
 

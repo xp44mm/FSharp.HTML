@@ -5,7 +5,7 @@ open System.Globalization
 
 module HtmlCharRefs = 
 
-    let private refs = 
+    let refs = 
         [|
           "&Aacute;", "\u00C1";
           "&Aacute", "\u00C1";
@@ -2240,7 +2240,7 @@ module HtmlCharRefs =
           "&zwnj;", "\u200C";
         |] |> Map.ofArray
 
-    let private (|Number|Lookup|) (orig:string) =
+    let (|Number|Lookup|) (orig:string) =
         let s = orig.TrimEnd([|';'|])
         if s.Length > 2
         then

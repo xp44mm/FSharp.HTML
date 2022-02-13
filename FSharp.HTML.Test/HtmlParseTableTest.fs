@@ -84,7 +84,7 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
         output.WriteLine(sourceCode)
 
     [<Fact(Skip="once and for all!")>] // 
-    member _.``5-generate parsing table``() =
+    member _.``5 - generate parsing table``() =
         let name = "HtmlParseTable"
         let moduleName = $"FSharp.HTML.{name}"
 
@@ -114,7 +114,7 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``8 - first or last token of node``() =
         let grammar = Grammar.from <| fsyacc.getMainProductions()
-        let last = grammar.lasts.["node"] |> Set.add "DOCTYPE"
+        let last = grammar.lasts.["node"]
         let first = grammar.firsts.["node"]
 
         output.WriteLine($"last={clazz last}")

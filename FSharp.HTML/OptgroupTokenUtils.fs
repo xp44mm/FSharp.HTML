@@ -1,10 +1,9 @@
 ﻿module FSharp.HTML.OptgroupTokenUtils
 
-open FSharp.Literals
-
-let relatedTagNames = set [
-    "optgroup";"select"
-]
+let endTag = set["optgroup";"select"]
+let selfClosingTag = set["optgroup"]
+let startTag = set["optgroup"]
+let id = set["COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
 
 let getTag (token:HtmlToken) =
     match token with
@@ -13,19 +12,19 @@ let getTag (token:HtmlToken) =
     | Text _ -> "TEXT"
     | CData _ -> "CDATA"
     | TagSelfClosing (name,_) -> 
-        if name = "optgroup" then
+        if selfClosingTag.Contains name then
             $"<{name}/>"
         else "TAGSELFCLOSING"
     | TagStart (name,_) -> 
-        if name = "optgroup" then
+        if startTag.Contains name then
             $"<{name}>"
         else "TAGSTART"
-    | TagEnd name ->  
-        if relatedTagNames.Contains name then
+    | TagEnd name ->
+        if endTag.Contains name then
             $"</{name}>"
         else "TAGEND"
+
     | EOF -> "EOF"
     | SEMICOLON -> ";"
 
-    | _ -> failwith (Literal.stringify token)
 

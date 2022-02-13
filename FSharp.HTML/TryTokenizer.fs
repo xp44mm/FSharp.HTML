@@ -19,7 +19,7 @@ let tryText =
    |> tryRegexMatch
 
 let tryDOCTYPE =
-    Regex(@"^<!DOCTYPE\s*[^>]*>",RegexOptions.IgnoreCase)
+    Regex(@"^<!DOCTYPE\s+[^>]*>",RegexOptions.IgnoreCase)
     |> tryRegexMatch
 
 let tryComment =

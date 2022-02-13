@@ -18,26 +18,37 @@ type RubyAnalyzerTest(output:ITestOutputHelper) =
     let parse txt =
         txt
         |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
-        // 临时措施
-        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
+        |> HtmlTokenUtils.preamble
+        |> snd
+        |> Seq.choose HtmlTokenUtils.unifyVoidElement
 
+        |> ListDFA.analyze
+        |> Seq.concat
 
         |> RubyDFA.analyze
         |> Seq.concat
 
         |> SemiNodeDFA.analyze
         |> Seq.concat
+
         |> HtmlParseTable.parse
 
     [<Fact>]
-    member _.``ListElementsWithoutListContainer``() =
-        let simpleHtml = """
+    member _.``well formed``() =
+        let x = """
         <ruby>
-        明日 <rp>(<rt>Ashita<rp>)</rp>
+        明日 <rp>(</rp><rt>Ashita</rt><rp>)</rp>
         </ruby>
             """
-        let y = parse simpleHtml |> snd
+        let y = parse x
         show y
-        //let e = [HtmlElement("ruby",[],[HtmlText " 明日 ";HtmlElement("rp",[],[HtmlText "("]);HtmlElement("rt",[],[HtmlText "Ashita"]);HtmlElement("rp",[],[HtmlText ")"])])]
-        //Should.equal e y
+
+    [<Fact>]
+    member _.``basis``() =
+        let x = """
+        <ruby>
+        明日 <rp>(<rt>Ashita<rp>)
+        </ruby>
+            """
+        let y = parse x
+        show y

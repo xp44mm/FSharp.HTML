@@ -50,5 +50,5 @@ let getTag (token:HtmlToken) =
     | EOF -> "EOF"
     | SEMICOLON -> ";"
 
-    | _ -> failwith (Literal.stringify token)
+    //| _ -> failwith (Literal.stringify token)
 
