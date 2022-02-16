@@ -80,7 +80,6 @@ type CaptionDFATest(output:ITestOutputHelper) =
         let name = "CaptionDFA" // **input**
         let moduleName = $"FSharp.HTML.{name}"
 
-        let fslex = FslexFile.parse text
         let y = fslex.toFslexDFAFile()
         let result = y.generate(moduleName)
 
@@ -90,7 +89,6 @@ type CaptionDFATest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``4 = valid DFA``() =
-        let fslex = FslexFile.parse text
         let y = fslex.toFslexDFAFile()
 
         Should.equal y.nextStates CaptionDFA.nextStates

@@ -1,48 +1,29 @@
 ﻿module FSharp.HTML.TrTokenUtils
 
-open FSharp.Literals
-
-// start
-let sTagNames = set [
-    "tr"
-    "thead"
-    "tbody"
-    "tfoot"
-    ]
-// end
-let eTagNames = set [
-    "tr"
-    "thead"
-    "tbody"
-    "tfoot"
-    "thead|tbody|tfoot"
-    ]
-
-// close
-let cTagNames = set [
-    "tr"
-    ]
+let endTag = set["script";"tbody";"template";"tfoot";"thead";"thead|tbody|tfoot";"tr"]
+let selfClosingTag = set["script";"template";"tr"]
+let startTag = set["tbody";"tfoot";"thead";"tr"]
 
 let getTag (token:HtmlToken) =
     match token with
-    | DocType _ -> "DOCTYPE"
     | Comment _ -> "COMMENT"
-    | Text _ -> "TEXT"
     | CData _ -> "CDATA"
+    | Text t -> 
+        if t.Trim() = "" then
+            "WS"
+        else "TEXT"
     | TagSelfClosing (name,_) -> 
-        if cTagNames.Contains name then
+        if selfClosingTag.Contains name then
             $"<{name}/>"
         else "TAGSELFCLOSING"
     | TagStart (name,_) -> 
-        if sTagNames.Contains name then
+        if startTag.Contains name then
             $"<{name}>"
         else "TAGSTART"
-    | TagEnd name ->  
-        if eTagNames.Contains name then
+    | TagEnd name ->
+        if endTag.Contains name then
             $"</{name}>"
         else "TAGEND"
     | EOF -> "EOF"
     | SEMICOLON -> ";"
-
-    //| _ -> failwith (Literal.stringify token)
-
+    | DocType _ -> "DOCTYPE"

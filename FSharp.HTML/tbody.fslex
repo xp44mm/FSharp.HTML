@@ -5,32 +5,22 @@ open FSharp.HTML.TbodyTokenUtils
 type token = HtmlToken
 %}
 
-utagstart = [ 
-    "<table>" "<tr>" 
-    ]
-
-utagend = [ 
-    "</caption>" "</colgroup>"
-    ]
-
-utagselfclosing = [ 
-    "<caption/>" "<colgroup/>" "<tr/>"
-    ]
-
-any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
-    | TAGSELFCLOSING | <utagselfclosing> 
-    | TAGSTART | <utagstart> 
-    | TAGEND | <utagend>
-
 precede = [ 
     "<table>" 
     "</caption>" "<caption/>"
     "</colgroup>" "<colgroup/>"
     ]
 
+any = COMMENT|TEXT|CDATA|EOF
+    | TAGSTART
+    | TAGEND
+    | TAGSELFCLOSING
+    | WS
+    | <precede> | ["<tr>" "<tr/>"]
+
 %%
 
-<precede> COMMENT* / ["<tr>" "<tr/>"]{ lexbuf @ [TagStart("tbody",[])] }
+<precede> [COMMENT WS]* / ["<tr>" "<tr/>"] { lexbuf @ [TagStart("tbody",[])] }
 
 <any> { lexbuf }
 

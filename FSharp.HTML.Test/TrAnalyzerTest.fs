@@ -15,12 +15,27 @@ type TrAnalyzerTest(output:ITestOutputHelper) =
         |> Render.stringify
         |> output.WriteLine
 
-    let evade txt =
+    let om txt =
+        txt
+
+    let parse txt =
         txt
         |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
-        // 临时措施
-        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
+        |> HtmlTokenUtils.preamble
+        |> snd
+        |> Seq.choose HtmlTokenUtils.unifyVoidElement
+
+        |> ListDFA.analyze
+        |> Seq.concat
+
+        |> RubyDFA.analyze
+        |> Seq.concat
+
+        |> OptgroupDFA.analyze
+        |> Seq.concat
+
+        |> OptionDFA.analyze
+        |> Seq.concat
 
         |> ColgroupDFA.analyze
         |> Seq.concat
@@ -37,14 +52,10 @@ type TrAnalyzerTest(output:ITestOutputHelper) =
         |> TrDFA.analyze
         |> Seq.concat
 
-
-    let parse txt =
-        txt
-        |> evade
-
         |> SemiNodeDFA.analyze
         |> Seq.concat
-        |> HtmlParseTable.parse
+
+        |> NodesParseTable.parse
 
     [<Fact>]
     member _.``well formed``() =
@@ -83,12 +94,8 @@ type TrAnalyzerTest(output:ITestOutputHelper) =
         //    let ls = List.ofSeq ls
         //    show ls
 
-        let y = parse x |> snd
+        let y = parse x
         show y
-
-        let e = [HtmlElement("table",[],[HtmlElement("caption",[],[HtmlText "Council budget (in £) 2018"]);HtmlElement("thead",[],[HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","col")],[HtmlText "Items"]);HtmlElement("th",[HtmlAttribute("scope","col")],[HtmlText "Expenditure"])])]);HtmlElement("tbody",[],[HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","row")],[HtmlText "Donuts"]);HtmlElement("td",[],[HtmlText "3,000"])]);HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","row")],[HtmlText "Stationery"]);HtmlElement("td",[],[HtmlText "18,000"])])])])]
-        Should.equal e y
-
 
     [<Fact>]
     member _.``basis``() =
@@ -103,10 +110,10 @@ type TrAnalyzerTest(output:ITestOutputHelper) =
         <td>18,000</td>
 </table>
 """
-        //let mutable ls = ResizeArray()
+        //let ls = ResizeArray()
         //try
         //    let y = 
-        //        evade x
+        //        om x
         //        |> Seq.map(fun x -> 
         //            ls.Add(x)
         //            x
@@ -117,11 +124,7 @@ type TrAnalyzerTest(output:ITestOutputHelper) =
         //    let ls = List.ofSeq ls
         //    show ls
 
-        let y = parse x |> snd
+        let y = parse x
         show y
 
-        //let e = [HtmlElement("table",[],[
-        //    HtmlElement("caption",[],[HtmlText "Council budget (in £) 2018 "]);
-        //    HtmlElement("tbody",[],[HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","row")],[HtmlText "Donuts"]);HtmlElement("td",[],[HtmlText "3,000"])]);HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","row")],[HtmlText "Stationery"]);HtmlElement("td",[],[HtmlText "18,000"])])])])]
-        //Should.equal e y
 

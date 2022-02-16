@@ -2,7 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-
 		<IsPackable>false</IsPackable>
 		<GenerateProgramFile>false</GenerateProgramFile>
 	</PropertyGroup>
@@ -10,8 +9,8 @@
 	<ItemGroup>
 		<Compile Include="CodeGeneratorTest.fs" />
 		<Compile Include="AttributeDFATest.fs" />
-		<Compile Include="HtmlParseTableTest.fs" />
 		<Compile Include="SemiNodeDFATest.fs" />
+		<Compile Include="NodesParseTableTest.fs" />
 		<Compile Include="ListDFATest.fs" />
 		<Compile Include="RubyDFATest.fs" />
 		<Compile Include="OptgroupDFATest.fs" />
@@ -38,15 +37,13 @@
 		<Compile Include="OptionAnalyzerTest.fs" />
 		<Compile Include="ColgroupAnalyzerTest.fs" />
 		<Compile Include="CaptionAnalyzerTest.fs" />
-		
-		<!--
-		<Compile Include="DlAnalyzerTest.fs" />		
 		<Compile Include="TheadAnalyzerTest.fs" />
 		<Compile Include="TbodyAnalyzerTest.fs" />
 		<Compile Include="TrAnalyzerTest.fs" />
 		<Compile Include="TdAnalyzerTest.fs" />
 		<Compile Include="ParagraphAnalyzerTest.fs" />
-		<Compile Include="WellFormedHtmlTest.fs" />-->
+		<Compile Include="DlAnalyzerTest.fs" />
+		<Compile Include="ParserTest.fs" />
 		
 		<Compile Include="Program.fs" />
 	</ItemGroup>

@@ -43,7 +43,7 @@ type CaptionAnalyzerTest(output:ITestOutputHelper) =
         |> SemiNodeDFA.analyze
         |> Seq.concat
 
-        |> HtmlParseTable.parse
+        |> NodesParseTable.parse
 
     [<Fact>]
     member _.``basis``() =

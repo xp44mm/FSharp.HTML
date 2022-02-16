@@ -12,7 +12,7 @@ open FslexFsyacc.Fsyacc
 open FslexFsyacc.Yacc
 open FSharp.Idioms
 
-type HtmlParseTableTest(output:ITestOutputHelper) =
+type NodesParseTableTest(output:ITestOutputHelper) =
     let show res =
         res
         |> Render.stringify
@@ -32,7 +32,7 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
 
     let solutionPath = DirectoryInfo(__SOURCE_DIRECTORY__).Parent.FullName
     let projPath = Path.Combine(solutionPath,@"FSharp.HTML")
-    let filePath = Path.Combine(projPath, "html.fsyacc")
+    let filePath = Path.Combine(projPath, "nodes.fsyacc") // **input**
     let text = File.ReadAllText(filePath)
     let rawFsyacc = FsyaccFile.parse text
     let fsyacc = NormFsyaccFile.fromRaw rawFsyacc
@@ -60,12 +60,12 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
         let pprods =
             ProductionUtils.precedenceOfProductions collection.grammar.terminals productions
             |> List.ofArray
+
         //优先级应该据此结果给出，不能少，也不应该多。
         let y = [
             ]
 
         Should.equal y pprods
-
 
     [<Fact>]
     member _.``3 - print the template of type annotaitions``() =
@@ -79,13 +79,13 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
         let sourceCode = 
             [
                 for i in symbols do
-                    $"{i}: \"HtmlAttribute list\""
+                    $"{i}: \"list<string*string>\""
             ] |> String.concat "\r\n"
         output.WriteLine(sourceCode)
 
-    [<Fact(Skip="once and for all!")>] // 
+    [<Fact(Skip="once and for all!")>] //
     member _.``5 - generate parsing table``() =
-        let name = "HtmlParseTable"
+        let name = "NodesParseTable" // **input**
         let moduleName = $"FSharp.HTML.{name}"
 
         let parseTbl = fsyacc.toFsyaccParseTableFile()
@@ -99,10 +99,10 @@ type HtmlParseTableTest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``6 - valid ParseTable``() =
         let t = fsyacc.toFsyaccParseTableFile()
-        Should.equal t.header        HtmlParseTable.header
-        Should.equal t.actions       HtmlParseTable.actions
-        Should.equal t.rules HtmlParseTable.rules
-        Should.equal t.declarations  HtmlParseTable.declarations
+        Should.equal t.header        NodesParseTable.header
+        Should.equal t.actions       NodesParseTable.actions
+        Should.equal t.rules NodesParseTable.rules
+        Should.equal t.declarations  NodesParseTable.declarations
 
     [<Fact>]
     member _.``7 - list all tokens``() =

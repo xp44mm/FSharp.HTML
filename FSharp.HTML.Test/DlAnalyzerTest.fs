@@ -15,30 +15,55 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
         |> Render.stringify
         |> output.WriteLine
 
-    let evade txt =
-        txt
-        |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
-        // 临时措施
-        |> Seq.filter(function Text x when String.IsNullOrWhiteSpace x -> false | _ -> true)
-
-
-        |> DlDFA.analyze
-        |> Seq.concat
-
-        //|> ListDFA.analyze
-        //|> Seq.concat
-
-
     let parse txt =
         txt
-        |> evade
-
+        |> Tokenizer.tokenize
+        |> HtmlTokenUtils.preamble
+        |> snd
+    
+        |> Seq.choose HtmlTokenUtils.unifyVoidElement
+    
+        |> ListDFA.analyze
+        |> Seq.concat
+    
+        |> RubyDFA.analyze
+        |> Seq.concat
+    
+        |> OptgroupDFA.analyze
+        |> Seq.concat
+    
+        |> OptionDFA.analyze
+        |> Seq.concat
+    
+        |> ColgroupDFA.analyze
+        |> Seq.concat
+    
+        |> CaptionDFA.analyze
+        |> Seq.concat
+    
+        |> TheadDFA.analyze
+        |> Seq.concat
+    
+        |> TbodyDFA.analyze
+        |> Seq.concat
+    
+        |> TrDFA.analyze
+        |> Seq.concat
+    
+        |> TdDFA.analyze
+        |> Seq.concat
+    
+        |> ParagraphDFA.analyze
+        |> Seq.concat
+    
+        |> DlDFA.analyze
+        |> Seq.concat
+    
         |> SemiNodeDFA.analyze
         |> Seq.concat
-
-        |> HtmlParseTable.parse
-
+    
+        |> NodesParseTable.parse
+    
 
     [<Fact>]
     member _.``well formed``() =
@@ -74,14 +99,8 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
         //    let ls = List.ofSeq ls
         //    show ls
 
-        let y = parse x |> snd
+        let y = parse x
         show y
-
-        //let e = [HtmlElement("table",[],[HtmlElement("caption",[],[HtmlText "Council budget (in £) 2018"]);HtmlElement("thead",[],[HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","col")],[HtmlText "Items"]);HtmlElement("th",[HtmlAttribute("scope","col")],[HtmlText "Expenditure"])])]);HtmlElement("tbody",[],[HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","row")],[HtmlText "Donuts"]);HtmlElement("td",[],[HtmlText "3,000"])]);HtmlElement("tr",[],[HtmlElement("th",[HtmlAttribute("scope","row")],[HtmlText "Stationery"]);HtmlElement("td",[],[HtmlText "18,000"])])])])]
-        //Should.equal e y
-
-
-
 
     [<Fact>]
     member _.``basis in div``() =
@@ -120,10 +139,9 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
         //    let ls = List.ofSeq ls
         //    show ls
 
-        let y = parse x |> snd
+        let y = parse x
         show y
 
-        //Should.equal e y
 
     [<Fact>]
     member _.``basis in dl``() =
@@ -160,17 +178,14 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
         //    let ls = List.ofSeq ls
         //    show ls
 
-        let y = parse x |> snd
+        let y = parse x
         show y
 
-        //Should.equal e y
 
     [<Fact>]
     member _.``ListElementsWithoutListContainer``() =
-        let simpleHtml = """<!DOCTYPE html><body><dl>
+        let x = """<!DOCTYPE html><body><dl>
             <dt>hello<dd>world</dd><dt>how<dd>do</dl>you</body><!--do-->
             """
-        let y = parse simpleHtml |> snd
+        let y = parse x
         show y
-        let e = [HtmlElement("body",[],[HtmlElement("dl",[],[HtmlElement("dt",[],[HtmlText "hello"]);HtmlElement("dd",[],[HtmlText "world"]);HtmlElement("dt",[],[HtmlText "how"]);HtmlElement("dd",[],[HtmlText "do"])]);HtmlText "you"]);HtmlComment "do"]
-        Should.equal e y

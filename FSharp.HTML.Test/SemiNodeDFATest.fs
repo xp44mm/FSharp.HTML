@@ -46,7 +46,7 @@ type SemiNodeDFATest(output:ITestOutputHelper) =
         show y
 
         
-    [<Fact(Skip="once and for all!")>] // 
+    [<Fact(Skip="once and for all!")>] //
     member _.``3 = generate DFA``() =
         let fslex = FslexFile.parse text
 

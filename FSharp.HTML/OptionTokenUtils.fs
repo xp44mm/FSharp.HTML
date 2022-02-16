@@ -3,11 +3,9 @@
 let endTag = set["datalist";"optgroup";"option";"select"]
 let selfClosingTag = set["optgroup";"option"]
 let startTag = set["optgroup";"option"]
-let id = set["TEXT"]
 
 let getTag (token:HtmlToken) =
     match token with
-    | DocType _ -> "DOCTYPE"
     | Comment _ -> "COMMENT"
     | Text _ -> "TEXT"
     | CData _ -> "CDATA"
@@ -26,4 +24,5 @@ let getTag (token:HtmlToken) =
 
     | EOF -> "EOF"
     | SEMICOLON -> ";"
+    | DocType _ -> "DOCTYPE"
 

@@ -5,44 +5,30 @@ open FSharp.HTML.TrTokenUtils
 type token = HtmlToken
 %}
 
-utagstart = [ 
-    "<tr>"
-    "<thead>"
-    "<tbody>"
-    "<tfoot>"
-    ]
-
-utagend = [ 
-    "</tr>"
-    "</thead>" "</tbody>" "</tfoot>"
-    "</thead|tbody|tfoot>"
-    ]
-
-utagselfclosing = [ 
-    "<tr/>"
-    ]
-
-any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
-    | TAGSELFCLOSING | <utagselfclosing> 
-    | TAGSTART | <utagstart> 
-    | TAGEND | <utagend>
-
 precede = [
+    "</script>" "<script/>"
+    "</template>" "<template/>"
     "<thead>"
     "<tbody>"
     "<tfoot>"
     "</tr>" "<tr/>"
     ]
 
-follow = [ "<tr>" "<tr/>" "</thead>" "</tbody>" "</tfoot>" "</thead|tbody|tfoot>" ]
+follow = [ 
+    "<tr>" "<tr/>" 
+    "</thead>" "</tbody>" "</tfoot>" 
+    "</thead|tbody|tfoot>" ]
+
+any = COMMENT|TEXT|CDATA|EOF
+    | TAGSTART
+    | TAGEND
+    | TAGSELFCLOSING
+    | WS
+    | <precede> | <follow>
 
 %%
 
-<precede> COMMENT* / ["<tr>" "<tr/>"]       { lexbuf }
-<precede> COMMENT* / "</thead>"             { lexbuf }
-<precede> COMMENT* / "</tbody>"             { lexbuf }
-<precede> COMMENT* / "</tfoot>"             { lexbuf }
-<precede> COMMENT* / "</thead|tbody|tfoot>" { lexbuf }
+<precede> [COMMENT WS]* / <follow> { lexbuf }
 
 <any> / <follow>  { lexbuf @ [TagEnd "tr"] }
 <any>             { lexbuf }

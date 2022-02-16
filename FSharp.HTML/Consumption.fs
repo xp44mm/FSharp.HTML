@@ -32,7 +32,7 @@ let consumeAttributeNames (inp:string) =
                     [] 
                 else
                     AttributeDFA.analyze revTokens
-                    |> Seq.map HtmlAttribute
+                    //|> Seq.map HtmlAttribute
                     |> Seq.toList
                     |> List.rev
             x, attributes, rest

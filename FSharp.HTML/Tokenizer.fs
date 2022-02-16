@@ -49,8 +49,8 @@ let tokenize(inp:string) =
 
             | On tryStartTagOpen (x,rest) ->
                 let tagName = x.[1..].ToLower()
-                let lt,attrs,rest = consumeAttributeNames rest
-                match lt with
+                let markup,attrs,rest = consumeAttributeNames rest
+                match markup with
                 | "/>" -> 
                     yield TagSelfClosing(tagName,attrs)
                     yield! loop rest
@@ -76,7 +76,7 @@ let tokenize(inp:string) =
                         yield! loop rest
                     | _ -> 
                         yield! loop rest
-                | _ -> failwith lt
+                | _ -> failwith markup
             | _ -> failwith inp
         }
     

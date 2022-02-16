@@ -1,7 +1,9 @@
 ﻿%{
+// Add a virtual semicolon to avoid conflicting.
 open System
 open FSharp.HTML
 open FSharp.HTML.HtmlTokenUtils
+
 type token = HtmlToken
 %}
 

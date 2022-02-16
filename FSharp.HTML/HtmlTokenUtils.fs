@@ -2,6 +2,7 @@
 open FSharp.Literals
 open FSharp.Idioms
 
+/// consume doctype from tokens
 let preamble (tokens:HtmlToken seq) =
     let iterator = Iterator(tokens.GetEnumerator())
     let rec loop () =

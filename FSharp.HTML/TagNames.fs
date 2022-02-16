@@ -1,5 +1,7 @@
 ﻿module FSharp.HTML.TagNames
 
+let meta = []
+
 let htmlTags = set [
   "a"
   "abbr"

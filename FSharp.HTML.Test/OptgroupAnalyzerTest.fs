@@ -34,7 +34,7 @@ type OptgroupAnalyzerTest(output:ITestOutputHelper) =
         |> SemiNodeDFA.analyze
         |> Seq.concat
 
-        |> HtmlParseTable.parse
+        |> NodesParseTable.parse
 
 
     [<Fact>]

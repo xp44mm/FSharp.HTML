@@ -5,24 +5,20 @@ open FSharp.HTML.DlTokenUtils
 type token = HtmlToken
 %}
 
-utagstart = [ "<dt>" "<dd>" "<div>" "<dl>" ] 
+content = COMMENT|CDATA|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND
 
-utagend = [ "</dt>" "</dd>" "</dl>" "</div>" ]
-
-utagselfclosing = [ "<dt/>" "<dd/>" ]
-
-any = DOCTYPE|COMMENT|TEXT|CDATA|EOF
-    | TAGSTART | <utagstart> 
-    | TAGEND | <utagend>
-    | TAGSELFCLOSING | <utagselfclosing> 
-
-content = COMMENT|TEXT|TAGSELFCLOSING|TAGSTART|TAGEND
+precede = [
+	"</script>" "<script/>"
+    "</template>" "<template/>"
+	"<div>" "<dl>" "</dt>" "<dt/>" "</dd>" "<dd/>"]
 
 follow = ["<dt>" "<dt/>" "<dd>" "<dd/>"]
 
+any = <content> | <precede> | <follow> |WS| ["<dt>" "<dd>" "</div>" "</dl>"]| EOF
+
 %%
 
-["<div>" "<dl>" "</dt>" "<dt/>" "</dd>" "<dd/>"] COMMENT* / <follow> { lexbuf }
-<any> / <follow>                       { lexbuf @ [TagEnd "dt|dd"] }
+<precede> [COMMENT WS]* / <follow> { lexbuf }
+<any> / <follow>                   { lexbuf @ [TagEnd "dt|dd"] }
 ["<dt>" "<dd>"] <content>* / ["</div>" "</dl>"] { lexbuf @ [TagEnd "dt|dd"] }
 <any>                                  { lexbuf }

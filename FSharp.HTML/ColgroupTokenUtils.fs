@@ -3,17 +3,15 @@
 let endTag = set["colgroup"]
 let selfClosingTag = set["col"]
 let startTag = set["colgroup"]
-let id = set["COMMENT";"WS"]
 
 let getTag (token:HtmlToken) =
     match token with
-    | DocType _ -> "DOCTYPE"
     | Comment _ -> "COMMENT"
+    | CData _ -> "CDATA"
     | Text t -> 
         if t.Trim() = "" then
             "WS"
         else "TEXT"
-    | CData _ -> "CDATA"
     | TagSelfClosing (name,_) -> 
         if selfClosingTag.Contains name then
             $"<{name}/>"
@@ -28,4 +26,5 @@ let getTag (token:HtmlToken) =
         else "TAGEND"
     | EOF -> "EOF"
     | SEMICOLON -> ";"
+    | DocType _ -> "DOCTYPE"
 

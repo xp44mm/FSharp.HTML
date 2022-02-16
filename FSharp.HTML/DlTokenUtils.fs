@@ -1,42 +1,33 @@
 ﻿module FSharp.HTML.DlTokenUtils
 
-open FSharp.Literals
-
-// start
-let sTagNames = set [
-    "dt";"dd";"dl";"div"
-    ]
-// end
-let eTagNames = set [
-    "dt";"dd";"dl";"div"
-    ]
-
-// close
-let cTagNames = set [
-    "dt";"dd";
-    ]
+let endTag = set["dd";"div";"dl";"dt";"script";"template"]
+let selfClosingTag = set["dd";"dt";"script";"template"]
+let startTag = set["dd";"div";"dl";"dt"]
 
 let getTag (token:HtmlToken) =
     match token with
-    | DocType _ -> "DOCTYPE"
     | Comment _ -> "COMMENT"
-    | Text _ -> "TEXT"
     | CData _ -> "CDATA"
+    | Text t -> 
+        if t.Trim() = "" then
+            "WS"
+        else "TEXT"
     | TagSelfClosing (name,_) -> 
-        if cTagNames.Contains name then
+        if selfClosingTag.Contains name then
             $"<{name}/>"
         else "TAGSELFCLOSING"
     | TagStart (name,_) -> 
-        if sTagNames.Contains name then
+        if startTag.Contains name then
             $"<{name}>"
         else "TAGSTART"
-    | TagEnd name ->  
-        if eTagNames.Contains name then
+    | TagEnd name ->
+        if endTag.Contains name then
             $"</{name}>"
         else "TAGEND"
-    | EOF -> "EOF"
-    | SEMICOLON -> ";"
 
-    //| _ -> failwith (Literal.stringify token)
+    | EOF -> "EOF"
+
+    | SEMICOLON -> ";"
+    | DocType _ -> "DOCTYPE"
 
 

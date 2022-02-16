@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>0.0.1</Version>
+		<Version>1.0.0</Version>
 		<Description>a parse for HTML5 based on the official W3C specification.</Description>
 		<Company>34696643@qq.com</Company>
 		<Authors>xp44m</Authors>
@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.HTML</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xp44mm/FSharp.HTML</PackageProjectUrl>
-		<PackageReleaseNotes>define types</PackageReleaseNotes>
+		<PackageReleaseNotes>FSharp.HTML.Parser</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageTags>html; parser</PackageTags>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -19,19 +19,23 @@
 
 	<ItemGroup>
 		<Compile Include="TagNames.fs" />
-		<Compile Include="HtmlAttribute.fs" />
 		<Compile Include="HtmlNode.fs" />
 		<Compile Include="HtmlDocument.fs" />
+		
 		<Compile Include="HtmlToken.fs" />
-
 		<Compile Include="TryTokenizer.fs" />
 		<None Include="attribute.fslex" />
 		<Compile Include="AttributeDFA.fs" />
 		<Compile Include="Consumption.fs" />
 		<Compile Include="Tokenizer.fs" />
 
-
 		<Compile Include="HtmlTokenUtils.fs" />
+		<None Include="semiNode.fslex" />
+		<Compile Include="SemiNodeDFA.fs" />
+		<None Include="nodes.fsyacc" />
+		<Compile Include="NodesFsyaccUtils.fs" />
+		<Compile Include="NodesParseTable.fs" />
+
 		<None Include="list.fslex" />
 		<Compile Include="ListTokenUtils.fs" />
 		<Compile Include="ListDFA.fs" />
@@ -68,14 +72,10 @@
 		<None Include="dl.fslex" />
 		<Compile Include="DlTokenUtils.fs" />
 		<Compile Include="DlDFA.fs" />
-		<None Include="semiNode.fslex" />
-		<Compile Include="SemiNodeDFA.fs" />
-		<None Include="html.fsyacc" />
-		<Compile Include="HtmlFsyaccUtils.fs" />
-		<Compile Include="HtmlParseTable.fs" />
 
 		<Compile Include="UnicodeHelper.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
+		<Compile Include="Parser.fs" />
 
 		<None Include="readme.md">
 			<Pack>True</Pack>
