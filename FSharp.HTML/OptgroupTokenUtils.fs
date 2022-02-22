@@ -1,8 +1,8 @@
 ﻿module FSharp.HTML.OptgroupTokenUtils
 
-let endTag = set["optgroup";"select"]
-let selfClosingTag = set["optgroup"]
-let startTag = set["optgroup"]
+let endTag = set ["optgroup";"select"]
+let selfClosingTag = set ["optgroup"]
+let startTag = set ["optgroup"]
 
 let getTag (token:HtmlToken) =
     match token with

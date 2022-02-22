@@ -55,14 +55,14 @@ The main structure types are defined as follows:
 ```F#
 /// Represents an HTML node. The names of elements are always normalized to lowercase
 type HtmlNode =
-    | HtmlElement of name:string * attributes:Map<string,string> * elements:HtmlNode[]
+    | HtmlElement of name:string * attributes:list<string*string> * elements:HtmlNode list
     | HtmlText of content:string
     | HtmlComment of content:string
     | HtmlCData of content:string
 
 /// Represents an HTML document
 type HtmlDocument =
-    | HtmlDocument of docType:string * elements:HtmlNode[]
+    | HtmlDocument of docType:string * elements:HtmlNode list
 
 type HtmlToken =
     | DocType of string
@@ -70,8 +70,8 @@ type HtmlToken =
     | Comment of string
     | CData of string
 
-    | TagSelfClosing of name:string * attrs:(string*string) list
-    | TagStart of name:string * attrs:(string*string) list
+    | TagSelfClosing of name:string * attrs:list<string*string>
+    | TagStart of name:string * attrs:list<string*string>
     | TagEnd of name:string
 
     | EOF

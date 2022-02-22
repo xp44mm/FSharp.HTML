@@ -47,6 +47,7 @@ type TheadAnalyzerTest(output:ITestOutputHelper) =
         |> Seq.concat
 
         |> NodesParseTable.parse
+        |> Whitespace.removeWsChildren
 
     [<Fact>]
     member _.``well formed``() =

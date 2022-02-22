@@ -13,13 +13,6 @@ type HtmlTokenUtilsTest(output:ITestOutputHelper) =
         |> Render.stringify
         |> output.WriteLine
 
-    let evade txt =
-        txt
-        |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
-        |> Seq.toList
-
-
     [<Fact>]
     member _.``01 = preamble``() =
         let x = """

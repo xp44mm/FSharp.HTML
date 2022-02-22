@@ -56,6 +56,7 @@ type TdAnalyzerTest(output:ITestOutputHelper) =
         |> Seq.concat
 
         |> NodesParseTable.parse
+        |> Whitespace.removeWsChildren
 
 
     [<Fact>]

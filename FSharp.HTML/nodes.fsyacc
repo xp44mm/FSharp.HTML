@@ -5,8 +5,8 @@ open FSharp.HTML.HtmlTokenUtils
 %}
 
 children : 
-    | nodes       {Array.ofList(List.rev s0)}
-    | (* empty *) {[||]}
+    | nodes       {List.rev s0}
+    | (* empty *) {[]}
 
 nodes:
     | nodes ";" node {s2::s0}
@@ -21,25 +21,23 @@ node:
 element:
     | TAGSELFCLOSING {
         let name,attrs = s0
-        let attrs = Map.ofList attrs
-        HtmlElement(name, attrs,[||])
+        HtmlElement(name, attrs,[])
     }
     | TAGSTART children TAGEND {
         let name,attrs = s0
-        let attrs = Map.ofList attrs
         NodesFsyaccUtils.htmlNode name s2 attrs s1
     }
 
 %%
 
-TAGSELFCLOSING : "string*(string*string) list"
-TAGSTART       : "string*(string*string) list"
+TAGSELFCLOSING : "string*list<string*string>"
+TAGSTART       : "string*list<string*string>"
 TAGEND         : "string"
 CDATA          : "string"
 COMMENT        : "string"
 TEXT           : "string"
 node           : "HtmlNode"
 element        : "HtmlNode"
-children       : "HtmlNode[]"
+children       : "HtmlNode list"
 nodes          : "HtmlNode list"
 

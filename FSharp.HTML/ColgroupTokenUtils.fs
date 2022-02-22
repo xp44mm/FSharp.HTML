@@ -1,8 +1,8 @@
 ﻿module FSharp.HTML.ColgroupTokenUtils
 
-let endTag = set["colgroup"]
-let selfClosingTag = set["col"]
-let startTag = set["colgroup"]
+let endTag = set ["colgroup"]
+let selfClosingTag = set ["col"]
+let startTag = set ["colgroup"]
 
 let getTag (token:HtmlToken) =
     match token with

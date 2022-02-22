@@ -94,7 +94,10 @@ let getNodes tokens =
 let getDoc tokens =
     let docType, tokens =
         consumeDoctype tokens
-    let nodes = getNodes tokens
+    let nodes = 
+        tokens
+        |> getNodes 
+        |> Whitespace.removeWsChildren
     HtmlDocument(docType,nodes)
 
 /// Parses input text as a HtmlDocument tree
@@ -110,3 +113,4 @@ let parseNodes txt =
     |> consumeDoctype
     |> snd
     |> getNodes
+    |> Whitespace.removeWsChildren

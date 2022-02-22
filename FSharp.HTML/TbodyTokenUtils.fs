@@ -1,8 +1,8 @@
 ﻿module FSharp.HTML.TbodyTokenUtils
 
-let endTag = set["caption";"colgroup"]
-let selfClosingTag = set["caption";"colgroup";"tr"]
-let startTag = set["table";"tr"]
+let endTag = set ["caption";"colgroup"]
+let selfClosingTag = set ["caption";"colgroup";"tr"]
+let startTag = set ["table";"tr"]
 
 let getTag (token:HtmlToken) =
     match token with

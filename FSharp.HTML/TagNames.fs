@@ -472,41 +472,93 @@ let escapableRawTextElements = set [
     "title"
     ]
 
-let optionalStartTags = [
-    "html"
-    "head"
-    "body"
-
-    "colgroup"
-    "tbody"
-
-]
-
-let optionalEndTags = [
-    "html"
-    "head"
-    "body"
-
-    "li"
-    "dt"
-    "dd"
-    "p"
-    "rt"
-    "rp"
-
-    "optgroup"
-    "option"
-
-    "colgroup"
-    "caption"
-    "thead"
-    "tbody"
-    "tfoot"
-    "tr"
-    "td"
-    "th"
-]
-
 let phrasing = set [
     "a"; "em"; "strong"; "small"; "mark"; "abbr"; "dfn"; "i"; "b"; "s"; "u"; "code"; "var"; "samp"; "kbd"; "sup"; "sub"; "q"; "cite"; "span"; "bdo"; "bdi"; "br"; "wbr"; "ins"; "del"; "img"; "embed"; "object"; "iframe"; "map"; "area"; "script"; "noscript"; "ruby"; "video"; "audio"; "input"; "textarea"; "select"; "button"; "label"; "output"; "datalist"; "keygen"; "progress"; "command"; "canvas"; "time"; "meter";
+]
+
+let flowContent = set [
+    "a";
+    "abbr";
+    "address";
+    "article";
+    "aside";
+    "audio";
+    "b";
+    "bdo";
+    "bdi";
+    "blockquote";
+    "br";
+    "button";
+    "canvas";
+    "cite";
+    "code";
+    "command";
+    "data";
+    "datalist";
+    "del";
+    "details";
+    "dfn";
+    "div";
+    "dl";
+    "em";
+    "embed";
+    "fieldset";
+    "figure";
+    "footer";
+    "form";
+    "h1";
+    "h2";
+    "h3";
+    "h4";
+    "h5";
+    "h6";
+    "header";
+    "hgroup";
+    "hr";
+    "i";
+    "iframe";
+    "img";
+    "input";
+    "ins";
+    "kbd";
+    "keygen";
+    "label";
+    "main";
+    "map";
+    "mark";
+    "math";
+    "menu";
+    "meter";
+    "nav";
+    "noscript";
+    "object";
+    "ol";
+    "output";
+    "p";
+    "picture";
+    "pre";
+    "progress";
+    "q";
+    "ruby";
+    "s";
+    "samp";
+    "script";
+    "section";
+    "select";
+    "small";
+    "span";
+    "strong";
+    "sub";
+    "sup";
+    "svg";
+    "table";
+    "template";
+    "textarea";
+    "time";
+    "u";
+    "ul";
+    "var";
+    "video";
+    "and";
+    "wbr";
 ]

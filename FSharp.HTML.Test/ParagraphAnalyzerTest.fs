@@ -59,6 +59,7 @@ type ParagraphAnalyzerTest(output:ITestOutputHelper) =
         |> Seq.concat
 
         |> NodesParseTable.parse
+        |> Whitespace.removeWsChildren
 
 
     [<Fact>]

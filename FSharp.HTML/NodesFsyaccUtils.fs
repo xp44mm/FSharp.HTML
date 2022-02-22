@@ -13,4 +13,4 @@ let htmlNode sn en attrs children =
         HtmlElement(sn, attrs, children)
     elif en = "dt|dd" && dcelles.Contains sn then
         HtmlElement(sn, attrs, children)
-    else failwithf "<%s></%s>" sn en
+    else failwithf "Misnested tags:<%s></%s>" sn en

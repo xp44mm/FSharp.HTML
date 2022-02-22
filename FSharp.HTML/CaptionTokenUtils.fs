@@ -1,8 +1,8 @@
 ﻿module FSharp.HTML.CaptionTokenUtils
 
-let endTag = set["caption";"table"]
-let selfClosingTag = set["caption";"colgroup";"table";"tbody";"tfoot";"thead";"tr"]
-let startTag = set["caption";"colgroup";"table";"tbody";"tfoot";"thead";"tr"]
+let endTag = set ["caption";"table"]
+let selfClosingTag = set ["caption";"colgroup";"table";"tbody";"tfoot";"thead";"tr"]
+let startTag = set ["caption";"colgroup";"table";"tbody";"tfoot";"thead";"tr"]
 
 let getTag (token:HtmlToken) =
     match token with

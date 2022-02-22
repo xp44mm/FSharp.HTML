@@ -89,7 +89,6 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         let moduleName = $"FSharp.HTML.{name}"
 
         let parseTbl = fsyacc.toFsyaccParseTableFile()
-        //解析表数据
         let fsharpCode = parseTbl.generate(moduleName)
         let outputDir = Path.Combine(projPath, $"{name}.fs")
 

@@ -29,6 +29,7 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         |> Seq.concat
 
         |> NodesParseTable.parse
+        |> Whitespace.removeWsChildren
 
     [<Fact>]
     member _.``ListElementsWithoutListContainer``() =

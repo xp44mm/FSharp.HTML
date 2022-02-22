@@ -1,8 +1,8 @@
 ﻿module FSharp.HTML.TheadTokenUtils
 
-let endTag = set["caption";"colgroup";"table";"tbody";"tfoot";"thead"]
-let selfClosingTag = set["caption";"colgroup";"tbody";"tfoot";"thead"]
-let startTag = set["table";"tbody";"tfoot";"thead"]
+let endTag = set ["caption";"colgroup";"table";"tbody";"tfoot";"thead"]
+let selfClosingTag = set ["caption";"colgroup";"tbody";"tfoot";"thead"]
+let startTag = set ["table";"tbody";"tfoot";"thead"]
 
 let getTag (token:HtmlToken) =
     match token with

@@ -1,8 +1,8 @@
 ﻿module FSharp.HTML.DlTokenUtils
 
-let endTag = set["dd";"div";"dl";"dt";"script";"template"]
-let selfClosingTag = set["dd";"dt";"script";"template"]
-let startTag = set["dd";"div";"dl";"dt"]
+let endTag = set ["dd";"div";"dl";"dt";"script";"template"]
+let selfClosingTag = set ["dd";"dt";"script";"template"]
+let startTag = set ["dd";"div";"dl";"dt"]
 
 let getTag (token:HtmlToken) =
     match token with
