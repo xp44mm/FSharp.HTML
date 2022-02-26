@@ -51,7 +51,7 @@ let notextElement = set [
     "slot";
     "spacer";
     //"strike";
-    "summary";
+    //"summary";
     "table";
     "tbody";
     //"td";
