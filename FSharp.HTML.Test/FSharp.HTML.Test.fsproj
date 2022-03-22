@@ -43,8 +43,8 @@
 		<Compile Include="TdAnalyzerTest.fs" />
 		<Compile Include="ParagraphAnalyzerTest.fs" />
 		<Compile Include="DlAnalyzerTest.fs" />
-		<Compile Include="ParserTest.fs" />
 		<Compile Include="WhitespaceTest.fs" />
+		<Compile Include="ParserTest.fs" />
 		
 		<Compile Include="Program.fs" />
 	</ItemGroup>

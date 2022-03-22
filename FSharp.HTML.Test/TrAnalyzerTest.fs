@@ -15,9 +15,6 @@ type TrAnalyzerTest(output:ITestOutputHelper) =
         |> Render.stringify
         |> output.WriteLine
 
-    let om txt =
-        txt
-
     let parse txt =
         txt
         |> Tokenizer.tokenize
@@ -57,6 +54,7 @@ type TrAnalyzerTest(output:ITestOutputHelper) =
 
         |> NodesParseTable.parse
         |> Whitespace.removeWsChildren
+        |> Whitespace.trimWhitespace
 
     [<Fact>]
     member _.``well formed``() =

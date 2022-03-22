@@ -1,5 +1,7 @@
 ﻿module FSharp.HTML.Whitespace
 
+open System.Text.RegularExpressions
+
 //its Permitted content contains no textNode.
 let notextElement = set [
     "acronym";
@@ -64,6 +66,48 @@ let notextElement = set [
     "xmp";
     ]
 
+let blockLevelFamily = set [
+    "address"   
+    "article"   
+    "aside"     
+    "blockquote"
+    "dd"        
+    "details"   
+    "dialog"    
+    "div"       
+    "dl"        
+    "dt"        
+    "fieldset"  
+    "figcaption"
+    "figure"    
+    "footer"    
+    "form"      
+    "h1"        
+    "h2"        
+    "h3"        
+    "h4"        
+    "h5"        
+    "h6"        
+    "header"    
+    "hgroup"    
+    "hr"        
+    "li"        
+    "main"      
+    //"nav"       
+    //"ol"        
+    "p"         
+    //"pre"       
+    "section"   
+    //"table"     
+    //"ul" 
+    
+    //补充的
+    "option"
+    "th"
+    "td"
+    "caption"
+]
+
 let rec removeWsChildren (nodes:HtmlNode list) =
     nodes
     |> List.filter(function
@@ -90,3 +134,57 @@ and removeWS (node:HtmlNode) =
     | HtmlComment _ -> node
     | HtmlText _ -> node
 
+let trimWhitespace elements =
+    let rec forward trimStart acc children =
+        match children with
+        | h::t -> 
+            match h with
+            | HtmlText x -> 
+                match x.TrimStart() with
+                | "" -> forward trimStart acc t
+                | y -> 
+                    let trimStart = Regex.IsMatch(y,@"\s+$")
+                    forward trimStart (HtmlText y::acc) t
+
+            | HtmlElement("pre",_,_) -> forward true (h::acc) t
+
+            | HtmlElement(nm,attrs,subchildren) ->
+                let trimStart = trimStart || blockLevelFamily.Contains nm
+                let trimStart,subchildren = forward trimStart [] subchildren
+                let hh = HtmlElement(nm,attrs,subchildren)
+                let trimStart = trimStart || blockLevelFamily.Contains nm
+                forward trimStart (hh::acc) t
+
+            | HtmlComment _ -> forward trimStart (h::acc) t
+
+            | HtmlCData _ -> forward false (h::acc) t
+        | [] ->
+            trimStart, List.rev acc
+
+    let rec backward trimEnd acc revchildren =
+        match revchildren with
+        | h::t -> 
+            match h with
+            | HtmlText x -> 
+                match x.TrimEnd() with
+                | "" -> backward trimEnd acc t
+                | y -> 
+                    let y = Regex.Replace(y,"\s+", " ")
+                    backward false (HtmlText y::acc) t
+
+            | HtmlElement("pre",_,_) -> backward true (h::acc) t
+
+            | HtmlElement(nm,attrs,subchildren) -> // pre
+                let trimEnd = trimEnd || blockLevelFamily.Contains nm
+                let trimEnd,subchildren = backward trimEnd [] subchildren
+                let hh = HtmlElement(nm,attrs,subchildren)
+                let trimEnd = trimEnd || blockLevelFamily.Contains nm
+                backward trimEnd (hh::acc) t
+            | HtmlComment _ -> backward trimEnd (h::acc) t
+            | HtmlCData _ -> backward false (h::acc) t
+        | [] -> trimEnd, acc
+
+    forward true [] elements
+    |> snd
+    |> backward true []
+    |> snd

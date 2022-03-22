@@ -1,12 +1,7 @@
 ﻿namespace FSharp.HTML
 
-open System
-open System.IO
-open System.Text.RegularExpressions
-
 open Xunit
 open Xunit.Abstractions
-open FSharp.xUnit
 open FSharp.Literals
 
 type ParserTest(output:ITestOutputHelper) =
@@ -17,7 +12,7 @@ type ParserTest(output:ITestOutputHelper) =
           
 
     [<Fact>]
-    member _.``well formed``() =
+    member _.``parseDoc``() =
         let x = """
         <!DOCTYPE html>
         <html>
@@ -31,5 +26,22 @@ type ParserTest(output:ITestOutputHelper) =
         </html>
         """
         let y = Parser.parseDoc x
+        show y
+
+    [<Fact>]
+    member _.``parseNodes``() =
+        let x = """
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <title>My test page</title>
+          </head>
+          <body>
+            <img src="images/firefox-icon.png" alt="My test image">
+          </body>
+        </html>
+        """
+        let y = Parser.parseNodes x
         show y
 

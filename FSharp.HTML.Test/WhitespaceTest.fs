@@ -22,3 +22,13 @@ type WhitespaceTest(output:ITestOutputHelper) =
             TagNames.htmlTags - TagNames.voidElements - TagNames.escapableRawTextElements
                 - TagNames.rawTextElements - TagNames.flowContent
         show y
+
+    [<Fact>]
+    member _.``trim whitespace``() =
+        let x = "<p>  <b> xyz</b>Geckos are a group<i>. </i>  </p>"
+        let y = 
+            Parser.parseNodes x
+            |> Whitespace.trimWhitespace
+
+        show y
+

@@ -27,6 +27,7 @@ type HtmlFsyaccTest(output:ITestOutputHelper) =
 
         |> NodesParseTable.parse
         |> Whitespace.removeWsChildren
+        |> Whitespace.trimWhitespace
     [<Fact>]
     member _.``Void elements``() =
         let x = """<br rel="author license" href="/about">"""

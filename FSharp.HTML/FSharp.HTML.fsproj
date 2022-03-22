@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>1.0.1</Version>
+		<Version>1.0.3</Version>
 		<Description>a parse for HTML5 based on the official W3C specification.</Description>
 		<Company>34696643@qq.com</Company>
 		<Authors>xp44m</Authors>
@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.HTML</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xp44mm/FSharp.HTML</PackageProjectUrl>
-		<PackageReleaseNotes>add feature that Simplely remove free whitespace</PackageReleaseNotes>
+		<PackageReleaseNotes>whitespace trim</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageTags>html; parser</PackageTags>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -54,7 +54,7 @@
 		<None Include="caption.fslex" />
 		<Compile Include="CaptionTokenUtils.fs" />
 		<Compile Include="CaptionDFA.fs" />
-		<Content Include="thead.fslex" />
+		<None Include="thead.fslex" />
 		<Compile Include="TheadTokenUtils.fs" />
 		<Compile Include="TheadDFA.fs" />
 		<None Include="tbody.fslex" />

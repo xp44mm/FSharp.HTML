@@ -60,6 +60,7 @@ type ParagraphAnalyzerTest(output:ITestOutputHelper) =
 
         |> NodesParseTable.parse
         |> Whitespace.removeWsChildren
+        |> Whitespace.trimWhitespace
 
 
     [<Fact>]
@@ -69,20 +70,6 @@ type ParagraphAnalyzerTest(output:ITestOutputHelper) =
 
 <p>Some species live in houses.</p>
 """
-        //let mutable ls = ResizeArray()
-        //try
-        //    let y = 
-        //        evade x
-        //        |> Seq.map(fun x -> 
-        //            ls.Add(x)
-        //            x
-        //        )
-        //        |> Seq.toList
-        //    show y
-        //with _ ->
-        //    let ls = List.ofSeq ls
-        //    show ls
-
         let y = parse x
         show y
 
@@ -94,19 +81,6 @@ type ParagraphAnalyzerTest(output:ITestOutputHelper) =
 <p>Some species live in houses.
 </div>
 """
-        //let mutable ls = ResizeArray()
-        //try
-        //    let y = 
-        //        evade x // ($"<div>{x}</div>")
-        //        |> Seq.map(fun x -> 
-        //            ls.Add(x)
-        //            x
-        //        )
-        //        |> Seq.toList
-        //    show y
-        //with _ ->
-        //    let ls = List.ofSeq ls
-        //    show ls
 
         let y = parse x
         show y

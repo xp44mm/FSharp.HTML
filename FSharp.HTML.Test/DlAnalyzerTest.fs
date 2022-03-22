@@ -64,7 +64,7 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
     
         |> NodesParseTable.parse
         |> Whitespace.removeWsChildren
-
+        |> Whitespace.trimWhitespace
 
     [<Fact>]
     member _.``well formed``() =
@@ -86,19 +86,6 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
 </div>
 </dl>
 """
-        //let mutable ls = ResizeArray()
-        //try
-        //    let y = 
-        //        evade x
-        //        |> Seq.map(fun x -> 
-        //            ls.Add(x)
-        //            x
-        //        )
-        //        |> Seq.toList
-        //    show y
-        //with _ ->
-        //    let ls = List.ofSeq ls
-        //    show ls
 
         let y = parse x
         show y
@@ -126,20 +113,6 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
 </div>
 </dl>
 """
-        //let mutable ls = ResizeArray()
-        //try
-        //    let y = 
-        //        evade x // ($"<div>{x}</div>")
-        //        |> Seq.map(fun x -> 
-        //            ls.Add(x)
-        //            x
-        //        )
-        //        |> Seq.toList
-        //    show y
-        //with _ ->
-        //    let ls = List.ofSeq ls
-        //    show ls
-
         let y = parse x
         show y
 
@@ -165,19 +138,6 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
  1 boule Crème brûlée, 1 boule Vanille, 1 boule Caramel, chantilly
 </dl>
 """
-        //let mutable ls = ResizeArray()
-        //try
-        //    let y = 
-        //        evade x // ($"<div>{x}</div>")
-        //        |> Seq.map(fun x -> 
-        //            ls.Add(x)
-        //            x
-        //        )
-        //        |> Seq.toList
-        //    show y
-        //with _ ->
-        //    let ls = List.ofSeq ls
-        //    show ls
 
         let y = parse x
         show y

@@ -57,7 +57,7 @@ type TdAnalyzerTest(output:ITestOutputHelper) =
 
         |> NodesParseTable.parse
         |> Whitespace.removeWsChildren
-
+        |> Whitespace.trimWhitespace
 
     [<Fact>]
     member _.``well formed``() =
@@ -86,19 +86,6 @@ type TdAnalyzerTest(output:ITestOutputHelper) =
 </tr>
 </table>
 """
-        //let mutable ls = ResizeArray()
-        //try
-        //    let y = 
-        //        evade x
-        //        |> Seq.map(fun x -> 
-        //            ls.Add(x)
-        //            x
-        //        )
-        //        |> Seq.toList
-        //    show y
-        //with _ ->
-        //    let ls = List.ofSeq ls
-        //    show ls
 
         let y = parse x
         show y

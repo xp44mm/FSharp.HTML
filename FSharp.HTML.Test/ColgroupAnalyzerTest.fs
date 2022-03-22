@@ -42,7 +42,7 @@ type ColgroupAnalyzerTest(output:ITestOutputHelper) =
 
         |> NodesParseTable.parse
         |> Whitespace.removeWsChildren
-
+        |> Whitespace.trimWhitespace
     [<Fact>]
     member _.``well-formed``() =
         let x = """

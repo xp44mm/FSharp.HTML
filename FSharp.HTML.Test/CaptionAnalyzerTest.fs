@@ -45,7 +45,7 @@ type CaptionAnalyzerTest(output:ITestOutputHelper) =
 
         |> NodesParseTable.parse
         |> Whitespace.removeWsChildren
-
+        |> Whitespace.trimWhitespace
     [<Fact>]
     member _.``basis``() =
         let x = """
