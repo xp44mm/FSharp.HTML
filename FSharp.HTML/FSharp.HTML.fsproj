@@ -78,7 +78,7 @@
 		<Compile Include="Whitespace.fs" />
 		<Compile Include="Parser.fs" />
 
-		<None Include="readme.md">
+		<None Include="..\readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
