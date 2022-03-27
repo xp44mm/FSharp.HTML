@@ -23,7 +23,7 @@ we can use this code to parse html source to HtmlDocument:
 
 ```F#
 let sourceText = ...
-let doc = Parser.parseDoc sourceText
+let doc = HtmlUtils.parseDoc sourceText
 ```
 
 you can get a `HtmlDocument` instance. see to [ParserTest](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML.Test/ParserTest.fs).
@@ -35,15 +35,18 @@ All parsing processes in a package are public, and you are free to compose them 
 The user can parse the string through the functions in the `Parser` module.
 
 ```F#
-module FSharp.HTML.Parser
+module FSharp.HTML.HtmlUtils
 
 /// Parses input text as a HtmlDocument tree
-let parseDoc txt = ...
-
+let parseDoc (txt:string) = ...
 
 /// Parses input text as a HtmlNode sequence, and ignore doctype.
-let parseNodes txt = ...
+let parseNodes (txt:string) = ...
 
+let stringifyNode (node:HtmlNode) = 
+    ...
+let stringifyDoc (docType, elements) =
+    ...
 ```
 
 You can also use a tokenizer to get a token sequence.
@@ -52,34 +55,10 @@ You can also use a tokenizer to get a token sequence.
 let tokens = Tokenizer.tokenize txt 
 ```
 
-
 The main structure types are defined as follows:
 
-```F#
-/// Represents an HTML node. The names of elements are always normalized to lowercase
-type HtmlNode =
-    | HtmlElement of name:string * attributes:list<string*string> * elements:HtmlNode list
-    | HtmlText of content:string
-    | HtmlComment of content:string
-    | HtmlCData of content:string
+- The type `HtmlNode` see to [HtmlNode](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlNode.fs).
 
-/// Represents an HTML document
-type HtmlDocument =
-    | HtmlDocument of docType:string * elements:HtmlNode list
+- The type `HtmlDocument` see to [HtmlDocument](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlDocument.fs).
 
-type HtmlToken =
-    | DocType of string
-    | Text of string
-    | Comment of string
-    | CData of string
-
-    | TagSelfClosing of name:string * attrs:list<string*string>
-    | TagStart of name:string * attrs:list<string*string>
-    | TagEnd of name:string
-
-    | EOF
-
-    | SEMICOLON
-
-```
-
+- The type `HtmlToken` see to [HtmlToken](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlToken.fs).

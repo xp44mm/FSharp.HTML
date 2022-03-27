@@ -45,12 +45,15 @@
 		<Compile Include="DlAnalyzerTest.fs" />
 		<Compile Include="WhitespaceTest.fs" />
 		<Compile Include="ParserTest.fs" />
+		<Compile Include="BrRemoverTest.fs" />
+		<Compile Include="HtmlCharRefsTest.fs" />
+		<Compile Include="RenderTest.fs" />
 		
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.xUnit" Version="1.2.1" />
+		<PackageReference Include="FSharp.xUnit" Version="1.2.2" />
 		<PackageReference Include="FslexFsyacc" Version="1.2.6" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />

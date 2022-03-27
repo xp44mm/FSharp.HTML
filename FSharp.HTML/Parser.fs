@@ -79,6 +79,9 @@ let getWellFormedNodes tokens =
     |> SemiNodeDFA.analyze
     |> Seq.concat
     |> NodesParseTable.parse
+    |> Whitespace.removeWsChildren
+    |> Whitespace.trimWhitespace
+    |> List.map HtmlCharRefs.unescapseNode
 
 let getNodes tokens =
     tokens
@@ -97,8 +100,6 @@ let getDoc tokens =
     let nodes = 
         tokens
         |> getNodes 
-        |> Whitespace.removeWsChildren
-        |> Whitespace.trimWhitespace
     HtmlDocument(docType,nodes)
 
 /// Parses input text as a HtmlDocument tree
@@ -114,5 +115,4 @@ let parseNodes txt =
     |> consumeDoctype
     |> snd
     |> getNodes
-    |> Whitespace.removeWsChildren
-    |> Whitespace.trimWhitespace
+

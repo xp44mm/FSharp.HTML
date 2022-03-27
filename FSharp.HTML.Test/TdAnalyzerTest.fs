@@ -1,12 +1,7 @@
 ﻿namespace FSharp.HTML
 
-open System
-open System.IO
-open System.Text.RegularExpressions
-
 open Xunit
 open Xunit.Abstractions
-open FSharp.xUnit
 open FSharp.Literals
 
 type TdAnalyzerTest(output:ITestOutputHelper) =

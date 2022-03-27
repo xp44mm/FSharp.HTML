@@ -159,7 +159,7 @@ let trimWhitespace elements =
 
             | HtmlCData _ -> forward false (h::acc) t
         | [] ->
-            trimStart, List.rev acc
+            trimStart, acc
 
     let rec backward trimEnd acc revchildren =
         match revchildren with

@@ -4,7 +4,7 @@ open FSharp.HTML
 open FSharp.HTML.HtmlTokenUtils
 %}
 
-children : 
+children: 
     | nodes       {List.rev s0}
     | (* empty *) {[]}
 

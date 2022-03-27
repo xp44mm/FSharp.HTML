@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>1.0.3</Version>
+		<Version>1.0.5</Version>
 		<Description>a parse for HTML5 based on the official W3C specification.</Description>
 		<Company>34696643@qq.com</Company>
 		<Authors>xp44m</Authors>
@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.HTML</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xp44mm/FSharp.HTML</PackageProjectUrl>
-		<PackageReleaseNotes>whitespace trim</PackageReleaseNotes>
+		<PackageReleaseNotes>render module</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageTags>html; parser</PackageTags>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -72,11 +72,14 @@
 		<None Include="dl.fslex" />
 		<Compile Include="DlTokenUtils.fs" />
 		<Compile Include="DlDFA.fs" />
-
-		<Compile Include="UnicodeHelper.fs" />
-		<Compile Include="HtmlCharRefs.fs" />
 		<Compile Include="Whitespace.fs" />
+		<Compile Include="GettingStarted.fs" />
+		<Compile Include="HtmlCharRefs.fs" />
 		<Compile Include="Parser.fs" />
+		<Compile Include="Render.fs" />
+		<Compile Include="BrRemover.fs" />
+		<Compile Include="HrRemover.fs" />
+		<Compile Include="HtmlUtils.fs" />
 
 		<None Include="..\readme.md">
 			<Pack>True</Pack>
@@ -86,6 +89,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.6" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
