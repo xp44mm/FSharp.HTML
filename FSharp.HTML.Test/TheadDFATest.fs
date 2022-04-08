@@ -75,7 +75,7 @@ type TheadDFATest(output:ITestOutputHelper) =
             let outp = $"let {tag} = {Literal.stringify st}"
             output.WriteLine(outp)
 
-    [<Fact(Skip="once and for all!")>] //
+    [<Fact(Skip="once and for all!")>] // 
     member _.``3 = generate DFA``() =
         let name = "TheadDFA" // **input**
         let moduleName = $"FSharp.HTML.{name}"

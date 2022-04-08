@@ -97,9 +97,18 @@ let getNodes tokens =
 let getDoc tokens =
     let docType, tokens =
         consumeDoctype tokens
+    let nodes =
+        tokens
+        |> getNodes
+    HtmlDocument(docType,nodes)
+
+let getWellFormedDoc tokens =
+    let docType, tokens =
+        consumeDoctype tokens
     let nodes = 
         tokens
-        |> getNodes 
+        |> unifyVoidElement
+        |> getWellFormedNodes 
     HtmlDocument(docType,nodes)
 
 /// Parses input text as a HtmlDocument tree
@@ -115,4 +124,20 @@ let parseNodes txt =
     |> consumeDoctype
     |> snd
     |> getNodes
+
+/// Parses input text as a HtmlDocument tree
+let parseWellFormedDoc txt =
+    txt
+    |> Tokenizer.tokenize
+    |> getWellFormedDoc
+
+/// Parses input text as a HtmlNode sequence, and ignore doctype.
+let parseWellFormedNodes txt =
+    txt
+    |> Tokenizer.tokenize
+    |> consumeDoctype
+    |> snd
+    |> unifyVoidElement
+    |> getWellFormedNodes
+
 

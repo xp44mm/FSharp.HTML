@@ -8,16 +8,20 @@ type token = HtmlToken
 precede = [
     "</script>" "<script/>"
     "</template>" "<template/>"
-    "<thead>"
-    "<tbody>"
-    "<tfoot>"
+    "<table>"
+    "</caption>" "<caption/>"
+    "</colgroup>" "<colgroup/>"
+    "<thead>" "</thead>" "<thead/>"
+    "<tbody>" "</tbody>" "<tbody/>"
+    "<tfoot>" "</tfoot>" "<tfoot/>"
     "</tr>" "<tr/>"
     ]
 
-follow = [ 
+follow = [
     "<tr>" "<tr/>" 
     "</thead>" "</tbody>" "</tfoot>" 
-    "</thead|tbody|tfoot>" ]
+    "</table>"
+    ]
 
 any = COMMENT|TEXT|CDATA|EOF
     | TAGSTART
@@ -28,7 +32,7 @@ any = COMMENT|TEXT|CDATA|EOF
 
 %%
 
-<precede> [COMMENT WS]* / <follow> { lexbuf }
+<precede> [COMMENT WS]* / [ "<tr>" "<tr/>" ] { lexbuf }
 
 <any> / <follow>  { lexbuf @ [TagEnd "tr"] }
 <any>             { lexbuf }

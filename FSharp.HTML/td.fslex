@@ -14,7 +14,7 @@ precede = [
     "</td>" "<td/>"
     ]
 
-follow = ["<th>" "<th/>" "<td>" "<td/>" "</tr>" ]
+follow = ["<th>" "<th/>" "<td>" "<td/>" "</tr>"]
 
 any = COMMENT|TEXT|CDATA|EOF
     | TAGSTART

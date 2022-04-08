@@ -26,13 +26,12 @@ let consumeAttributeNames (inp:string) =
             let tokens = v::revTokens
             loop tokens rest
 
-        | On (tryPrefix @"/?>") (x,rest) -> 
+        | On (tryMatch(Regex @"^/?>")) (x,rest) -> 
             let attributes = 
                 if revTokens.IsEmpty then 
                     [] 
                 else
                     AttributeDFA.analyze revTokens
-                    //|> Seq.map HtmlAttribute
                     |> Seq.toList
                     |> List.rev
             x, attributes, rest
@@ -44,7 +43,7 @@ let consumeAttributeNames (inp:string) =
 let consumeNestedCss (inp:string) =
     let continueTries = 
         [|
-            Regex("^[^/\"<]+") |> tryRegexMatch
+            Regex("^[^/\"<]+") |> tryMatch
             tryMultiLineComment
             tryDoubleStringLiteral
             fun inp -> Some(inp.[0..0],inp.[1..])
@@ -57,7 +56,7 @@ let consumeNestedCss (inp:string) =
     
     let breakTry =
         Regex("^</style\\s*>",RegexOptions.IgnoreCase) 
-        |> tryRegexMatch
+        |> tryMatch
         >> Option.map(fun(x,rest)-> 
             // 1 = break
             1,x,rest)
@@ -80,7 +79,7 @@ let consumeNestedCss (inp:string) =
 let consumeNestedJavaScript (inp:string) =
     let continueTries = 
         [|
-            Regex("^[^\"'`/<]+") |> tryRegexMatch
+            Regex("^[^\"'`/<]+") |> tryMatch
             tryDoubleStringLiteral
             trySingleStringLiteral
             tryGraveAccent
@@ -97,7 +96,7 @@ let consumeNestedJavaScript (inp:string) =
    
     let breakTry =
         Regex("^</script\\s*>",RegexOptions.IgnoreCase) 
-        |> tryRegexMatch
+        |> tryMatch
         >> Option.map(fun(x,rest)-> 
             // 1 = break
             1,x,rest)

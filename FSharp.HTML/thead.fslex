@@ -5,22 +5,24 @@ open FSharp.HTML.TheadTokenUtils
 type token = HtmlToken
 %}
 
-precede = [ 
+precede = [
     "</script>" "<script/>"
     "</template>" "<template/>"
-    "<table>" 
+    "<table>"
     "</caption>" "<caption/>"
     "</colgroup>" "<colgroup/>"
     "</thead>" "<thead/>"
     "</tbody>" "<tbody/>"
     "</tfoot>" "<tfoot/>"
+
+    "</tr>" "<tr/>"
     ]
 
 follow = [
     "<thead>" "<thead/>"
     "<tbody>" "<tbody/>"
     "<tfoot>" "<tfoot/>"
-    "</table>" 
+    "</table>"
 ]
 
 any = COMMENT|CDATA|TEXT|EOF
@@ -33,7 +35,6 @@ any = COMMENT|CDATA|TEXT|EOF
 %%
 
 <precede> [COMMENT WS]* / <follow> { lexbuf }
-
-<any> / <follow> { lexbuf @ [TagEnd "thead|tbody|tfoot"] }
+<any> / <follow> { lexbuf @ [TagEnd "thead|tbody|tfoot|tr"] }
 <any>            { lexbuf }
 

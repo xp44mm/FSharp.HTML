@@ -2260,20 +2260,20 @@ open FSharp.Idioms
 
 let tryCommonText =
     Regex @"^[^&]+"
-    |> tryRegexMatch
+    |> tryMatch
 
 let tryNamedCharacterReference =
     Regex @"^&[a-zA-Z]+;?"
-    |> tryRegexMatch
+    |> tryMatch
 
 let tryDecimalNumericCharacterReference =
     Regex @"^&#\d+;"
-    |> tryRegexMatch
+    |> tryMatch
 
 // Hexadecimal numeric character reference
 let tryHexadecimalNumericCharacterReference = 
     new Regex(@"^&#[xX][a-fA-F\d]+;")
-    |> tryRegexMatch
+    |> tryMatch
 
 let rec tokenizeRawText (inp:string) =
     seq {

@@ -7,6 +7,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="Dir.fs" />
 		<Compile Include="CodeGeneratorTest.fs" />
 		<Compile Include="AttributeDFATest.fs" />
 		<Compile Include="SemiNodeDFATest.fs" />
@@ -15,6 +16,7 @@
 		<Compile Include="RubyDFATest.fs" />
 		<Compile Include="OptgroupDFATest.fs" />
 		<Compile Include="OptionDFATest.fs" />
+		<Compile Include="TableParseTableTest.fs" />
 		<Compile Include="ColgroupDFATest.fs" />
 		<Compile Include="CaptionDFATest.fs" />
 		<Compile Include="TheadDFATest.fs" />
@@ -54,7 +56,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.xUnit" Version="1.2.2" />
-		<PackageReference Include="FslexFsyacc" Version="1.2.6" />
+		<PackageReference Include="FslexFsyacc" Version="1.2.8" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">

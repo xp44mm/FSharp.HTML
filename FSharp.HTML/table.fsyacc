@@ -1,0 +1,44 @@
+﻿%{
+// for optional </tr>
+%}
+
+table: 
+    | "<table>" children "</table>"  {}
+
+children:
+    | caption colgroup thead tbody tfoot tr thead tbody tfoot tr {}
+
+caption:
+    | (* empty *) {}
+    | "<caption>" "</caption>" {}
+    | "<caption/>"             {}
+
+colgroup:
+    | (* empty *)                {}
+    | "<colgroup>" "</colgroup>" {}
+    | "<colgroup/>"  {}
+
+thead:
+    | (* empty *)          {}
+    | "<thead>" "</thead>" {}
+    | "<thead>" tr "</thead>" {}
+
+    | "<thead/>" {}
+
+tfoot:
+    | (* empty *)          {}
+    | "<tfoot>" "</tfoot>" {}
+    | "<tfoot>" tr "</tfoot>" {}
+
+    | "<tfoot/>" {}
+
+tbody:
+    | (* empty *)   {}
+    | "<tbody>" "</tbody>" {}
+    | "<tbody>" tr "</tbody>" {}
+    | "<tbody/>" {}
+
+tr:
+    | "<tr>" "</tr>" {}
+    | "<tr/>" {}
+
