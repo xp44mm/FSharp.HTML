@@ -30,9 +30,8 @@ type TableParseTableTest(output:ITestOutputHelper) =
         |> Seq.map symbolRender
         |> String.concat "\r\n"
         |> sprintf "[\r\n%s\r\n]"
-    let solutionPath = DirectoryInfo(__SOURCE_DIRECTORY__).Parent.FullName
-    let projPath = Path.Combine(solutionPath,@"FSharp.HTML")
-    let filePath = Path.Combine(projPath, "table.fsyacc") // **input**
+
+    let filePath = Path.Combine(__SOURCE_DIRECTORY__, "table.fsyacc") // **input**
     let text = File.ReadAllText(filePath)
     let rawFsyacc = FsyaccFile.parse text
     let fsyacc = NormFsyaccFile.fromRaw rawFsyacc
@@ -81,7 +80,18 @@ type TableParseTableTest(output:ITestOutputHelper) =
 
         //优先级应该据此结果给出，不能少，也不应该多。
         let y = [
-            ]
+            ["tbody"]," No exist terminal!";
+            ["tfoot"]," No exist terminal!";
+            ["thead"]," No exist terminal!";
+            ["tr"]," No exist terminal!";
+            ["tbody";"<tbody>";"tr";"</tbody>"],"</tbody>";
+            ["tfoot";"<tfoot>";"tr";"</tfoot>"],"</tfoot>";
+            ["thead";"<thead>";"tr";"</thead>"],"</thead>";
+            ["tr";"<tr>";"</tr>"],"</tr>";
+            ["tbody";"<tbody/>"],"<tbody/>";
+            ["tfoot";"<tfoot/>"],"<tfoot/>";
+            ["thead";"<thead/>"],"<thead/>";
+            ["tr";"<tr/>"],"<tr/>"]
 
         Should.equal y pprods
 
@@ -113,37 +123,55 @@ type TableParseTableTest(output:ITestOutputHelper) =
         let grammar = Grammar.from <| fsyacc.getMainProductions()
         //let x = Map.keys grammar.precedes 
         //output.WriteLine(Literal.stringify x)
-        let p = grammar.precedes.["<tr>"]
-        let f = grammar.follows.["</tr>"]
+        let p = 
+            grammar.precedes.["<tr>"]
+            |> Set.toList
+            |> List.sortBy(fun x -> Regex.Match(x,@"\w+").Value)
+
+        let f = 
+            grammar.follows.["</tr>"]
+            |> Set.toList
+            |> List.sortBy(fun x -> Regex.Match(x,@"\w+").Value)
 
         output.WriteLine($"ptr={clazz p}")
         output.WriteLine($"ftr={clazz f}")
 
-
     [<Fact>]
     member _.``09 - thead precede``() =
         let grammar = Grammar.from <| fsyacc.getMainProductions()
-        let p = grammar.precedes.["</thead>"]
+        let p = 
+            grammar.precedes.["</thead>"]
+            |> Set.toList
+            |> List.sortBy(fun x -> Regex.Match(x,@"\w+").Value)
 
         output.WriteLine($"thead={clazz p}")
 
     [<Fact>]
     member _.``10 - tbody precede``() =
         let grammar = Grammar.from <| fsyacc.getMainProductions()
-        let p = grammar.precedes.["</tbody>"]
+        let p = 
+            grammar.precedes.["</tbody>"]
+            |> Set.toList
+            |> List.sortBy(fun x -> Regex.Match(x,@"\w+").Value)
 
         output.WriteLine($"tbody={clazz p}")
     [<Fact>]
     member _.``11 - tfoot precede``() =
         let grammar = Grammar.from <| fsyacc.getMainProductions()
-        let p = grammar.precedes.["</tfoot>"]
+        let p = 
+            grammar.precedes.["</tfoot>"]
+            |> Set.toList
+            |> List.sortBy(fun x -> Regex.Match(x,@"\w+").Value)
 
         output.WriteLine($"tfoot={clazz p}")
 
     [<Fact>]
     member _.``12 - table precede``() =
         let grammar = Grammar.from <| fsyacc.getMainProductions()
-        let p = grammar.precedes.["</table>"]
+        let p = 
+            grammar.precedes.["</table>"]
+            |> Set.toList
+            |> List.sortBy(fun x -> Regex.Match(x,@"\w+").Value)
 
         output.WriteLine($"table={clazz p}")
 

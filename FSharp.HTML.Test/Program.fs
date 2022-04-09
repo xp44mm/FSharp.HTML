@@ -8,27 +8,10 @@ open Xunit.Abstractions
 open FSharp.xUnit
 open FSharp.Literals
 
-let precedes = [
-    "</caption>";
-    "<caption/>";
-    "</colgroup>";
-    "<colgroup/>";
+let endTag = set ["caption";"colgroup";"table";"tbody";"tfoot";"thead";"tr"]
+let selfClosingTag = set ["caption";"colgroup";"tbody";"tfoot";"thead";"tr"]
+let startTag = set ["table";"tbody";"tfoot";"thead";"tr"]
+let id = set ["CDATA";"COMMENT";"EOF";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT";"WS"]
 
-    "</thead>";
-    "<thead/>";
-    "<thead>"
-    "</tbody>";
-    "<tbody/>";
-    "<tbody>";
-    "</tfoot>";
-    "<tfoot/>";
-    "<tfoot>";
-
-    "<table>";
-    ]
-
-
-
-
-
-let [<EntryPoint>] main _ = 0
+let [<EntryPoint>] main _ = 
+    0

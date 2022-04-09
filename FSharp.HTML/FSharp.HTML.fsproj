@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>1.0.7</Version>
+		<Version>1.0.8</Version>
 		<Description>a parse for HTML5 based on the official W3C specification.</Description>
 		<Company>34696643@qq.com</Company>
 		<Authors>xp44m</Authors>
@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.HTML</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xp44mm/FSharp.HTML</PackageProjectUrl>
-		<PackageReleaseNotes>Well Formed</PackageReleaseNotes>
+		<PackageReleaseNotes>remove thead, tbody, tfoot end tag be optional.</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageTags>html; parser</PackageTags>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -48,19 +48,12 @@
 		<None Include="option.fslex" />
 		<Compile Include="OptionTokenUtils.fs" />
 		<Compile Include="OptionDFA.fs" />
-		<None Include="table.fsyacc" />
 		<None Include="colgroup.fslex" />
 		<Compile Include="ColgroupTokenUtils.fs" />
 		<Compile Include="ColgroupDFA.fs" />
 		<None Include="caption.fslex" />
 		<Compile Include="CaptionTokenUtils.fs" />
 		<Compile Include="CaptionDFA.fs" />
-		<None Include="thead.fslex" />
-		<Compile Include="TheadTokenUtils.fs" />
-		<Compile Include="TheadDFA.fs" />
-		<None Include="tbody.fslex" />
-		<Compile Include="TbodyTokenUtils.fs" />
-		<Compile Include="TbodyDFA.fs" />
 		<None Include="tr.fslex" />
 		<Compile Include="TrTokenUtils.fs" />
 		<Compile Include="TrDFA.fs" />

@@ -20,25 +20,23 @@ colgroup:
 
 thead:
     | (* empty *)          {}
-    | "<thead>" "</thead>" {}
     | "<thead>" tr "</thead>" {}
 
     | "<thead/>" {}
 
 tfoot:
     | (* empty *)          {}
-    | "<tfoot>" "</tfoot>" {}
     | "<tfoot>" tr "</tfoot>" {}
 
     | "<tfoot/>" {}
 
 tbody:
     | (* empty *)   {}
-    | "<tbody>" "</tbody>" {}
     | "<tbody>" tr "</tbody>" {}
     | "<tbody/>" {}
 
 tr:
+    | (* empty *)   {}
     | "<tr>" "</tr>" {}
     | "<tr/>" {}
 

@@ -75,8 +75,29 @@ type TrDFATest(output:ITestOutputHelper) =
             let outp = $"let {tag} = {Literal.stringify st}"
             output.WriteLine(outp)
      
+    [<Fact>]
+    member _.``3 = print all tokens``() =
+        let res = fslex.getRegularExpressions()
+
+        let tokens = 
+            res
+            |> Array.collect(fun re -> re.getCharacters())
+            |> Array.toList
+            |> List.filter(fun x -> Regex.IsMatch(x,@"\W"))
+            |> List.distinct
+            |> List.sortBy(fun x -> Regex.Match(x,@"\w+").Value)
+            
+        let outp =
+            tokens
+            |> List.map(FSharp.Idioms.Quotation.quote)
+            |> String.concat "\r\n"
+            |> sprintf "[%s]"
+
+        output.WriteLine(outp)
+
+
     [<Fact(Skip="once and for all!")>] //
-    member _.``3 = generate DFA``() =
+    member _.``4 = generate DFA``() =
         let name = "TrDFA" // **input**
         let moduleName = $"FSharp.HTML.{name}"
 
@@ -88,7 +109,7 @@ type TrDFATest(output:ITestOutputHelper) =
         output.WriteLine("dfa output path:" + outputDir)
 
     [<Fact>]
-    member _.``4 = valid DFA``() =
+    member _.``5 = valid DFA``() =
         let y = fslex.toFslexDFAFile()
 
         Should.equal y.nextStates TrDFA.nextStates

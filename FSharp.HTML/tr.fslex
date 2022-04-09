@@ -5,35 +5,48 @@ open FSharp.HTML.TrTokenUtils
 type token = HtmlToken
 %}
 
-precede = [
-    "</script>" "<script/>"
-    "</template>" "<template/>"
-    "<table>"
-    "</caption>" "<caption/>"
-    "</colgroup>" "<colgroup/>"
-    "<thead>" "</thead>" "<thead/>"
-    "<tbody>" "</tbody>" "<tbody/>"
-    "<tfoot>" "</tfoot>" "<tfoot/>"
-    "</tr>" "<tr/>"
-    ]
-
-follow = [
-    "<tr>" "<tr/>" 
-    "</thead>" "</tbody>" "</tfoot>" 
-    "</table>"
-    ]
-
 any = COMMENT|TEXT|CDATA|EOF
     | TAGSTART
     | TAGEND
     | TAGSELFCLOSING
     | WS
-    | <precede> | <follow>
+    | ["</caption>" "<caption/>" "</colgroup>" "<colgroup/>" "<table>" "</table>" "</tbody>" "<tbody/>" "<tbody>" "</tfoot>" "<tfoot/>" "<tfoot>" "</thead>" "<thead/>" "<thead>" "</tr>" "<tr/>" "<tr>"]
 
 %%
 
-<precede> [COMMENT WS]* / [ "<tr>" "<tr/>" ] { lexbuf }
+[
+"<table>"
+"</caption>"  "<caption/>"
+"</colgroup>" "<colgroup/>"
+"</thead>"  "<thead/>"  "<thead>"
+"</tbody>"  "<tbody/>"  "<tbody>"
+"</tfoot>"  "<tfoot/>"  "<tfoot>"
+"</tr>"  "<tr/>" ] [COMMENT WS]* / [ "<tr>" "<tr/>" ] { lexbuf }
 
-<any> / <follow>  { lexbuf @ [TagEnd "tr"] }
-<any>             { lexbuf }
+[
+"<thead>"
+"</tr>" "<tr/>" ] [COMMENT WS]* / "</thead>" { lexbuf }
+
+[
+"<tbody>"
+"</tr>" "<tr/>" ] [COMMENT WS]* / "</tbody>" { lexbuf }
+
+[
+"<tfoot>"
+"</tr>" "<tr/>" ] [COMMENT WS]* / "</tfoot>" { lexbuf }
+
+[
+"<table>"
+"</caption>" "<caption/>"
+"</colgroup>" "<colgroup/>"
+"</thead>" "<thead/>"
+"</tbody>" "<tbody/>"
+"</tfoot>" "<tfoot/>"
+"</tr>" "<tr/>" ] [COMMENT WS]* / "</table>" { lexbuf }
+
+<any> / [
+"<tr>" "<tr/>" 
+"</thead>" "</tbody>" "</tfoot>" "</table>" ] { lexbuf @ [TagEnd "tr"] }
+
+<any> { lexbuf }
 

@@ -5,7 +5,6 @@ open FSharp.HTML.TdTokenUtils
 type token = HtmlToken
 %}
 
-
 precede = [
     "</script>" "<script/>"
     "</template>" "<template/>"

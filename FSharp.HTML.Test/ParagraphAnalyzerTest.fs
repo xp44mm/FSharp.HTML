@@ -40,12 +40,6 @@ type ParagraphAnalyzerTest(output:ITestOutputHelper) =
         |> CaptionDFA.analyze
         |> Seq.concat
 
-        |> TheadDFA.analyze
-        |> Seq.concat
-
-        |> TbodyDFA.analyze
-        |> Seq.concat
-
         |> TrDFA.analyze
         |> Seq.concat
 
