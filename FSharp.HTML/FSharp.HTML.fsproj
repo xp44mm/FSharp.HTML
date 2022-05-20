@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>1.0.8</Version>
+		<Version>1.0.9</Version>
 		<Description>a parse for HTML5 based on the official W3C specification.</Description>
 		<Company>34696643@qq.com</Company>
 		<Authors>xp44m</Authors>
@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.HTML</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xp44mm/FSharp.HTML</PackageProjectUrl>
-		<PackageReleaseNotes>remove thead, tbody, tfoot end tag be optional.</PackageReleaseNotes>
+		<PackageReleaseNotes>update dependency.</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageTags>html; parser</PackageTags>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -30,11 +30,10 @@
 		<Compile Include="Tokenizer.fs" />
 
 		<Compile Include="HtmlTokenUtils.fs" />
-		<None Include="semiNode.fslex" />
-		<Compile Include="SemiNodeDFA.fs" />
-		<None Include="nodes.fsyacc" />
+		
+		<None Include="precnodes.fsyacc" />
 		<Compile Include="NodesFsyaccUtils.fs" />
-		<Compile Include="NodesParseTable.fs" />
+		<Compile Include="PrecNodesParseTable.fs" />
 
 		<None Include="list.fslex" />
 		<Compile Include="ListTokenUtils.fs" />
@@ -82,12 +81,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.7" />
+		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.10" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="FSharp.Core" Version="6.0.3" />
+	  <PackageReference Update="FSharp.Core" Version="6.0.4" />
 	</ItemGroup>
 
 </Project>

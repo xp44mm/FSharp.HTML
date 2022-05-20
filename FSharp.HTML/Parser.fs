@@ -70,9 +70,7 @@ let consumeDoctype tokens =
 /// no doctype, the tags are all in pairs in tokens
 let getWellFormedNodes tokens =
     tokens
-    |> SemiNodeDFA.analyze
-    |> Seq.concat
-    |> NodesParseTable.parse
+    |> PrecNodesParseTable.parse
     |> Whitespace.removeWsChildren
     |> Whitespace.trimWhitespace
     |> List.map HtmlCharRefs.unescapseNode

@@ -6,13 +6,14 @@ open System
 open System.IO
 open System.Text.RegularExpressions
 
+open FSharp.Idioms
 open FSharp.Literals
 open FSharp.xUnit
-open FslexFsyacc.Fsyacc
-open FslexFsyacc.Yacc
-open FSharp.Idioms
 
-type NodesParseTableTest(output:ITestOutputHelper) =
+open FslexFsyacc.Yacc
+open FslexFsyacc.Fsyacc
+
+type PrecNodesParseTableTest(output:ITestOutputHelper) =
     let show res =
         res
         |> Render.stringify
@@ -32,7 +33,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
 
     let solutionPath = DirectoryInfo(__SOURCE_DIRECTORY__).Parent.FullName
     let projPath = Path.Combine(solutionPath,@"FSharp.HTML")
-    let filePath = Path.Combine(projPath, "nodes.fsyacc") // **input**
+    let filePath = Path.Combine(projPath, "precnodes.fsyacc") // **input**
     let text = File.ReadAllText(filePath)
     let rawFsyacc = FsyaccFile.parse text
     let fsyacc = NormFsyaccFile.fromRaw rawFsyacc
@@ -85,7 +86,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
 
     [<Fact(Skip="once and for all!")>] //
     member _.``5 - generate parsing table``() =
-        let name = "NodesParseTable" // **input**
+        let name = "PrecNodesParseTable" // **input**
         let moduleName = $"FSharp.HTML.{name}"
 
         let parseTbl = fsyacc.toFsyaccParseTableFile()
@@ -98,10 +99,10 @@ type NodesParseTableTest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``6 - valid ParseTable``() =
         let t = fsyacc.toFsyaccParseTableFile()
-        Should.equal t.header        NodesParseTable.header
-        Should.equal t.actions       NodesParseTable.actions
-        Should.equal t.rules NodesParseTable.rules
-        Should.equal t.declarations  NodesParseTable.declarations
+        Should.equal t.header       PrecNodesParseTable.header
+        Should.equal t.actions      PrecNodesParseTable.actions
+        Should.equal t.rules        PrecNodesParseTable.rules
+        Should.equal t.declarations PrecNodesParseTable.declarations
 
     [<Fact>]
     member _.``7 - list all tokens``() =

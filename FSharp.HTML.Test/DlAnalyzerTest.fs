@@ -52,11 +52,8 @@ type DlAnalyzerTest(output:ITestOutputHelper) =
     
         |> DlDFA.analyze
         |> Seq.concat
-    
-        |> SemiNodeDFA.analyze
-        |> Seq.concat
-    
-        |> NodesParseTable.parse
+        
+        |> PrecNodesParseTable.parse
         |> Whitespace.removeWsChildren
         |> Whitespace.trimWhitespace
 

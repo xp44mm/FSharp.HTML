@@ -2,6 +2,8 @@
 open System
 open FSharp.HTML
 open FSharp.HTML.HtmlTokenUtils
+type token = HtmlToken
+
 %}
 
 children: 
@@ -9,8 +11,8 @@ children:
     | (* empty *) {[]}
 
 nodes:
-    | nodes ";" node {s2::s0}
-    |           node {[s0]}
+    | nodes node {s1::s0}
+    |       node {[s0]}
 
 node:
     | TEXT    {HtmlText s0}

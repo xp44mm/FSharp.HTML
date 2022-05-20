@@ -25,10 +25,7 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         |> ListDFA.analyze
         |> Seq.concat
 
-        |> SemiNodeDFA.analyze
-        |> Seq.concat
-
-        |> NodesParseTable.parse
+        |> PrecNodesParseTable.parse
         |> Whitespace.removeWsChildren
         |> Whitespace.trimWhitespace
 

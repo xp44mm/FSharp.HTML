@@ -31,10 +31,7 @@ type OptgroupAnalyzerTest(output:ITestOutputHelper) =
         |> OptgroupDFA.analyze
         |> Seq.concat
 
-        |> SemiNodeDFA.analyze
-        |> Seq.concat
-
-        |> NodesParseTable.parse
+        |> PrecNodesParseTable.parse
         |> Whitespace.removeWsChildren
         |> Whitespace.trimWhitespace
     [<Fact>]
