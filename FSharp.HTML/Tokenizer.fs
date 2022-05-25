@@ -20,7 +20,6 @@ let tokenize(inp:string) =
                 let b = ">".Length
                 let c = x.Length-1
                 let xx = x.[a..c-b].Trim()
-                //let y = Regex.Replace(x,@"^<!DOCTYPE\s+([^>]+?)\s*>$","$1")
                 yield DocType xx
                 yield! loop rest
 
@@ -29,7 +28,6 @@ let tokenize(inp:string) =
                 let b = "-->".Length
                 let c = x.Length-1
                 let xx = x.[a..c-b]
-                //let y = Regex.Replace(x,@"^<!--\s*([\s\S]*?)\s*-->$","$1")
                 yield Comment xx
                 yield! loop rest
 
@@ -38,7 +36,6 @@ let tokenize(inp:string) =
                 let b = "]]>".Length
                 let c = x.Length-1
                 let xx = x.[a..c-b]
-                //let y = Regex.Replace(x,@"^<!\[CDATA\[([\s\S]*)\]\]>$","$1",RegexOptions.IgnoreCase)
                 yield CData xx
                 yield! loop rest
 

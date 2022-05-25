@@ -26,6 +26,5 @@ let getTag (token:HtmlToken) =
     | TagSelfClosing _ -> "TAGSELFCLOSING"
 
     | EOF -> "EOF"
-    | SEMICOLON -> ";"
     | DocType _ -> "DOCTYPE"
 

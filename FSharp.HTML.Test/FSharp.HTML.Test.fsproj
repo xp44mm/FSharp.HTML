@@ -54,7 +54,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.xUnit" Version="1.2.2" />
-		<PackageReference Include="FslexFsyacc" Version="1.2.17" />
+		<PackageReference Include="FslexFsyacc" Version="1.2.24" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
 		<PackageReference Include="xunit" Version="2.4.1" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">

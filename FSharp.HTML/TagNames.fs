@@ -562,4 +562,42 @@ let flowContent = set [
     "wbr";
 ]
 
+let follows = Map [
+    "head",set["body";]
 
+
+    "li",set ["li"]
+
+    "colgroup",set ["caption";"colgroup";"thead";"tbody";"tfoot";"tr";"td";"th"]
+    "caption",set ["caption";"colgroup";"col";"thead";"tbody";"tfoot";"tr";"td";"th"]
+    "thead", set ["thead";"tbody";"tfoot"]
+    "tbody", set ["thead";"tbody";"tfoot"]
+    "tfoot", set ["thead";"tbody";"tfoot"]
+    "tr",set ["tr";"thead";"tbody";"tfoot"]
+    "th",set ["tr";"thead";"tbody";"tfoot";"th";"td"]
+    "td",set ["tr";"thead";"tbody";"tfoot";"th";"td"]
+    "p",set [
+        "address"; "article"; "aside"; "blockquote"; "details"; "div"; "dl"; 
+        "fieldset"; "figcaption"; "figure"; "footer"; "form"; 
+        "h1"; "h2"; "h3"; "h4"; "h5"; "h6"; "header"; "hgroup"; "hr"; 
+        "main"; "menu"; "nav"; "ol"; "p"; "pre"; "section"; "table"; "ul"
+    ]
+
+    "dt", set ["dd";"dt"]
+    "dd", set ["dd";"dt"]
+
+    "rt",set ["rt";"rp";"ruby"]
+    "rp",set ["rt";"rp";"ruby"]
+
+    "optgroup",set ["optgroup"]
+    "option",set ["option";"optgroup"]
+
+]
+
+let contents = [
+    "head",set["base"; "link"; "meta"; "noscript"; "script"; "style"; "template"; "title";]
+
+    "colgroup",set ["col"]
+
+
+]

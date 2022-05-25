@@ -12,6 +12,7 @@ open FSharp.xUnit
 
 open FslexFsyacc.Yacc
 open FslexFsyacc.Fsyacc
+open System.Text
 
 type PrecNodesParseTableTest(output:ITestOutputHelper) =
     let show res =
@@ -119,3 +120,13 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
 
         output.WriteLine($"last={clazz last}")
         output.WriteLine($"first={clazz first}")
+
+    [<Fact>]
+    member _.``9 - closures``() =
+        let tbl = PrecNodesParseTable.parser.getParserTable()
+        let str = tbl.collection()
+
+        let name = "precnodes"
+        let outputDir = Path.Combine(projPath, $"{name}.txt")
+        File.WriteAllText(outputDir,str,Encoding.UTF8)
+        output.WriteLine($"output:\r\n{outputDir}")

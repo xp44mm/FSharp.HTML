@@ -7,7 +7,9 @@ type token = HtmlToken
 
 follow = [ 
 	"<option>" "<option/>"
-	"<optgroup>" "<optgroup/>" "</optgroup>" 
+	"<optgroup>" "<optgroup/>" 
+	
+	"</optgroup>" 
 	"</select>" 
 	"</datalist>" 
 	]

@@ -23,7 +23,7 @@ let getTag (token:HtmlToken) =
         else "TAGEND"
 
     | EOF -> "EOF"
-    | SEMICOLON -> ";"
+    //| SEMICOLON -> ";"
     | DocType _ -> "DOCTYPE"
 
 

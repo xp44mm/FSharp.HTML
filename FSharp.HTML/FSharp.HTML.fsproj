@@ -28,13 +28,8 @@
 		<Compile Include="AttributeDFA.fs" />
 		<Compile Include="Consumption.fs" />
 		<Compile Include="Tokenizer.fs" />
-
 		<Compile Include="HtmlTokenUtils.fs" />
 		
-		<None Include="precnodes.fsyacc" />
-		<Compile Include="NodesFsyaccUtils.fs" />
-		<Compile Include="PrecNodesParseTable.fs" />
-
 		<None Include="list.fslex" />
 		<Compile Include="ListTokenUtils.fs" />
 		<Compile Include="ListDFA.fs" />
@@ -65,11 +60,17 @@
 		<None Include="dl.fslex" />
 		<Compile Include="DlTokenUtils.fs" />
 		<Compile Include="DlDFA.fs" />
+
+		<None Include="precnodes.fsyacc" />
+		<Compile Include="NodesFsyaccUtils.fs" />
+		<Compile Include="PrecNodesParseTable.fs" />
+
 		<Compile Include="Whitespace.fs" />
 		<Compile Include="GettingStarted.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
-		<Compile Include="Parser.fs" />
 		<Compile Include="Render.fs" />
+		<Compile Include="Parser.fs" />
+		<Compile Include="Compiler.fs" />
 		<Compile Include="BrRemover.fs" />
 		<Compile Include="HrRemover.fs" />
 		<Compile Include="HtmlUtils.fs" />
@@ -81,7 +82,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.10" />
+		<PackageReference Include="FslexFsyacc.Runtime" Version="1.2.17" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
 	</ItemGroup>
 

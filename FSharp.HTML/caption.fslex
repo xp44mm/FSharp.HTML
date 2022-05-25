@@ -8,7 +8,7 @@ type token = HtmlToken
 content = COMMENT|TEXT|CDATA|TAGSELFCLOSING|TAGSTART|TAGEND
 
 follow = [
-    "<table>" "</table>" "<table/>"
+    "<table>" "<table/>" "</table>"
     "<caption>" "<caption/>"
     "<colgroup>" "<colgroup/>"
     "<thead>" "<thead/>"
