@@ -22,9 +22,6 @@ type ListAnalyzerTest(output:ITestOutputHelper) =
         |> snd
         |> Seq.choose HtmlTokenUtils.unifyVoidElement
 
-        |> ListDFA.analyze
-        |> Seq.concat
-
         |> PrecNodesParseTable.parse
         |> Whitespace.removeWsChildren
         |> Whitespace.trimWhitespace

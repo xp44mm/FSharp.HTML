@@ -1,58 +1,5 @@
 ﻿module FSharp.HTML.Parser
 
-/// convert void element from <br> or <br></br> to <br/>
-let unifyVoidElement tokens = 
-    tokens 
-    |> Seq.choose HtmlTokenUtils.unifyVoidElement
-
-/// complement omitted </option> </optgroup>
-let complementOption tokens =
-    tokens
-    |> OptgroupDFA.analyze
-    |> Seq.concat
-
-    |> OptionDFA.analyze
-    |> Seq.concat
-
-/// complement omitted </caption> </colgroup> </thead> <tbody> </tbody> </tfoot> </tr> </th> </td>
-let complementTable tokens =
-    tokens
-    |> ColgroupDFA.analyze
-    |> Seq.concat
-
-    |> CaptionDFA.analyze
-    |> Seq.concat
-
-    |> TrDFA.analyze
-    |> Seq.concat
-
-    |> TdDFA.analyze
-    |> Seq.concat
-
-/// complement omitted </li>
-let complementLi tokens =
-    tokens
-    |> ListDFA.analyze
-    |> Seq.concat
-
-/// complement omitted </rt> </rp>
-let complementRuby tokens =
-    tokens
-    |> RubyDFA.analyze
-    |> Seq.concat
-
-/// complement omitted </p>
-let complementParagraph tokens =
-    tokens
-    |> ParagraphDFA.analyze
-    |> Seq.concat
-
-/// complement omitted </dt> </dd>
-let complementDl tokens =
-    tokens
-    |> DlDFA.analyze
-    |> Seq.concat
-
 /// Locate doctype at the beginning of tokens
 let consumeDoctype tokens =
     let maybeDoctype, tokens = 
@@ -67,69 +14,80 @@ let consumeDoctype tokens =
         |> Option.defaultValue "html"
     docType,tokens
 
-/// no doctype, the tags are all in pairs in tokens
-let getWellFormedNodes tokens =
-    tokens
-    |> PrecNodesParseTable.parse
-    |> Whitespace.removeWsChildren
-    |> Whitespace.trimWhitespace
-    |> List.map HtmlCharRefs.unescapseNode
+let basicTokenize txt =
+    let docType,tokens =
+        txt
+        |> Tokenizer.tokenize
+        |> consumeDoctype
 
-let getNodes tokens =
-    tokens
-    |> unifyVoidElement
-    |> complementLi
-    |> complementRuby
-    |> complementOption
-    |> complementTable
-    |> complementParagraph
-    |> complementDl
-    |> getWellFormedNodes
-
-let getDoc tokens =
-    let docType, tokens =
-        consumeDoctype tokens
-    let nodes =
+    let tokens =
         tokens
-        |> getNodes
-    HtmlDocument(docType,nodes)
-
-let getWellFormedDoc tokens =
-    let docType, tokens =
-        consumeDoctype tokens
-    let nodes = 
-        tokens
-        |> unifyVoidElement
-        |> getWellFormedNodes 
-    HtmlDocument(docType,nodes)
+        |> Seq.filter(HtmlTokenUtils.isVoidTagEnd>>not)
+        |> Seq.map HtmlTokenUtils.voidTagStartToSelfClosing
+    docType,tokens
 
 /// Parses input text as a HtmlDocument tree
 let parseDoc txt =
-    txt
-    |> Tokenizer.tokenize
-    |> getDoc
+    let docType,tokens =
+        txt
+        |> basicTokenize
+    let nodes =
+        tokens
+        |> Compiler.parse
+        |> Whitespace.removeWsChildren
+        |> Whitespace.trimWhitespace
+        |> List.map HtmlCharRefs.unescapseNode
+        
+    docType,nodes
 
-/// Parses input text as a HtmlNode sequence, and ignore doctype.
-let parseNodes txt =
-    txt
-    |> Tokenizer.tokenize
-    |> consumeDoctype
-    |> snd
-    |> getNodes
 
-/// Parses input text as a HtmlDocument tree
-let parseWellFormedDoc txt =
-    txt
-    |> Tokenizer.tokenize
-    |> getWellFormedDoc
+///// no doctype, the tags are all in pairs in tokens
+//let getWellFormedNodes tokens =
+//    tokens
+//    |> PrecNodesParseTable.parse
+//    |> Whitespace.removeWsChildren
+//    |> Whitespace.trimWhitespace
+//    |> List.map HtmlCharRefs.unescapseNode
 
-/// Parses input text as a HtmlNode sequence, and ignore doctype.
-let parseWellFormedNodes txt =
-    txt
-    |> Tokenizer.tokenize
-    |> consumeDoctype
-    |> snd
-    |> unifyVoidElement
-    |> getWellFormedNodes
+//let getNodes tokens =
+//    tokens
+//    |> getWellFormedNodes
+
+//let getWellFormedDoc tokens =
+//    let docType, tokens =
+//        consumeDoctype tokens
+//    let nodes = 
+//        tokens
+//        |> Seq.filter(HtmlTokenUtils.isVoidTagEnd>>not)
+//        |> Seq.map HtmlTokenUtils.voidTagStartToSelfClosing
+
+//        |> getWellFormedNodes 
+//    HtmlDocument(docType,nodes)
+
+
+///// Parses input text as a HtmlNode sequence, and ignore doctype.
+//let parseNodes txt =
+//    txt
+//    |> Tokenizer.tokenize
+//    |> consumeDoctype
+//    |> snd
+//    |> getNodes
+
+///// Parses input text as a HtmlDocument tree
+//let parseWellFormedDoc txt =
+//    txt
+//    |> Tokenizer.tokenize
+//    |> getWellFormedDoc
+
+///// Parses input text as a HtmlNode sequence, and ignore doctype.
+//let parseWellFormedNodes txt =
+//    txt
+//    |> Tokenizer.tokenize
+//    |> consumeDoctype
+//    |> snd
+//    |> Seq.filter(HtmlTokenUtils.isVoidTagEnd>>not)
+//    |> Seq.map HtmlTokenUtils.voidTagStartToSelfClosing
+
+//    |> getWellFormedNodes
 
 

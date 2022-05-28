@@ -22,12 +22,6 @@ type RubyAnalyzerTest(output:ITestOutputHelper) =
         |> snd
         |> Seq.choose HtmlTokenUtils.unifyVoidElement
 
-        |> ListDFA.analyze
-        |> Seq.concat
-
-        |> RubyDFA.analyze
-        |> Seq.concat
-
         |> PrecNodesParseTable.parse
         |> Whitespace.removeWsChildren
         |> Whitespace.trimWhitespace

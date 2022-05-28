@@ -40,7 +40,7 @@ let stringifyStates states =
         |> List.map(fun(i,_)-> $"{parser.getSymbol i}")
     stringify symbols
 
-let parse txt =
+let parse tokens =
     let mutable states = [0,null]
 
     //omitted TagEnd complement omitted
@@ -93,10 +93,11 @@ let parse txt =
 
         loop ()
 
-    txt
-    |> Tokenizer.tokenize
-    |> Seq.filter(HtmlTokenUtils.isVoidTagEnd>>not)
-    |> Seq.map HtmlTokenUtils.voidTagStartToSelfClosing
+    tokens
+    //txt
+    //|> Tokenizer.tokenize
+    //|> Seq.filter(HtmlTokenUtils.isVoidTagEnd>>not)
+    //|> Seq.map HtmlTokenUtils.voidTagStartToSelfClosing
     |> complementOmmittedTagEnd
     |> Seq.iteri(fun i tok ->
         //Console.WriteLine($"tok:{stringify tok}")

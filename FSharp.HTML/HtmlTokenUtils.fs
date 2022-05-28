@@ -7,7 +7,7 @@ let preamble (tokens:HtmlToken seq) =
     let iterator = Iterator(tokens.GetEnumerator())
     let rec loop () =
         match iterator.tryNext() with
-        | Some(Text t) when t.Trim() = "" -> loop () 
+        | Some(Text t) when t.Trim() = "" -> loop ()
         | Some(DocType _) as sm ->
             let rest =
                 iterator.tryNext()
@@ -30,16 +30,15 @@ let preamble (tokens:HtmlToken seq) =
 
 let unifyVoidElement (token:HtmlToken) =    
     match token with
-    | TagStart (name,attrs) ->
-        if TagNames.voidElements.Contains name then
-            TagSelfClosing(name,attrs)
-        else token
+    | TagStart (name,attrs) when 
+        TagNames.voidElements.Contains name ->
+        TagSelfClosing(name,attrs)
         |> Some
-    | TagEnd name ->
-        if TagNames.voidElements.Contains name then
-            None
-        else Some token
-    | _ -> Some token
+    | TagEnd name when 
+        TagNames.voidElements.Contains name ->
+        None
+    | _ -> 
+        Some token
 
 let voidTagStartToSelfClosing(token:HtmlToken) =    
     match token with

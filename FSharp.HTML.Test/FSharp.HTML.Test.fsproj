@@ -11,18 +11,6 @@
 		<Compile Include="CodeGeneratorTest.fs" />
 		<Compile Include="AttributeDFATest.fs" />
 		<Compile Include="PrecNodesParseTableTest.fs" />
-		<Compile Include="ListDFATest.fs" />
-		<Compile Include="RubyDFATest.fs" />
-		<Compile Include="OptgroupDFATest.fs" />
-		<Compile Include="OptionDFATest.fs" />
-		<None Include="table.fsyacc" />
-		<Compile Include="TableParseTableTest.fs" />
-		<Compile Include="ColgroupDFATest.fs" />
-		<Compile Include="CaptionDFATest.fs" />
-		<Compile Include="TrDFATest.fs" />
-		<Compile Include="TdDFATest.fs" />
-		<Compile Include="ParagraphDFATest.fs" />
-		<Compile Include="DlDFATest.fs" />
 		
 		<Compile Include="TryTokenizerTest.fs" />
 		<Compile Include="TokenizerTest.fs" />

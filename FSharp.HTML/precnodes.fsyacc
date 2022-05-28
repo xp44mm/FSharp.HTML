@@ -27,7 +27,10 @@ element:
     }
     | TAGSTART children TAGEND {
         let name,attrs = s0
-        NodesFsyaccUtils.htmlNode name s2 attrs s1
+        if name = s2 then
+            HtmlElement(name, attrs, s1)
+        else 
+            failwith $"unmatched:<{name}></{s2}>"
     }
 
 %%

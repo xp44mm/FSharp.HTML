@@ -18,6 +18,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<Compile Include="SourceText.fs" />
 		<Compile Include="TagNames.fs" />
 		<Compile Include="HtmlNode.fs" />
 		<Compile Include="HtmlDocument.fs" />
@@ -29,48 +30,15 @@
 		<Compile Include="Consumption.fs" />
 		<Compile Include="Tokenizer.fs" />
 		<Compile Include="HtmlTokenUtils.fs" />
-		
-		<None Include="list.fslex" />
-		<Compile Include="ListTokenUtils.fs" />
-		<Compile Include="ListDFA.fs" />
-		<None Include="ruby.fslex" />
-		<Compile Include="RubyTokenUtils.fs" />
-		<Compile Include="RubyDFA.fs" />
-		<None Include="optgroup.fslex" />
-		<Compile Include="OptgroupTokenUtils.fs" />
-		<Compile Include="OptgroupDFA.fs" />
-		<None Include="option.fslex" />
-		<Compile Include="OptionTokenUtils.fs" />
-		<Compile Include="OptionDFA.fs" />
-		<None Include="colgroup.fslex" />
-		<Compile Include="ColgroupTokenUtils.fs" />
-		<Compile Include="ColgroupDFA.fs" />
-		<None Include="caption.fslex" />
-		<Compile Include="CaptionTokenUtils.fs" />
-		<Compile Include="CaptionDFA.fs" />
-		<None Include="tr.fslex" />
-		<Compile Include="TrTokenUtils.fs" />
-		<Compile Include="TrDFA.fs" />
-		<None Include="td.fslex" />
-		<Compile Include="TdTokenUtils.fs" />
-		<Compile Include="TdDFA.fs" />
-		<None Include="paragraph.fslex" />
-		<Compile Include="ParagraphTokenUtils.fs" />
-		<Compile Include="ParagraphDFA.fs" />
-		<None Include="dl.fslex" />
-		<Compile Include="DlTokenUtils.fs" />
-		<Compile Include="DlDFA.fs" />
 
 		<None Include="precnodes.fsyacc" />
-		<Compile Include="NodesFsyaccUtils.fs" />
 		<Compile Include="PrecNodesParseTable.fs" />
 
 		<Compile Include="Whitespace.fs" />
-		<Compile Include="GettingStarted.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
 		<Compile Include="Render.fs" />
-		<Compile Include="Parser.fs" />
 		<Compile Include="Compiler.fs" />
+		<Compile Include="Parser.fs" />
 		<Compile Include="BrRemover.fs" />
 		<Compile Include="HrRemover.fs" />
 		<Compile Include="HtmlUtils.fs" />

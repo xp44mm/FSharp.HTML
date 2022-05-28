@@ -24,7 +24,7 @@ type BrRemoverTest(output:ITestOutputHelper) =
         </p>
 """
 
-        let y = Parser.parseNodes x
+        let y = Parser.parseDoc x
         show y
 
         let z = 
@@ -48,7 +48,7 @@ type BrRemoverTest(output:ITestOutputHelper) =
         </p>
 """
 
-        let y = Parser.parseNodes x
+        let y = Parser.parseDoc x
         show y
         let z = 
             match y.[0] with

@@ -22,21 +22,6 @@ type ColgroupAnalyzerTest(output:ITestOutputHelper) =
         |> snd
         |> Seq.choose HtmlTokenUtils.unifyVoidElement
 
-        |> ListDFA.analyze
-        |> Seq.concat
-
-        |> RubyDFA.analyze
-        |> Seq.concat
-
-        |> OptgroupDFA.analyze
-        |> Seq.concat
-
-        |> OptionDFA.analyze
-        |> Seq.concat
-
-        |> ColgroupDFA.analyze
-        |> Seq.concat
-
         |> PrecNodesParseTable.parse
         |> Whitespace.removeWsChildren
         |> Whitespace.trimWhitespace
