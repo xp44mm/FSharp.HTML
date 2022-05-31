@@ -3,8 +3,9 @@
 open Xunit
 open Xunit.Abstractions
 open System
-open System.IO
+open System.Text
 open System.Text.RegularExpressions
+open System.IO
 
 open FSharp.Idioms
 open FSharp.Literals
@@ -12,9 +13,8 @@ open FSharp.xUnit
 
 open FslexFsyacc.Yacc
 open FslexFsyacc.Fsyacc
-open System.Text
 
-type PrecNodesParseTableTest(output:ITestOutputHelper) =
+type NodesParseTableTest(output:ITestOutputHelper) =
     let show res =
         res
         |> Render.stringify
@@ -32,9 +32,7 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
         |> Seq.map symbolRender
         |> String.concat "|"
 
-    let solutionPath = DirectoryInfo(__SOURCE_DIRECTORY__).Parent.FullName
-    let projPath = Path.Combine(solutionPath,@"FSharp.HTML")
-    let filePath = Path.Combine(projPath, "precnodes.fsyacc") // **input**
+    let filePath = Path.Combine(Dir.projPath, "nodes.fsyacc") // **input**
     let text = File.ReadAllText(filePath)
     let rawFsyacc = FsyaccFile.parse text
     let fsyacc = NormFsyaccFile.fromRaw rawFsyacc
@@ -42,17 +40,17 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``1 - 显示冲突状态的冲突项目``() =
         let collection =
-            AmbiguousCollection.create <| fsyacc.getMainProductions()
+            fsyacc.getMainProductions()
+            |> AmbiguousCollection.create
         let conflicts =
             collection.filterConflictedClosures()
         show conflicts
 
-        //Should.equal y conflicts
-
     [<Fact>]
     member _.``2 - 汇总冲突的产生式``() =
         let collection =
-            AmbiguousCollection.create <| fsyacc.getMainProductions()
+            fsyacc.getMainProductions()
+            |> AmbiguousCollection.create
         let conflicts =
             collection.filterConflictedClosures()
 
@@ -60,7 +58,9 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
             AmbiguousCollection.gatherProductions conflicts
         // production -> %prec
         let pprods =
-            ProductionUtils.precedenceOfProductions collection.grammar.terminals productions
+            ProductionUtils.precedenceOfProductions 
+                collection.grammar.terminals 
+                productions
             |> List.ofArray
 
         //优先级应该据此结果给出，不能少，也不应该多。
@@ -71,7 +71,9 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``3 - print the template of type annotaitions``() =
-        let grammar = Grammar.from <| fsyacc.getMainProductions()
+        let grammar = 
+            fsyacc.getMainProductions()
+            |> Grammar.from
 
         let symbols = 
             grammar.symbols
@@ -85,14 +87,14 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
             ] |> String.concat "\r\n"
         output.WriteLine(sourceCode)
 
-    [<Fact(Skip="once and for all!")>] //
+    [<Fact>] //(Skip="once and for all!")
     member _.``5 - generate parsing table``() =
-        let name = "PrecNodesParseTable" // **input**
+        let name = "NodesParseTable" // **input**
         let moduleName = $"FSharp.HTML.{name}"
 
         let parseTbl = fsyacc.toFsyaccParseTableFile()
         let fsharpCode = parseTbl.generate(moduleName)
-        let outputDir = Path.Combine(projPath, $"{name}.fs")
+        let outputDir = Path.Combine(Dir.projPath, $"{name}.fs")
 
         File.WriteAllText(outputDir,fsharpCode)
         output.WriteLine("output path:"+outputDir)
@@ -100,21 +102,27 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
     [<Fact>]
     member _.``6 - valid ParseTable``() =
         let t = fsyacc.toFsyaccParseTableFile()
-        Should.equal t.header       PrecNodesParseTable.header
-        Should.equal t.actions      PrecNodesParseTable.actions
-        Should.equal t.rules        PrecNodesParseTable.rules
-        Should.equal t.declarations PrecNodesParseTable.declarations
+        Should.equal t.header       NodesParseTable.header
+        Should.equal t.actions      NodesParseTable.actions
+        Should.equal t.rules        NodesParseTable.rules
+        Should.equal t.declarations NodesParseTable.declarations
 
     [<Fact>]
     member _.``7 - list all tokens``() =
-        let grammar = Grammar.from <| fsyacc.getMainProductions()     
+        let grammar = 
+            fsyacc.getMainProductions()
+            |> Grammar.from
+
         let tokens = 
             grammar.symbols - grammar.nonterminals
         output.WriteLine($"any={clazz tokens}")
 
     [<Fact>]
     member _.``8 - first or last token of node``() =
-        let grammar = Grammar.from <| fsyacc.getMainProductions()
+        let grammar = 
+            fsyacc.getMainProductions()
+            |> Grammar.from
+
         let last = grammar.lasts.["node"]
         let first = grammar.firsts.["node"]
 
@@ -123,10 +131,10 @@ type PrecNodesParseTableTest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``9 - closures``() =
-        let tbl = PrecNodesParseTable.parser.getParserTable()
+        let tbl = NodesParseTable.parser.getParserTable()
         let str = tbl.collection()
 
-        let name = "precnodes"
-        let outputDir = Path.Combine(projPath, $"{name}.txt")
+        let name = "nodes"
+        let outputDir = Path.Combine(Dir.projPath, $"{name}.txt")
         File.WriteAllText(outputDir,str,Encoding.UTF8)
         output.WriteLine($"output:\r\n{outputDir}")

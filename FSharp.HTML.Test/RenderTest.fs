@@ -43,14 +43,9 @@ type RenderTest(output:ITestOutputHelper) =
 
         let y = 
             x
-            |> Parser.parseNodes
+            |> HtmlUtils.parseDoc
 
-        let z =
-            y
-            |> List.map Render.stringifyNode
-
-
-        show z
+        show y
 
     [<Fact>]
     member _.``parseDoc``() =
@@ -87,12 +82,6 @@ type RenderTest(output:ITestOutputHelper) =
             |> HtmlUtils.parseDoc
 
         show y
-
-        let z =
-            match y with
-            | HtmlDocument(docType, nodes) ->
-                HtmlUtils.stringifyDoc(docType,nodes)
-        show z
 
 
 

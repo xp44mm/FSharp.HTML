@@ -42,6 +42,6 @@ type ParserTest(output:ITestOutputHelper) =
           </body>
         </html>
         """
-        let y = Parser.parseNodes x
+        let y = HtmlUtils.parseDoc x
         show y
 

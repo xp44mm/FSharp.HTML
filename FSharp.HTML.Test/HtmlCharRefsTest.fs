@@ -88,25 +88,7 @@ U+000A9 &#169; &#xA9;
 
         let y = 
             x
-            |> Parser.parseNodes
-
-        let result = [
-            HtmlComment " HTM_Numeric_Character_References_Example.html\r\n         - Copyright (c) HerongYang.com. All Rights Reserved.\r\n        ";
-            HtmlElement("html",[],[
-            HtmlElement("head",[],[
-            HtmlComment " Numeric Character References in \"title\" element ";
-            HtmlElement("title",[],[
-            HtmlText "\"Character Entity References\" Example"])]);
-            HtmlElement("body",[],[
-            HtmlComment " Numeric Character References in element content ";
-            HtmlElement("pre",[],[
-            HtmlText "\r\n        U+0003C \" \" \" \"\r\n        U+000A9 © ©\r\n        "]);
-            HtmlComment " Numeric Character References in attribute value ";
-            HtmlElement("img",["src","image.gif";"alt","In attribute value: ©"],[]);
-            HtmlComment " Bad examples ";
-            HtmlElement("script",[],[
-            HtmlText "U+000A9 © ©"])])])]
-
+            |> HtmlUtils.parseDoc
 
         show y
 

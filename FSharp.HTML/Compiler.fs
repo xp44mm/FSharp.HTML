@@ -1,14 +1,9 @@
 ﻿module FSharp.HTML.Compiler
 
-open System
-open System.Text.RegularExpressions
-
 open FSharp.Literals.Literal
 open FSharp.Idioms
 
-open FslexFsyacc.Runtime
-
-let parser = PrecNodesParseTable.parser
+let parser = NodesParseTable.parser
 let getTag = HtmlTokenUtils.getTag
 let getLexeme = HtmlTokenUtils.getLexeme
 
@@ -94,10 +89,6 @@ let parse tokens =
         loop ()
 
     tokens
-    //txt
-    //|> Tokenizer.tokenize
-    //|> Seq.filter(HtmlTokenUtils.isVoidTagEnd>>not)
-    //|> Seq.map HtmlTokenUtils.voidTagStartToSelfClosing
     |> complementOmmittedTagEnd
     |> Seq.iteri(fun i tok ->
         //Console.WriteLine($"tok:{stringify tok}")

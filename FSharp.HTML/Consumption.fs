@@ -38,7 +38,6 @@ let consumeAttributeNames (inp:string) =
         | _ -> failwithf "%A" (List.rev revTokens,inp)
 
     loop [] inp
-    
 
 let consumeNestedCss (inp:string) =
     let continueTries = 

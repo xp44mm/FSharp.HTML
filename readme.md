@@ -1,6 +1,6 @@
 # FSharp.HTML
 
-a parse for HTML5 based on the official W3C specification.
+A parse for HTML5 based on the official W3C specification.
 
 ## Usage
 
@@ -32,25 +32,9 @@ All parsing processes in a package are public, and you are free to compose them 
 
 ## API
 
-The user can parse the string through the functions in the `Parser` module.
+The user can parse the string through the functions in the `HtmlUtils` module.
 
-```F#
-module FSharp.HTML.HtmlUtils
-
-/// Parses input text as a HtmlDocument tree
-let parseDoc (txt:string) = ...
-let parseWellFormedDoc (txt:string) = ...
-
-
-/// Parses input text as a HtmlNode sequence, and ignore doctype.
-let parseNodes (txt:string) = ...
-let parseWellFormedNodes (txt:string) = ...
-
-let stringifyNode (node:HtmlNode) = 
-    ...
-let stringifyDoc (docType, elements) =
-    ...
-```
+[HtmlUtils](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlUtils.fs)
 
 You can also use a tokenizer to get a token sequence.
 
@@ -61,7 +45,5 @@ let tokens = Tokenizer.tokenize txt
 The main structure types are defined as follows:
 
 - The type `HtmlNode` see to [HtmlNode](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlNode.fs).
-
-- The type `HtmlDocument` see to [HtmlDocument](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlDocument.fs).
 
 - The type `HtmlToken` see to [HtmlToken](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlToken.fs).

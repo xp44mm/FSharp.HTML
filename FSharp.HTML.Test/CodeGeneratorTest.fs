@@ -6,7 +6,6 @@ open Xunit.Abstractions
 open FSharp.HTML.TagNames
 open FSharp.Literals
 
-
 type CodeGeneratorTest(output:ITestOutputHelper) =
     let show res =
         res

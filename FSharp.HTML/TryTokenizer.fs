@@ -71,8 +71,6 @@ let tryHexadecimalNumericCharacterReference =
    Regex(@"^&#[xX][0-9a-fA-F]+;")
    |> tryMatch
 
-// --- javascript ====
-
 let trySingleLineComment =
     Regex @"^//.*"
     |> tryMatch

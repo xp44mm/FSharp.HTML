@@ -40,19 +40,19 @@ let unifyVoidElement (token:HtmlToken) =
     | _ -> 
         Some token
 
-let voidTagStartToSelfClosing(token:HtmlToken) =    
-    match token with
-    | TagStart (name,attrs) when 
-        TagNames.voidElements.Contains name ->
-        TagSelfClosing(name,attrs)
-    | _ -> token
+//let voidTagStartToSelfClosing(token:HtmlToken) =    
+//    match token with
+//    | TagStart (name,attrs) when 
+//        TagNames.voidElements.Contains name ->
+//        TagSelfClosing(name,attrs)
+//    | _ -> token
 
-let isVoidTagEnd(token:HtmlToken) =    
-    match token with
-    | TagEnd name when 
-        TagNames.voidElements.Contains name ->
-        true
-    | _ -> false
+//let isVoidTagEnd(token:HtmlToken) =    
+//    match token with
+//    | TagEnd name when 
+//        TagNames.voidElements.Contains name ->
+//        true
+//    | _ -> false
 
 let getTag (token:HtmlToken) =
     match token with

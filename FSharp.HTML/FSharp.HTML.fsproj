@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>1.0.10</Version>
+		<Version>1.0.11</Version>
 		<Description>a parse for HTML5 based on the official W3C specification.</Description>
 		<Company>34696643@qq.com</Company>
 		<Authors>xp44m</Authors>
@@ -11,7 +11,7 @@
 		<PackageLicenseExpression>LGPL-3.0-or-later</PackageLicenseExpression>
 		<RepositoryUrl>https://github.com/xp44mm/FSharp.HTML</RepositoryUrl>
 		<PackageProjectUrl>https://github.com/xp44mm/FSharp.HTML</PackageProjectUrl>
-		<PackageReleaseNotes>remove semi</PackageReleaseNotes>
+		<PackageReleaseNotes>omitted tag alg</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageTags>html; parser</PackageTags>
 		<PackageReadmeFile>readme.md</PackageReadmeFile>
@@ -21,7 +21,6 @@
 		<Compile Include="SourceText.fs" />
 		<Compile Include="TagNames.fs" />
 		<Compile Include="HtmlNode.fs" />
-		<Compile Include="HtmlDocument.fs" />
 		
 		<Compile Include="HtmlToken.fs" />
 		<Compile Include="TryTokenizer.fs" />
@@ -31,16 +30,16 @@
 		<Compile Include="Tokenizer.fs" />
 		<Compile Include="HtmlTokenUtils.fs" />
 
-		<None Include="precnodes.fsyacc" />
-		<Compile Include="PrecNodesParseTable.fs" />
+		<None Include="nodes.fsyacc" />
 
+		<Compile Include="NodesParseTable.fs" />
+		<Compile Include="Compiler.fs" />
 		<Compile Include="Whitespace.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
-		<Compile Include="Render.fs" />
-		<Compile Include="Compiler.fs" />
 		<Compile Include="Parser.fs" />
 		<Compile Include="BrRemover.fs" />
 		<Compile Include="HrRemover.fs" />
+		<Compile Include="Render.fs" />
 		<Compile Include="HtmlUtils.fs" />
 
 		<None Include="..\readme.md">
