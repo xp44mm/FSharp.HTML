@@ -8,20 +8,18 @@
 
 	<ItemGroup>
 		<Compile Include="Dir.fs" />
-		<Compile Include="CodeGeneratorTest.fs" />
 		<Compile Include="AttributeDFATest.fs" />
 		<Compile Include="NodesParseTableTest.fs" />
-		
 		<Compile Include="TryTokenizerTest.fs" />
 		<Compile Include="TokenizerTest.fs" />
 		<Compile Include="HtmlTokenizerTest.fs" />
 		<Compile Include="HtmlTokenUtilsTest.fs" />
 		<Compile Include="UnifyVoidElementTest.fs" />
-		<Compile Include="WhitespaceTest.fs" />
 		<Compile Include="ParserTest.fs" />
-		<Compile Include="BrRemoverTest.fs" />
+		<Compile Include="WhitespaceTest.fs" />
 		<Compile Include="HtmlCharRefsTest.fs" />
 		<Compile Include="RenderTest.fs" />
+		<Compile Include="BrRemoverTest.fs" />
 		<Compile Include="FileTest.fs" />
 		
 		<Compile Include="Program.fs" />

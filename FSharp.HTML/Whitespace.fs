@@ -184,7 +184,6 @@ let trimWhitespace elements =
             | HtmlCData _ -> backward false (h::acc) t
         | [] -> trimEnd, acc
 
-    forward true [] elements
-    |> snd
-    |> backward true []
-    |> snd
+    elements
+    |> forward  true [] |> snd
+    |> backward true [] |> snd

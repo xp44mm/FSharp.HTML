@@ -5,11 +5,8 @@ open System.Net.Http
 
 ///獲取unicode網頁文本
 let getDocumentAsync(url:string) =
-    //task {
     use client = new HttpClient()
-    //return!
     client.GetStringAsync url
-    //}
 
 let GB18030 =
     //https://docs.microsoft.com/en-us/dotnet/api/system.text.encoding.registerprovider?redirectedfrom=MSDN

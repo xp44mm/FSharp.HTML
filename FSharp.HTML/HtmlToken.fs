@@ -8,4 +8,4 @@ type HtmlToken =
     | TagSelfClosing of name:string * attrs:list<string*string>
     | TagStart of name:string * attrs:list<string*string>
     | TagEnd of name:string
-    | EOF
+    //| EOF

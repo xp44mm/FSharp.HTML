@@ -1,0 +1,4 @@
+<script referrerpolicy="origin">
+fetch('/api/data');    // not fetched with <script>'s referrer policy
+import('./utils.mjs'); // is fetched with <script>'s referrer policy ("origin" in this case)
+</script>

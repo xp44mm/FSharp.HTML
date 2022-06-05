@@ -2,6 +2,8 @@
 
 open FSharp.Literals.Literal
 open FSharp.Idioms
+open FslexFsyacc.Runtime
+open System
 
 let parser = NodesParseTable.parser
 let getTag = HtmlTokenUtils.getTag
@@ -19,7 +21,8 @@ let tryFindTagStart (states:list<int*obj>) =
                 if balance > 0 then
                     let name,attrs =
                         lexeme
-                        |> unbox<string*list<string*string>>
+                        |> unbox<_>
+                        |> HtmlNodeCreator.getNameAttributes
                     Some(name,attrs)
                 else
                     loop balance tail
@@ -35,11 +38,11 @@ let stringifyStates states =
         |> List.map(fun(i,_)-> $"{parser.getSymbol i}")
     stringify symbols
 
-let parse tokens =
+let parse (tokens:seq<Position<HtmlToken>>) =
     let mutable states = [0,null]
 
     //omitted TagEnd complement omitted
-    let complementOmmittedTagEnd (tokens:seq<_>) =
+    let complementOmmittedTagEnd (tokens:seq<Position<HtmlToken>>) =
         let iterator =
             tokens.GetEnumerator()
             |> RetractableIterator
@@ -51,31 +54,39 @@ let parse tokens =
                     match tryFindTagStart states with
                     | None -> ()
                     | Some(bnm,attrs) ->
-                        yield TagEnd bnm
+                        yield { 
+                            index = -1
+                            length = 0
+                            value = TagEnd bnm }
                         yield! loop ()
-                | Some (TagEnd enm) ->
+                | Some ({value=TagEnd enm}as baseline) ->
                     match tryFindTagStart states with
                     | None ->
-                        let _ = iterator.consume()
-                        yield Text $"</{enm}>"
+                        iterator.consume() |> ignore
+                        yield {
+                            baseline with value = Text $"</{enm}>"} // tok.getRaw(inp)
                         yield! loop ()
                     | Some(bnm,attrs) ->
                         if enm = bnm then
-                            yield iterator.consume() // tok
+                            yield iterator.consume()
                             yield! loop ()
                         else
-                            yield TagEnd bnm
+                            yield { baseline with 
+                                        length = 0
+                                        value = TagEnd bnm}
                             iterator.restart()
                             yield! loop ()
-                | Some (TagStart (name,_)|TagSelfClosing (name,_)) ->
+                | Some ({value=TagStart (name,_)|TagSelfClosing (name,_)}as baseline) ->
                     match tryFindTagStart states with
                     // 有未闭合的，
                     | Some(bnm,attrs) when 
                         TagNames.follows.ContainsKey bnm && 
                         TagNames.follows.[bnm].Contains name ->
-                            //自动闭合
-                            yield TagEnd bnm
-                            let _ = iterator.restart()
+                            //insert 虚拟tok
+                            yield { baseline with
+                                        length = 0
+                                        value = TagEnd bnm}
+                            iterator.restart()
                             yield! loop ()
                     | _ ->
                         // 没有未闭合的，继续正常流程
@@ -90,8 +101,8 @@ let parse tokens =
 
     tokens
     |> complementOmmittedTagEnd
-    |> Seq.iteri(fun i tok ->
-        //Console.WriteLine($"tok:{stringify tok}")
+    |> Seq.iter(fun tok ->
+        Console.WriteLine($"tok:{stringify tok}")
         let nextStates = parser.shift(states,tok)
         states <- nextStates
         )
@@ -99,9 +110,9 @@ let parse tokens =
     match parser.tryReduce(states) with
     | Some nextStates ->
         states <- nextStates
-        //Console.WriteLine($"Accept{stringifyStates states}")
+        Console.WriteLine($"Accept{stringifyStates states}")
     | None ->
-        //Console.WriteLine(stringify x)
+        Console.WriteLine(stringify states)
         ()
 
     if parser.isAccept states then

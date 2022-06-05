@@ -10,6 +10,7 @@ type HtmlCharRefsTest(output:ITestOutputHelper) =
         res
         |> Render.stringify
         |> output.WriteLine
+
     [<Fact>]
     member _.``substituteNamedCharacterReference``() =
         let x = "&lt;"
@@ -17,7 +18,7 @@ type HtmlCharRefsTest(output:ITestOutputHelper) =
             HtmlCharRefs.substituteNamedCharacterReference x
 
         show y
-
+        Should.equal y "<"
 
     [<Fact>]
     member _.``Named Character Reference``() =
@@ -27,9 +28,9 @@ type HtmlCharRefsTest(output:ITestOutputHelper) =
             HtmlCharRefs.tokenizeRawText x
             |> Seq.toList
 
-            //|> String.concat ""
         show y
 
+        Should.equal y ["<";", ";">";" and ";"&";" Character References"]
 
     [<Fact>]
     member _.``Decimal Numeric Character Reference``() =
@@ -39,8 +40,8 @@ type HtmlCharRefsTest(output:ITestOutputHelper) =
             HtmlCharRefs.tokenizeRawText x
             |> Seq.toList
 
-            //|> String.concat ""
         show y
+        Should.equal y ["<"]
 
     [<Fact>]
     member _.``Hexadecimal Numeric Character Reference``() =
@@ -50,9 +51,8 @@ type HtmlCharRefsTest(output:ITestOutputHelper) =
             HtmlCharRefs.tokenizeRawText x
             |> Seq.toList
 
-            //|> String.concat ""
         show y
-
+        Should.equal y ["\""]
 
     [<Fact>]
     member _.``unescapseNode``() =
@@ -83,12 +83,28 @@ U+000A9 &#169; &#xA9;
 </body>
 </html>
 """
+        let y = [
+            HtmlComment " HTM_Numeric_Character_References_Example.html\r\n    - Copyright (c) HerongYang.com. All Rights Reserved.\r\n";
+            HtmlElement("html",[],[
+            HtmlElement("head",[],[
+            HtmlComment " Numeric Character References in \"title\" element ";
+            HtmlElement("title",[],[
+            HtmlText "\"Character Entity References\" Example"])]);
+            HtmlElement("body",[],[
+            HtmlComment " Numeric Character References in element content ";
+            HtmlElement("pre",[],[
+            HtmlText "\r\nU+0003C \" \" \" \"\r\nU+000A9 © ©\r\n"]);
+            HtmlComment " Numeric Character References in attribute value ";
+            HtmlElement("img",["src","image.gif";"alt","In attribute value: ©"],[]);
+            HtmlComment " Bad examples ";
+            HtmlElement("script",[],[
+            HtmlText "U+000A9 &#169; &#xA9;"])])])]
 
 
-
-        let y = 
+        let dtp,nodes = 
             x
             |> HtmlUtils.parseDoc
 
-        show y
+        show nodes
 
+        Should.equal y nodes

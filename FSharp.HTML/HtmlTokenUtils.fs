@@ -1,21 +1,25 @@
 ﻿module FSharp.HTML.HtmlTokenUtils
 open FSharp.Literals
 open FSharp.Idioms
+open FslexFsyacc.Runtime
 
 /// consume doctype from tokens
-let preamble (tokens:HtmlToken seq) =
-    let iterator = Iterator(tokens.GetEnumerator())
+let preamble (tokens:seq<Position<HtmlToken>>) =
+    let iterator = 
+        tokens.GetEnumerator()
+        |> Iterator
+
     let rec loop () =
         match iterator.tryNext() with
-        | Some(Text t) when t.Trim() = "" -> loop ()
-        | Some(DocType _) as sm ->
+        | Some {value = Text t } when t.Trim() = "" -> loop ()
+        | Some {value = DocType _ } as sm ->
             let rest =
                 iterator.tryNext()
                 |> Seq.unfold(
                     Option.map(fun v -> v,iterator.tryNext())
                 )
                 |> Seq.skipWhile(function
-                    | Text t when t.Trim() = "" -> true
+                    | {value = Text t } when t.Trim() = "" -> true
                     | _ -> false
                 )
             sm,rest
@@ -26,36 +30,24 @@ let preamble (tokens:HtmlToken seq) =
                     Option.map(fun v -> v,iterator.tryNext())
                 )
             None,rest
-    loop()
+    loop ()
 
-let unifyVoidElement (token:HtmlToken) =    
-    match token with
+let unifyVoidElement(token:Position<HtmlToken>) =    
+    match token.value with
     | TagStart (name,attrs) when 
         TagNames.voidElements.Contains name ->
         TagSelfClosing(name,attrs)
-        |> Some
+        |> fun value -> Some {
+            token with value = value
+        }
     | TagEnd name when 
         TagNames.voidElements.Contains name ->
         None
     | _ -> 
         Some token
 
-//let voidTagStartToSelfClosing(token:HtmlToken) =    
-//    match token with
-//    | TagStart (name,attrs) when 
-//        TagNames.voidElements.Contains name ->
-//        TagSelfClosing(name,attrs)
-//    | _ -> token
-
-//let isVoidTagEnd(token:HtmlToken) =    
-//    match token with
-//    | TagEnd name when 
-//        TagNames.voidElements.Contains name ->
-//        true
-//    | _ -> false
-
-let getTag (token:HtmlToken) =
-    match token with
+let getTag (token:Position<HtmlToken>) =
+    match token.value with
     | DocType _ -> "DOCTYPE"
     | Comment _ -> "COMMENT"
     | Text _ -> "TEXT"
@@ -63,16 +55,7 @@ let getTag (token:HtmlToken) =
     | TagSelfClosing _ -> "TAGSELFCLOSING"
     | TagStart _ -> "TAGSTART"
     | TagEnd _ -> "TAGEND"
-    | EOF -> "EOF"
 
-let getLexeme (token:HtmlToken) =
-    match token with
-    | DocType s -> box s
-    | Comment s -> box s
-    | Text    s -> box s
-    | CData   s -> box s
-    | TagSelfClosing (name,attrs) -> box (name,attrs)
-    | TagStart (name,attrs) -> box (name,attrs)
-    | TagEnd name ->  box name
-    | _ -> null
+let getLexeme (token:Position<HtmlToken>) = box token
+
 

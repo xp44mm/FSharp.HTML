@@ -1,4 +1,5 @@
 ﻿module FSharp.HTML.Parser
+open FSharp.Literals.Literal
 
 /// Locate doctype at the beginning of tokens
 let consumeDoctype tokens =
@@ -8,7 +9,7 @@ let consumeDoctype tokens =
     let docType = 
         maybeDoctype
         |> Option.map(function
-            | DocType dt -> dt
+            | {value=DocType dt} -> dt
             | _ -> "html"
         )
         |> Option.defaultValue "html"
@@ -30,11 +31,9 @@ let parseDoc txt =
     let docType,tokens =
         txt
         |> basicTokenize
+
     let nodes =
         tokens
         |> Compiler.parse
-        |> Whitespace.removeWsChildren
-        |> Whitespace.trimWhitespace
-        |> List.map HtmlCharRefs.unescapseNode
         
     docType,nodes

@@ -2,10 +2,10 @@
 
 open Xunit
 open Xunit.Abstractions
-open System.IO
 
 open FSharp.Literals
 open FSharp.xUnit
+open FslexFsyacc.Runtime
 
 type UnifyVoidElementTest(output:ITestOutputHelper) =
     let show res =
@@ -13,22 +13,31 @@ type UnifyVoidElementTest(output:ITestOutputHelper) =
         |> Render.stringify
         |> output.WriteLine
 
-    let evade txt =
-        txt
-        |> Tokenizer.tokenize
-        |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
-        |> Seq.toList
+    static let source = [
+            "<br/>",[{index= 0;length= 5;value= TagSelfClosing("br",[])}]
+            "<p><br></br></p>",[
+                {index= 0;length= 3;value= TagStart("p",[])};
+                {index= 3;length= 4;value= TagSelfClosing("br",[])};
+                {index= 12;length= 4;value= TagEnd "p"}]
+        ]
 
+    static let mp = Map.ofList source
 
-    [<Fact>]
-    member _.``self closing``() =
-        let x = "<br/>"
-        let y = evade x
-        Should.equal y [TagSelfClosing("br",[])]
+    static member keys = 
+        source
+        |> Seq.map (fst>>Array.singleton)
+        
 
-    [<Fact>]
-    member _.``start end``() =
-        let x = "<br></br>"
-        let y = evade x
-        Should.equal y [TagSelfClosing("br",[])]
+    [<Theory;MemberData(nameof UnifyVoidElementTest.keys)>]
+    member _.``self closing``(x:string) =
+        let y = 
+            x
+            |> Tokenizer.tokenize
+            |> Seq.choose (HtmlTokenUtils.unifyVoidElement)
+            |> Seq.toList
+
+        let a = mp.[x]
+        show y
+        Should.equal y a
+
         

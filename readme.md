@@ -19,11 +19,11 @@ the html source text is:
 </html>
 ```
 
-we can use this code to parse html source to HtmlDocument:
+we can use this code to parse html source to `HtmlNode list`:
 
 ```F#
 let sourceText = ...
-let doc = HtmlUtils.parseDoc sourceText
+let doctype,nodes = HtmlUtils.parseDoc sourceText
 ```
 
 you can get a `HtmlDocument` instance. see to [ParserTest](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML.Test/ParserTest.fs).

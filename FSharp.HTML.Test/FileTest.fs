@@ -34,11 +34,22 @@ type FileTest(output:ITestOutputHelper) =
     member this.``omitted vs wellformed``(file) =
         let _,nodes1 = 
             let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))            
-            Parser.parseDoc txt
+            HtmlUtils.parseDoc txt
         let _,nodes2 = 
             let txt = File.ReadAllText(Path.Combine(Dir.wellformed, file))            
-            Parser.parseDoc txt
+            HtmlUtils.parseDoc txt
+        show nodes2
         Should.equal nodes1 nodes2
+
+    [<Theory;MemberData(nameof FileTest.files)>]
+    member this.``render``(file) =
+        let doctype,nodes = 
+            let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))            
+            HtmlUtils.parseDoc txt
+
+        let y = Render.stringifyDoc(doctype,nodes)
+        show y
+
 
 
 

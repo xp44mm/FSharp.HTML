@@ -1,8 +1,10 @@
 ﻿%{
 open System
+open FslexFsyacc.Runtime
 open FSharp.HTML
 open FSharp.HTML.HtmlTokenUtils
-type token = HtmlToken
+open FSharp.HTML.HtmlNodeCreator
+type token = Position<HtmlToken>
 
 %}
 
@@ -15,32 +17,32 @@ nodes:
     |       node {[s0]}
 
 node:
-    | TEXT    {HtmlText s0}
-    | COMMENT {HtmlComment s0}
-    | CDATA   {HtmlCData s0}
+    | TEXT    {htmlText s0}
+    | COMMENT {htmlComment s0}
+    | CDATA   {htmlCData s0}
     | element {s0}
 
 element:
     | TAGSELFCLOSING {
-        let name,attrs = s0
+        let name,attrs = getNameAttributes s0
         HtmlElement(name, attrs,[])
     }
     | TAGSTART children TAGEND {
-        let name,attrs = s0
-        if name = s2 then
+        let name,attrs = getNameAttributes s0
+        if name = getName s2 then
             HtmlElement(name, attrs, s1)
         else 
-            failwith $"unmatched:<{name}></{s2}>"
+            failwith $"unmatched tag:<{name}></{s2}>"
     }
 
 %%
 
-TAGSELFCLOSING : "string*list<string*string>"
-TAGSTART       : "string*list<string*string>"
-TAGEND         : "string"
-CDATA          : "string"
-COMMENT        : "string"
-TEXT           : "string"
+TAGSELFCLOSING : "Position<HtmlToken>"
+TAGSTART       : "Position<HtmlToken>"
+TAGEND         : "Position<HtmlToken>"
+CDATA          : "Position<HtmlToken>"
+COMMENT        : "Position<HtmlToken>"
+TEXT           : "Position<HtmlToken>"
 node           : "HtmlNode"
 element        : "HtmlNode"
 children       : "HtmlNode list"
