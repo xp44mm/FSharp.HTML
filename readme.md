@@ -21,14 +21,39 @@ the html source text is:
 
 we can use this code to parse html source to `HtmlNode list`:
 
-```F#
+```fsharp
 let sourceText = ...
 let doctype,nodes = HtmlUtils.parseDoc sourceText
 ```
 
-you can get a `HtmlDocument` instance. see to [ParserTest](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML.Test/ParserTest.fs).
+doctype is a string that is extracted from doctype tag. and nodes is a `HtmlNode list`.
 
-All parsing processes in a package are public, and you are free to compose them to implement your functional requirements. Parser is highly configurable, see source code [Parser](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/Parser.fs)
+All parsing processes in a package are public, and you are free to compose them to implement your functional requirements. Parser is highly configurable, see source code [HtmlUtils](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlUtils.fs)
+
+Parse only html structures without changing the content.
+```fsharp
+Parser.parseDoc
+Whitespace.removeWsChildren
+Whitespace.trimWhitespace
+HtmlCharRefs.unescapseNode
+```
+
+generate html source text:
+
+```Fsharp
+Render.stringifyNode
+Render.stringifyDoc
+
+HtmlUtils.stringifyNode
+HtmlUtils.stringifyDoc
+```
+
+some transform:
+
+```fsharp
+BrRemover.splitByBr
+HrRemover.splitByHr
+```
 
 ## API
 
@@ -38,7 +63,7 @@ The user can parse the string through the functions in the `HtmlUtils` module.
 
 You can also use a tokenizer to get a token sequence.
 
-```F#
+```fsharp
 let tokens = Tokenizer.tokenize txt 
 ```
 

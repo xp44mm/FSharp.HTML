@@ -26,7 +26,7 @@ let basicTokenize txt =
         |> Seq.choose HtmlTokenUtils.unifyVoidElement
     docType,tokens
 
-/// Parses input text as a HtmlDocument tree
+/// Parses input text as a doctype, and nodes.
 let parseDoc txt =
     let docType,tokens =
         txt
