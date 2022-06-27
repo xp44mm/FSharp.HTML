@@ -38,7 +38,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
     let fsyacc = NormFsyaccFile.fromRaw rawFsyacc
 
     [<Fact>]
-    member _.``1 - 显示冲突状态的冲突项目``() =
+    member _.``01 - 显示冲突状态的冲突项目``() =
         let collection =
             fsyacc.getMainProductions()
             |> AmbiguousCollection.create
@@ -47,7 +47,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         show conflicts
 
     [<Fact>]
-    member _.``2 - 汇总冲突的产生式``() =
+    member _.``02 - 汇总冲突的产生式``() =
         let collection =
             fsyacc.getMainProductions()
             |> AmbiguousCollection.create
@@ -70,7 +70,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         Should.equal y pprods
 
     [<Fact>]
-    member _.``3 - print the template of type annotaitions``() =
+    member _.``03 - print the template of type annotaitions``() =
         let grammar = 
             fsyacc.getMainProductions()
             |> Grammar.from
@@ -88,7 +88,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         output.WriteLine(sourceCode)
 
     [<Fact(Skip="once and for all!")>] //
-    member _.``5 - generate parsing table``() =
+    member _.``04 - generate parsing table``() =
         let name = "NodesParseTable" // **input**
         let moduleName = $"FSharp.HTML.{name}"
 
@@ -100,15 +100,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         output.WriteLine("output path:"+outputDir)
 
     [<Fact>]
-    member _.``6 - valid ParseTable``() =
-        let t = fsyacc.toFsyaccParseTableFile()
-        Should.equal t.header       NodesParseTable.header
-        Should.equal t.actions      NodesParseTable.actions
-        Should.equal t.rules        NodesParseTable.rules
-        Should.equal t.declarations NodesParseTable.declarations
-
-    [<Fact>]
-    member _.``7 - list all tokens``() =
+    member _.``05 - list all tokens``() =
         let grammar = 
             fsyacc.getMainProductions()
             |> Grammar.from
@@ -118,7 +110,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         output.WriteLine($"any={clazz tokens}")
 
     [<Fact>]
-    member _.``8 - first or last token of node``() =
+    member _.``06 - first or last token of node``() =
         let grammar = 
             fsyacc.getMainProductions()
             |> Grammar.from
@@ -130,7 +122,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         output.WriteLine($"first={clazz first}")
 
     [<Fact>]
-    member _.``9 - closures``() =
+    member _.``07 - closures``() =
         let tbl = NodesParseTable.parser.getParserTable()
         let str = tbl.collection()
 
@@ -138,3 +130,26 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         let outputDir = Path.Combine(Dir.projPath, $"{name}.txt")
         File.WriteAllText(outputDir,str,Encoding.UTF8)
         output.WriteLine($"output:\r\n{outputDir}")
+
+    [<Fact>]
+    member _.``08 - valid ParseTable``() =
+        let src = fsyacc.toFsyaccParseTableFile()
+
+        Should.equal src.actions NodesParseTable.actions
+        Should.equal src.closures NodesParseTable.closures
+
+        let headerFromFsyacc =
+            FSharp.Compiler.SyntaxTreeX.Parser.getDecls("header.fsx",src.header)
+
+        let semansFsyacc =
+            let mappers = src.generateMappers()
+            FSharp.Compiler.SyntaxTreeX.SourceCodeParser.semansFromMappers mappers
+
+        let header,semans =
+            let filePath = Path.Combine(Dir.projPath, "NodesParseTable.fs")
+            File.ReadAllText(filePath, Encoding.UTF8)
+            |> FSharp.Compiler.SyntaxTreeX.SourceCodeParser.getHeaderSemansFromFSharp 2
+
+        Should.equal headerFromFsyacc header
+        Should.equal semansFsyacc semans
+

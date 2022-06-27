@@ -17,7 +17,7 @@ type UnifyVoidElementTest(output:ITestOutputHelper) =
             "<br/>",[{index= 0;length= 5;value= TagSelfClosing("br",[])}]
             "<p><br></br></p>",[
                 {index= 0;length= 3;value= TagStart("p",[])};
-                {index= 3;length= 4;value= TagSelfClosing("br",[])};
+                {index= 3;length= 0;value= TagSelfClosing("br",[])};
                 {index= 12;length= 4;value= TagEnd "p"}]
         ]
 
@@ -40,4 +40,3 @@ type UnifyVoidElementTest(output:ITestOutputHelper) =
         show y
         Should.equal y a
 
-        

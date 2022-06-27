@@ -38,7 +38,9 @@ let unifyVoidElement(token:Position<HtmlToken>) =
         TagNames.voidElements.Contains name ->
         TagSelfClosing(name,attrs)
         |> fun value -> Some {
-            token with value = value
+            token with 
+                length = 0
+                value = value
         }
     | TagEnd name when 
         TagNames.voidElements.Contains name ->
