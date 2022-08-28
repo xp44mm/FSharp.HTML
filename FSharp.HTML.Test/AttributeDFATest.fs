@@ -44,8 +44,8 @@ type AttributeDFATest(output:ITestOutputHelper) =
 
         let y = 
             res
-            |> Array.collect(fun re -> re.getCharacters())
-            |> Set.ofArray
+            |> List.collect(fun re -> re.getCharacters())
+            |> Set.ofList
 
         show y
 

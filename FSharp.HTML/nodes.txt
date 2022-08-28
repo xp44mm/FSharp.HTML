@@ -1,6 +1,6 @@
-﻿0/"" :
+﻿state 0 "" :
     "" -> @ children
-    children ->  [""]
+    children -> @ [""]
     children -> @ nodes
     element -> @ TAGSELFCLOSING
     element -> @ TAGSTART children TAGEND
@@ -10,10 +10,10 @@
     node -> @ element
     nodes -> @ node
     nodes -> @ nodes node
-1/children :
-    "" -> children [""]
-2/nodes :
-    children -> nodes ["";"TAGEND"]
+state 1 "children" :
+    "" -> children @ [""]
+state 2 "nodes" :
+    children -> nodes @ ["";"TAGEND"]
     element -> @ TAGSELFCLOSING
     element -> @ TAGSTART children TAGEND
     node -> @ CDATA
@@ -21,10 +21,10 @@
     node -> @ TEXT
     node -> @ element
     nodes -> nodes @ node
-3/TAGSELFCLOSING :
-    element -> TAGSELFCLOSING ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-4/TAGSTART :
-    children ->  ["TAGEND"]
+state 3 "TAGSELFCLOSING" :
+    element -> TAGSELFCLOSING @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 4 "TAGSTART" :
+    children -> @ ["TAGEND"]
     children -> @ nodes
     element -> @ TAGSELFCLOSING
     element -> @ TAGSTART children TAGEND
@@ -35,19 +35,19 @@
     node -> @ element
     nodes -> @ node
     nodes -> @ nodes node
-5/children :
+state 5 "children" :
     element -> TAGSTART children @ TAGEND
-6/TAGEND :
-    element -> TAGSTART children TAGEND ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-7/CDATA :
-    node -> CDATA ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-8/COMMENT :
-    node -> COMMENT ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-9/TEXT :
-    node -> TEXT ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-10/element :
-    node -> element ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-11/node :
-    nodes -> node ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-12/node :
-    nodes -> nodes node ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 6 "TAGEND" :
+    element -> TAGSTART children TAGEND @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 7 "CDATA" :
+    node -> CDATA @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 8 "COMMENT" :
+    node -> COMMENT @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 9 "TEXT" :
+    node -> TEXT @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 10 "element" :
+    node -> element @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 11 "node" :
+    nodes -> node @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 12 "node" :
+    nodes -> nodes node @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]

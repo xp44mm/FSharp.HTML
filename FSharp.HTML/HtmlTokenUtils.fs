@@ -39,7 +39,7 @@ let unifyVoidElement(token:Position<HtmlToken>) =
         TagSelfClosing(name,attrs)
         |> fun value -> Some {
             token with 
-                length = 0
+                //length = 0
                 value = value
         }
     | TagEnd name when 
