@@ -153,3 +153,9 @@ type NodesParseTableTest(output:ITestOutputHelper) =
         Should.equal headerFromFsyacc header
         Should.equal semansFsyacc semans
 
+    [<Fact>]
+    member _.``101 - format norm file test``() =
+        let startSymbol = fsyacc.rules.Head |> Triple.first |> List.head
+        //show startSymbol
+        let fsyacc = fsyacc.start(startSymbol,Set.empty).toRaw()
+        output.WriteLine(fsyacc.render())

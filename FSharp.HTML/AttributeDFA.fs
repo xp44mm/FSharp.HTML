@@ -1,8 +1,6 @@
 module FSharp.HTML.AttributeDFA
 let nextStates = [0u,["N",3u;"V",1u];1u,["N",2u]]
 open FslexFsyacc.Runtime
-open System
-open FSharp.HTML
 type token = string
 let getTag (tok:token) = if tok.[0] = '=' then "V" else "N"
 let rules:list<uint32 list*uint32 list*_> = [

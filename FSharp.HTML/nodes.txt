@@ -1,53 +1,53 @@
 ﻿state 0 "" :
-    "" -> @ children
-    children -> @ [""]
-    children -> @ nodes
+    "" -> @ node*
     element -> @ TAGSELFCLOSING
-    element -> @ TAGSTART children TAGEND
+    element -> @ TAGSTART node* TAGEND
     node -> @ CDATA
     node -> @ COMMENT
     node -> @ TEXT
     node -> @ element
-    nodes -> @ node
-    nodes -> @ nodes node
-state 1 children :
-    "" -> children @ [""]
-state 2 nodes :
-    children -> nodes @ ["";"TAGEND"]
-    element -> @ TAGSELFCLOSING
-    element -> @ TAGSTART children TAGEND
-    node -> @ CDATA
-    node -> @ COMMENT
-    node -> @ TEXT
-    node -> @ element
-    nodes -> nodes @ node
-state 3 TAGSELFCLOSING :
+    node* -> @ [""]
+    node* -> @ node+
+    node+ -> @ node
+    node+ -> @ node+ node
+state 1 node* :
+    "" -> node* @ [""]
+state 2 TAGSELFCLOSING :
     element -> TAGSELFCLOSING @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-state 4 TAGSTART :
-    children -> @ ["TAGEND"]
-    children -> @ nodes
+state 3 TAGSTART :
     element -> @ TAGSELFCLOSING
-    element -> @ TAGSTART children TAGEND
-    element -> TAGSTART @ children TAGEND
+    element -> @ TAGSTART node* TAGEND
+    element -> TAGSTART @ node* TAGEND
     node -> @ CDATA
     node -> @ COMMENT
     node -> @ TEXT
     node -> @ element
-    nodes -> @ node
-    nodes -> @ nodes node
-state 5 children :
-    element -> TAGSTART children @ TAGEND
-state 6 TAGEND :
-    element -> TAGSTART children TAGEND @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-state 7 CDATA :
+    node* -> @ ["TAGEND"]
+    node* -> @ node+
+    node+ -> @ node
+    node+ -> @ node+ node
+state 4 node* :
+    element -> TAGSTART node* @ TAGEND
+state 5 TAGEND :
+    element -> TAGSTART node* TAGEND @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 6 CDATA :
     node -> CDATA @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-state 8 COMMENT :
+state 7 COMMENT :
     node -> COMMENT @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-state 9 TEXT :
+state 8 TEXT :
     node -> TEXT @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
-state 10 element :
+state 9 element :
     node -> element @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+state 10 node+ :
+    element -> @ TAGSELFCLOSING
+    element -> @ TAGSTART node* TAGEND
+    node -> @ CDATA
+    node -> @ COMMENT
+    node -> @ TEXT
+    node -> @ element
+    node* -> node+ @ ["";"TAGEND"]
+    node+ -> node+ @ node
 state 11 node :
-    nodes -> node @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+    node+ -> node @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
 state 12 node :
-    nodes -> nodes node @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+    node+ -> node+ node @ ["";"CDATA";"COMMENT";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
