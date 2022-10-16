@@ -88,11 +88,12 @@ type NodesParseTableTest(output:ITestOutputHelper) =
 
     [<Fact(Skip="once and for all!")>] //
     member _.``04 - generate parsing table``() =
-        let name = "NodesParseTable" // **input**
+        // **input**
+        let name = "NodesParseTable" 
         let moduleName = $"FSharp.HTML.{name}"
 
         let parseTbl = fsyacc.toFsyaccParseTableFile()
-        let fsharpCode = parseTbl.generate(moduleName)
+        let fsharpCode = parseTbl.generateModule(moduleName)
         let outputDir = Path.Combine(Dir.projPath, $"{name}.fs")
 
         File.WriteAllText(outputDir,fsharpCode)
@@ -122,7 +123,7 @@ type NodesParseTableTest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``07 - closures``() =
-        let tbl = NodesParseTable.parser.getParserTable()
+        let tbl = Compiler.parser.getParserTable()
         let str = tbl.collection()
 
         let name = "nodes"

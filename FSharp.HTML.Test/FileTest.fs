@@ -18,7 +18,8 @@ type FileTest(output:ITestOutputHelper) =
         |> Seq.map(fun f -> Path.GetFileName f)
         |> Seq.map Array.singleton
 
-    [<Theory(Skip="generated");MemberData(nameof FileTest.files)>]
+    [<Theory(Skip="generated")>]
+    [<MemberData(nameof FileTest.files)>]
     member this.``generate wellformed file``(file) =
         let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))
         let _,nodes = Parser.parseDoc txt

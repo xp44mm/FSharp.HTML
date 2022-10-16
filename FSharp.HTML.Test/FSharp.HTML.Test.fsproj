@@ -26,10 +26,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="1.0.4" />
+		<PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="1.0.5" />
 		<PackageReference Include="FSharp.xUnit" Version="1.2.3" />
-		<PackageReference Include="FslexFsyacc" Version="1.2.29" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+		<PackageReference Include="FslexFsyacc" Version="1.3.0" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
 		<PackageReference Include="xunit" Version="2.4.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -46,7 +46,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="FSharp.Core" Version="6.0.5" />
+	  <PackageReference Update="FSharp.Core" Version="6.0.6" />
 	</ItemGroup>
 
 </Project>

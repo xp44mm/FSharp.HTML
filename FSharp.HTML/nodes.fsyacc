@@ -1,11 +1,7 @@
 ﻿%{
-open System
 open FslexFsyacc.Runtime
 open FSharp.HTML
-open FSharp.HTML.HtmlTokenUtils
 open FSharp.HTML.HtmlNodeCreator
-type token = Position<HtmlToken>
-
 %}
 
 children: 
@@ -43,8 +39,8 @@ TAGEND         : "Position<HtmlToken>"
 CDATA          : "Position<HtmlToken>"
 COMMENT        : "Position<HtmlToken>"
 TEXT           : "Position<HtmlToken>"
-node           : "HtmlNode"
-element        : "HtmlNode"
+node           : HtmlNode
+element        : HtmlNode
 children       : "HtmlNode list"
 nodes          : "HtmlNode list"
 

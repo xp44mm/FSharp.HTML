@@ -5,9 +5,20 @@ open FSharp.Idioms
 open FslexFsyacc.Runtime
 open System
 
-let parser = NodesParseTable.parser
 let getTag = HtmlTokenUtils.getTag
 let getLexeme = HtmlTokenUtils.getLexeme
+
+let parser = 
+    Parser<Position<HtmlToken>>(
+        NodesParseTable.rules,
+        NodesParseTable.actions,
+        NodesParseTable.closures,getTag,getLexeme)
+
+let parseTokens(tokens:seq<Position<HtmlToken>>) =
+    tokens
+    |> parser.parse
+    |> NodesParseTable.unboxRoot
+
 
 ///尝试在状态栈中寻找第一个开始标签
 let tryFindTagStart (states:list<int*obj>) =
