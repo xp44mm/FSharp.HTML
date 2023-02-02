@@ -4,41 +4,41 @@ open FSharp.Idioms
 open System.Text.RegularExpressions
 open TryTokenizer
 
-[<System.Obsolete>]
-let consumeAttributeNames (inp:string) =
-    let rec loop (revTokens:list<string>) (inp:string) =
-        match inp with
-        | On tryWS (_,rest) -> 
-            loop revTokens rest
+//[<System.Obsolete>]
+//let consumeAttributeNames (inp:string) =
+//    let rec loop (revTokens:list<string>) (inp:string) =
+//        match inp with
+//        | On tryWS (_,rest) -> 
+//            loop revTokens rest
 
-        | On tryAttributeName (x,rest) ->             
-            let tokens = x::revTokens
-            loop tokens rest
+//        | On tryAttributeName (x,rest) ->             
+//            let tokens = x::revTokens
+//            loop tokens rest
 
-        | On tryUnquotedAttributeValue (x,rest) -> 
-            let y = x.Substring(1).TrimStart() // remove ^=\s*
-            let v = sprintf "=%s" y
-            let tokens = v::revTokens
-            loop tokens rest
+//        | On tryUnquotedAttributeValue (x,rest) -> 
+//            let y = x.Substring(1).TrimStart() // remove ^=\s*
+//            let v = sprintf "=%s" y
+//            let tokens = v::revTokens
+//            loop tokens rest
 
-        | On tryQuotedAttributeValue (x,rest) -> 
-            let y = x.Substring(1).TrimStart() // remove ^=\s*
-            let v = sprintf "=%s" y.[1..y.Length-2] // unquote
-            let tokens = v::revTokens
-            loop tokens rest
+//        | On tryQuotedAttributeValue (x,rest) -> 
+//            let y = x.Substring(1).TrimStart() // remove ^=\s*
+//            let v = sprintf "=%s" y.[1..y.Length-2] // unquote
+//            let tokens = v::revTokens
+//            loop tokens rest
 
-        | On (tryMatch(Regex @"^/?>")) (x,rest) -> 
-            let attributes = 
-                if revTokens.IsEmpty then 
-                    [] 
-                else
-                    AttributeDFA.analyze revTokens
-                    |> Seq.toList
-                    |> List.rev
-            x, attributes, rest
-        | _ -> failwithf "%A" (List.rev revTokens,inp)
+//        | On (tryMatch(Regex @"^/?>")) (x,rest) -> 
+//            let attributes = 
+//                if revTokens.IsEmpty then 
+//                    [] 
+//                else
+//                    AttributeDFA.analyze revTokens
+//                    |> Seq.toList
+//                    |> List.rev
+//            x, attributes, rest
+//        | _ -> failwithf "%A" (List.rev revTokens,inp)
 
-    loop [] inp
+//    loop [] inp
 
 let consumeNestedCss (inp:string) =
     let continueTries = 
@@ -145,7 +145,8 @@ let consumeAttributes (inp:string) =
                 if revTokens.IsEmpty then 
                     [] 
                 else
-                    AttributeDFA.analyze revTokens
+                    revTokens
+                    |> AttributeDFA.analyze 
                     |> Seq.toList
                     |> List.rev
             x, attributes, (len+x.Length)

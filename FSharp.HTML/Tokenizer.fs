@@ -13,20 +13,22 @@ let afterStartTag tagName (rest:string) =
             let mm = rgx.Match(rest)
 
             let g1 = mm.Groups.[1].Value
-            yield g1.Length, Text g1
+            yield g1.Length, TEXT g1
 
             let g2 = mm.Groups.[2].Value
-            yield g2.Length, TagEnd tagName
+            yield g2.Length, TAGEND tagName
         | "script" -> 
             let js,entTag,rest = consumeNestedJavaScript rest
-            yield js.Length,Text js
-            yield entTag.Length, TagEnd "script"
+            yield js.Length,TEXT js
+            yield entTag.Length, TAGEND "script"
         | "style" -> 
             let css,endTag,rest = consumeNestedCss rest
-            yield css.Length, Text css
-            yield endTag.Length, TagEnd "style"
+            yield css.Length, TEXT css
+            yield endTag.Length, TAGEND "style"
         | _ -> ()
     }
+
+//其他普通的token
 let entry (inp:string) =
     seq {
         match inp with    
@@ -35,22 +37,22 @@ let entry (inp:string) =
             let b = ">".Length
             let c = x.Length-1
             let xx = x.[a..c-b].Trim()
-            yield x.Length, DocType xx
+            yield x.Length, DOCTYPE xx
         | On tryComment (x,rest) -> 
             let a = "<!--".Length
             let b = "-->".Length
             let c = x.Length-1
             let xx = x.[a..c-b]
-            yield x.Length, Comment xx
+            yield x.Length, COMMENT xx
         | On tryCDATA (x,rest) -> 
             let a = "<![CDATA[".Length
             let b = "]]>".Length
             let c = x.Length-1
             let xx = x.[a..c-b]
-            yield x.Length, CData xx
+            yield x.Length, CDATA xx
         | On tryEndTag (x,rest) ->
             let tagName = x.[2..x.Length-2].TrimEnd().ToLower()
-            yield x.Length, TagEnd tagName
+            yield x.Length, TAGEND tagName
         | On tryStartTagOpen (x,rest) ->
             let tagName = x.[1..].ToLower()
             
@@ -58,13 +60,12 @@ let entry (inp:string) =
             let len = x.Length + len
             match markup with
             | "/>" -> 
-                yield len,TagSelfClosing(tagName,attrs)
+                yield len,TAGSELFCLOSING(tagName,attrs)
             | ">" -> 
-                yield len,TagStart(tagName,attrs)
-                //
+                yield len,TAGSTART(tagName,attrs)
             | _ -> failwith markup
         | On tryText (x,rest) -> 
-            yield x.Length, Text x
+            yield x.Length, TEXT x
 
         | _ -> failwith inp
     }
@@ -82,7 +83,7 @@ let tokenize(inp:string) =
                 yield! afterStartTag tagName inp.[i..]
             | None -> 
                 yield! entry inp.[i..]
-        //yield 0, EOF
+        yield 0, EOF
     }
     |> Seq.map(fun (len,tok) ->
         let pos = {
@@ -92,7 +93,8 @@ let tokenize(inp:string) =
         }
         i <- i + len
         match tok with
-        | TagStart(nm,_) -> tagStarted <- Some nm
+        | TAGSTART(nm,_) -> 
+            tagStarted <- Some nm
         | _ -> ()
         pos
     )

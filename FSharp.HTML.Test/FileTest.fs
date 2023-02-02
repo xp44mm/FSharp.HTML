@@ -22,7 +22,7 @@ type FileTest(output:ITestOutputHelper) =
     [<MemberData(nameof FileTest.files)>]
     member this.``generate wellformed file``(file) =
         let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))
-        let _,nodes = Parser.parseDoc txt
+        let _,nodes =  HtmlUtils.parseDoc txt
         let content =
             nodes
             |> Seq.map HtmlUtils.stringifyNode
@@ -37,7 +37,7 @@ type FileTest(output:ITestOutputHelper) =
             let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))            
             HtmlUtils.parseDoc txt
         let _,nodes2 = 
-            let txt = File.ReadAllText(Path.Combine(Dir.wellformed, file))            
+            let txt = File.ReadAllText(Path.Combine(Dir.wellformed, file))
             HtmlUtils.parseDoc txt
         show nodes2
         Should.equal nodes1 nodes2

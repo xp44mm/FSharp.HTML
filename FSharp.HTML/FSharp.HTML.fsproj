@@ -34,8 +34,13 @@
 		<None Include="nodes.fsyacc" />
 
 		<Compile Include="NodesParseTable.fs" />
+
+		<None Include="htmldoc.fsyacc" />
+
+		<Compile Include="HtmldocParseTable.fs" />
 		<Compile Include="Compiler.fs" />
 		<Compile Include="Parser.fs" />
+		<Compile Include="HtmldocCompiler.fs" />
 		<Compile Include="Whitespace.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
 		<Compile Include="BrRemover.fs" />
@@ -50,7 +55,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FslexFsyacc.Runtime" Version="1.3.1" />
+		<PackageReference Include="FslexFsyacc.Runtime" Version="1.3.4" />
+		<PackageReference Include="System.Reactive" Version="5.0.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
 	</ItemGroup>
 

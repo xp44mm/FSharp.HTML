@@ -25,11 +25,12 @@ type ParserTest(output:ITestOutputHelper) =
           </body>
         </html>
         """
-        let dtp, nodes = Parser.parseDoc x
+        let dtp, nodes = HtmldocCompiler.compile x
         Should.equal dtp "html"
         
         show nodes
         let e =     [
+            HtmlText "\r\n        ";
             HtmlElement("html",[],[HtmlText "\r\n          ";
             HtmlElement("head",[],[HtmlText "\r\n            ";
             HtmlElement("meta",["charset","utf-8"],[]);

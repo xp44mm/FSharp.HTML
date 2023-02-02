@@ -26,7 +26,7 @@ type AttributeDFATest(output:ITestOutputHelper) =
     
     [<Fact>]
     member _.``01 - compiler test``() =
-        let hdr,dfs,rls = FslexCompiler.parseToStructuralData text
+        let hdr,dfs,rls = FslexCompiler.compile text
         show hdr
         show dfs
         show rls

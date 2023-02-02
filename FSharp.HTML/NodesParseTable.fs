@@ -65,3 +65,5 @@ let rules:(string list*(obj list->obj))list = [
 ]
 let unboxRoot =
     unbox<HtmlNode list>
+let theoryParser = FslexFsyacc.Runtime.TheoryParser.create(rules, actions, closures)
+let stateSymbolPairs = theoryParser.getStateSymbolPairs()

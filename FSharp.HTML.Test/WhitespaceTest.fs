@@ -26,7 +26,7 @@ type WhitespaceTest(output:ITestOutputHelper) =
     member _.``trim whitespace``() =
         let x = "<p>  <b> xyz</b>Geckos are a group<i>. </i>  </p>"
         let y = 
-            Parser.parseDoc x
+             HtmldocCompiler.compile x
             |> snd
 
         show y

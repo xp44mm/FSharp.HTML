@@ -56,8 +56,7 @@ type HtmlCharRefsTest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``unescapseNode``() =
-        let x = """
-<!DOCTYPE html>
+        let x = """<!DOCTYPE html>
 <!-- HTM_Numeric_Character_References_Example.html
     - Copyright (c) HerongYang.com. All Rights Reserved.
 -->

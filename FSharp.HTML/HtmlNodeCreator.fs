@@ -4,31 +4,31 @@ open FSharp.Literals.Literal
 
 let htmlText (token:Position<HtmlToken>) =
     match token.value with
-    | Text x -> HtmlText x
+    | TEXT x -> HtmlText x
     | _ -> failwith $"HtmlNodeCreator:{stringify token}"
 
 let htmlComment (token:Position<HtmlToken>) =
     match token.value with
-    | Comment x -> HtmlComment x
+    | COMMENT x -> HtmlComment x
     | _ -> failwith $"HtmlNodeCreator:{stringify token}"
 
 let htmlCData (token:Position<HtmlToken>) =
     match token.value with
-    | CData x -> HtmlCData x
+    | CDATA x -> HtmlCData x
     | _ -> failwith $"HtmlNodeCreator:{stringify token}"
 
 let getNameAttributes (token:Position<HtmlToken>) =
     match token.value with
-    | TagStart (name,attrs) 
-    | TagSelfClosing (name,attrs)
+    | TAGSTART (name,attrs) 
+    | TAGSELFCLOSING (name,attrs)
         -> name,attrs
     | _ -> failwith $"HtmlNodeCreator:{stringify token}"
 
 let getName (token:Position<HtmlToken>) =
     match token.value with
-    | TagStart (name,_) 
-    | TagSelfClosing (name,_)
-    | TagEnd name
+    | TAGSTART (name,_) 
+    | TAGSELFCLOSING (name,_)
+    | TAGEND name
         -> name
     | _ -> failwith $"HtmlNodeCreator:{stringify token}"
 

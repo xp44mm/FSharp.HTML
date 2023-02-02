@@ -4,6 +4,10 @@ open FSharp.Literals.Literal
 open FSharp.Idioms
 open FslexFsyacc.Runtime
 open System
+open System.Reactive
+open System.Reactive.Linq
+
+open FSharp.Literals.Literal
 
 let getTag = HtmlTokenUtils.getTag
 let getLexeme = HtmlTokenUtils.getLexeme
@@ -13,20 +17,64 @@ let parser =
         NodesParseTable.rules,
         NodesParseTable.actions,
         NodesParseTable.closures,getTag,getLexeme)
+        
+let stateSymbolList = NodesParseTable.theoryParser.getStateSymbolPairs()
 
 let parseTokens(tokens:seq<Position<HtmlToken>>) =
     tokens
     |> parser.parse
     |> NodesParseTable.unboxRoot
 
+/// consume doctype from tokens
+let preamble (tokens:seq<Position<HtmlToken>>) =
+    let iterator = 
+        tokens.GetEnumerator()
+        |> Iterator
 
-///尝试在状态栈中寻找第一个开始标签
+    let rec loop () =
+        match iterator.tryNext() with
+        | Some {value = TEXT t } when t.Trim() = "" -> loop ()
+        | Some {value = DOCTYPE _ } as sm ->
+            let rest =
+                iterator.tryNext()
+                |> Seq.unfold(
+                    Option.map(fun v -> v,iterator.tryNext())
+                )
+                |> Seq.skipWhile(function
+                    | {value = TEXT t } when t.Trim() = "" -> true
+                    | _ -> false
+                )
+            sm,rest
+        | maybe -> 
+            let rest =
+                maybe
+                |> Seq.unfold(
+                    Option.map(fun v -> v,iterator.tryNext())
+                )
+            None,rest
+    loop ()
+/// Locate doctype at the beginning of tokens
+let consumeDoctype tokens =
+    let maybeDoctype, tokens = 
+        tokens
+        |> preamble
+    let docType = 
+        maybeDoctype
+        |> Option.map(function
+            | {value=DOCTYPE dt} -> dt
+            | _ -> "html"
+        )
+        |> Option.defaultValue "html"
+    docType,tokens
+
+
+///尝试在状态栈中寻找第一个开始标签（不平衡的）
 let tryFindTagStart (states:list<int*obj>) =
     let rec loop (balance:int)(rest:list<int*obj>) =
         match rest with
         | [] -> None
         | (i,lexeme)::tail ->
-            match parser.getSymbol i with
+            match stateSymbolList.[i] with
             | "TAGSTART" ->
                 let balance = balance + 1
                 if balance > 0 then
@@ -46,7 +94,7 @@ let tryFindTagStart (states:list<int*obj>) =
 let stringifyStates states =
     let symbols =
         states
-        |> List.map(fun(i,_)-> $"{parser.getSymbol i}")
+        |> List.map(fun(i,_)-> $"{stateSymbolList.[i]}")
     stringify symbols
 
 let parse (tokens:seq<Position<HtmlToken>>) =
@@ -68,26 +116,26 @@ let parse (tokens:seq<Position<HtmlToken>>) =
                         yield { 
                             index = -1
                             length = 0
-                            value = TagEnd bnm }
+                            value = TAGEND bnm }
                         yield! loop ()
-                | Some ({value=TagEnd enm}as baseline) ->
+                | Some ({value=TAGEND enm}as baseline) ->
                     match tryFindTagStart states with
                     | None ->
-                        iterator.consume() |> ignore
+                        iterator.dequeue(1) |> ignore
                         yield {
-                            baseline with value = Text $"</{enm}>"} // tok.getRaw(inp)
+                            baseline with value = TEXT $"</{enm}>"} // tok.getRaw(inp)
                         yield! loop ()
                     | Some(bnm,attrs) ->
                         if enm = bnm then
-                            yield iterator.consume()
+                            yield iterator.dequeueHead()
                             yield! loop ()
                         else
                             yield { baseline with 
                                         length = 0
-                                        value = TagEnd bnm}
-                            iterator.restart()
+                                        value = TAGEND bnm}
+                            iterator.dequequeNothing()
                             yield! loop ()
-                | Some ({value=TagStart (name,_)|TagSelfClosing (name,_)}as baseline) ->
+                | Some ({value=TAGSTART (name,_)|TAGSELFCLOSING (name,_)}as baseline) ->
                     match tryFindTagStart states with
                     // 有未闭合的，
                     | Some(bnm,attrs) when 
@@ -96,15 +144,15 @@ let parse (tokens:seq<Position<HtmlToken>>) =
                             //insert 虚拟tok
                             yield { baseline with
                                         length = 0
-                                        value = TagEnd bnm}
-                            iterator.restart()
+                                        value = TAGEND bnm}
+                            iterator.dequequeNothing()
                             yield! loop ()
                     | _ ->
                         // 没有未闭合的，继续正常流程
-                        yield iterator.consume() // tok
+                        yield iterator.dequeueHead() // tok
                         yield! loop ()
                 | _ ->
-                    yield iterator.consume() // tok
+                    yield iterator.dequeueHead() // tok
                     yield! loop ()
             }
 
@@ -131,3 +179,4 @@ let parse (tokens:seq<Position<HtmlToken>>) =
         |[(1,lxm);0,null] -> lxm |> unbox<HtmlNode list>
         | _ -> failwith $"states:{stringifyStates states}\r\ntok:EOF"
     else failwith $"states:{stringifyStates states}"
+
