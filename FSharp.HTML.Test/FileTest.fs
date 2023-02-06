@@ -32,20 +32,30 @@ type FileTest(output:ITestOutputHelper) =
             content,System.Text.Encoding.UTF8)
         
     [<Theory;MemberData(nameof FileTest.files)>]
-    member this.``omitted vs wellformed``(file) =
-        let _,nodes1 = 
-            let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))            
-            HtmlUtils.parseDoc txt
+    member this.``wellformed``(file) =
         let _,nodes2 = 
             let txt = File.ReadAllText(Path.Combine(Dir.wellformed, file))
             HtmlUtils.parseDoc txt
         show nodes2
+
+    [<Theory;MemberData(nameof FileTest.files)>]
+    member this.``omitted vs wellformed``(file) =
+        let _,nodes2 = 
+            let txt = File.ReadAllText(Path.Combine(Dir.wellformed, file))
+            HtmlUtils.parseDoc txt
+
+        let _,nodes1 = 
+            let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))            
+            HtmlUtils.parseDoc txt
+
+        show nodes2
+        //检测忽略结束标签补充算法的正确性
         Should.equal nodes1 nodes2
 
     [<Theory;MemberData(nameof FileTest.files)>]
     member this.``render``(file) =
         let doctype,nodes = 
-            let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))            
+            let txt = File.ReadAllText(Path.Combine(Dir.omitted, file))
             HtmlUtils.parseDoc txt
 
         let y = Render.stringifyDoc(doctype,nodes)

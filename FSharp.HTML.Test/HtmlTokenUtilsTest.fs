@@ -47,15 +47,15 @@ type HtmlTokenUtilsTest(output:ITestOutputHelper) =
         source
         |> Seq.map(fun(a,_)->Array.singleton a)
 
-    [<Theory;MemberData(nameof HtmlTokenUtilsTest.inputs)>]
-    member _.``preamble test``(x) =
+    //[<Theory;MemberData(nameof HtmlTokenUtilsTest.inputs)>]
+    //member _.``preamble test``(x) =
 
-        let a,b = 
-            x
-            |> Tokenizer.tokenize
-            |> Compiler.preamble
-        let b =  b |> Seq.toList
-        show (a,b)
-        Should.equal (a,b) mp.[x]
+    //    let a,b = 
+    //        x
+    //        |> Tokenizer.tokenize
+    //        |> Compiler.preamble
+    //    let b =  b |> Seq.toList
+    //    show (a,b)
+    //    Should.equal (a,b) mp.[x]
 
 

@@ -30,6 +30,6 @@ let getTag (token:Position<HtmlToken>) =
     | TAGSTART       _ -> "TAGSTART"
     | TAGEND         _ -> "TAGEND"
 
-let getLexeme (token:Position<HtmlToken>) = box token
+//let getLexeme (token:Position<HtmlToken>) = box token
 
 
