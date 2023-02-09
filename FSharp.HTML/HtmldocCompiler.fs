@@ -2,21 +2,12 @@
 
 open FSharp.Literals.Literal
 open FSharp.Idioms
+
 open FslexFsyacc.Runtime
-open FSharp.Idioms.PointFree
 
 let getTag = HtmlTokenUtils.getTag
 
-let getLexeme (token:Position<HtmlToken>) = 
-    match token.value with
-    | EOF -> null
-    | DOCTYPE s -> box s
-    | TEXT    s -> box s
-    | COMMENT s -> box s
-    | CDATA   s -> box s
-    | TAGEND  s -> box s
-    | TAGSELFCLOSING (nm,attrs) -> box (nm,attrs)
-    | TAGSTART       (nm,attrs) -> box (nm,attrs)
+let getLexeme = HtmlTokenUtils.getLexeme
 
 let parser = 
     Parser<Position<HtmlToken>>(
@@ -79,27 +70,24 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             yield! omittedTagends
             yield tok
         | TAGEND enm ->
-            let omittedTagends,couple =
+            let omittedTagends,found =
                 let tagstarts = 
                     let sq =
                         states |> iterateTagStarts
                     Iterator(sq.GetEnumerator())
-                let mutable couple = false
-                let rec loop () =
-                    [
-                        match tagstarts.tryNext() with
-                        | Some snm when snm = enm ->
-                            couple <- true
-                        | Some snm ->
-                            yield newOmittedTagend tok snm
-                            yield! loop ()
-                        | None -> ()
-                    ]
-                loop (),couple
+                let rec loop acc =
+                    match tagstarts.tryNext() with
+                    | Some snm when snm = enm ->
+                        List.rev acc,true
+                    | Some snm ->
+                        let acc = newOmittedTagend tok snm::acc
+                        loop acc
+                    | None ->
+                        List.rev acc,false
+                loop []
 
-            yield! omittedTagends
-
-            if couple then
+            if found then
+                yield! omittedTagends
                 yield tok
             else
                 failwith $"orphan end tag:</{enm}>"
@@ -123,7 +111,6 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
                 |> Seq.filter((=)"li")
                 |> Seq.map(newOmittedTagend tok)
                 
-
             yield! omittedTagends
             yield tok
 
@@ -135,7 +122,6 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
                 |> Seq.filter(fun tag -> tag = "dt" || tag = "dd")
                 |> Seq.map(newOmittedTagend tok)
                 
-
             yield! omittedTagends
             yield tok
         | TAGSTART       (("address"|"article"|"aside"|"blockquote"|"details"|"div"|"dl"|"fieldset"|"figcaption"|"figure"|"footer"|"form"|"h1"|"h2"|"h3"|"h4"|"h5"|"h6"|"header"|"hgroup"|"hr"|"main"|"menu"|"nav"|"ol"|"p"|"pre"|"section"|"table"| "ul"),_) 
@@ -186,6 +172,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
                 |> Seq.truncate 1
                 |> Seq.filter((=)"option")
                 |> Seq.map(newOmittedTagend tok)
+
             yield! omittedTagends
             yield tok
         | TAGSTART ("col",_) | TAGSELFCLOSING ("col",_) ->
@@ -295,14 +282,21 @@ let compile (txt:string) =
     let mutable result = defaultValue<_>
 
     txt
-    |> Tokenizer.tokenize
-    |> Seq.skipWhile(fun tok ->
-        match tok.value with
-        | TEXT x when x.Trim() = "" -> true
-        | _ -> false
-    )
+    |> HtmlTokenizer.tokenize 0
     |> Seq.choose HtmlTokenUtils.unifyVoidElement
-    |> Seq.collect(fun tok ->insertOmittedTagend states tok)
+    |> Seq.filter(fun tok ->
+        // 删除文件根部的自由空白
+        match tok.value with
+        | TEXT x when x.Trim() = "" -> 
+            states 
+            |> iterateTagStarts 
+            |> Seq.isEmpty
+            |> not
+        | _ -> true
+    )
+    |> Seq.collect(fun tok -> 
+        //不可以柯里化，否则会错误地缓存states快照
+        insertOmittedTagend states tok)
     |> Seq.map(fun tok ->
         tokens <- tok :: tokens
         tok

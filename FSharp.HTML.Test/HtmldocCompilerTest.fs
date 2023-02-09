@@ -5,14 +5,14 @@ open Xunit.Abstractions
 open FSharp.Literals
 open FSharp.xUnit
 
-type ParserTest(output:ITestOutputHelper) =
+type HtmldocCompilerTest(output:ITestOutputHelper) =
     let show res =
         res
         |> Render.stringify
         |> output.WriteLine
           
     [<Fact>]
-    member _.``parseDoc``() =
+    member _.``compile test``() =
         let x = """
         <!DOCTYPE html>
         <html>
@@ -29,8 +29,7 @@ type ParserTest(output:ITestOutputHelper) =
         Should.equal dtp "html"
         
         show nodes
-        let e =     [
-            HtmlText "\r\n        ";
+        let e = [
             HtmlElement("html",[],[HtmlText "\r\n          ";
             HtmlElement("head",[],[HtmlText "\r\n            ";
             HtmlElement("meta",["charset","utf-8"],[]);
@@ -40,6 +39,6 @@ type ParserTest(output:ITestOutputHelper) =
             HtmlText "\r\n            ";
             HtmlElement("img",["src","images/firefox-icon.png";"alt","My test image"],[]);
             HtmlText "\r\n          "]);HtmlText "\r\n        "]);
-            HtmlText "\r\n        "]
+            ]
 
         Should.equal nodes e

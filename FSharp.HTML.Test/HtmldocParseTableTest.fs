@@ -112,26 +112,26 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
         File.WriteAllText(parseTblPath,fsharpCode)
         output.WriteLine("output path:"+parseTblPath)
 
-    //[<Fact>]
-    //member _.``08 - valid ParseTable``() =
-    //    let src = fsyacc.toFsyaccParseTableFile()
+    [<Fact>]
+    member _.``08 - valid ParseTable``() =
+        let src = fsyacc.toFsyaccParseTableFile()
 
-    //    Should.equal src.actions HtmldocParseTable.actions
-    //    Should.equal src.closures HtmldocParseTable.closures
+        Should.equal src.actions HtmldocParseTable.actions
+        Should.equal src.closures HtmldocParseTable.closures
 
-    //    let headerFromFsyacc =
-    //        FSharp.Compiler.SyntaxTreeX.Parser.getDecls("header.fsx",src.header)
+        let headerFromFsyacc =
+            FSharp.Compiler.SyntaxTreeX.Parser.getDecls("header.fsx",src.header)
 
-    //    let semansFsyacc =
-    //        let mappers = src.generateMappers()
-    //        FSharp.Compiler.SyntaxTreeX.SourceCodeParser.semansFromMappers mappers
+        let semansFsyacc =
+            let mappers = src.generateMappers()
+            FSharp.Compiler.SyntaxTreeX.SourceCodeParser.semansFromMappers mappers
 
-    //    let header,semans =
-    //        File.ReadAllText(parseTblPath, Encoding.UTF8)
-    //        |> FSharp.Compiler.SyntaxTreeX.SourceCodeParser.getHeaderSemansFromFSharp 2
+        let header,semans =
+            File.ReadAllText(parseTblPath, Encoding.UTF8)
+            |> FSharp.Compiler.SyntaxTreeX.SourceCodeParser.getHeaderSemansFromFSharp 2
 
-    //    Should.equal headerFromFsyacc header
-    //    Should.equal semansFsyacc semans
+        Should.equal headerFromFsyacc header
+        Should.equal semansFsyacc semans
 
     [<Fact>]
     member _.``06 - first or last token of node``() =

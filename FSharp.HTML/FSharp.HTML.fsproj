@@ -27,26 +27,19 @@
 		<None Include="attribute.fslex" />
 		<Compile Include="AttributeDFA.fs" />
 		<Compile Include="Consumption.fs" />
-		<Compile Include="Tokenizer.fs" />
+		<Compile Include="HtmlTokenizer.fs" />
 		<Compile Include="HtmlTokenUtils.fs" />
-		<Compile Include="HtmlNodeCreator.fs" />
-
-		<None Include="nodes.fsyacc" />
-
-		<Compile Include="NodesParseTable.fs" />
 
 		<None Include="htmldoc.fsyacc" />
 
 		<Compile Include="HtmldocParseTable.fs" />
-		<Compile Include="Compiler.fs" />
-		<Compile Include="Parser.fs" />
 		<Compile Include="HtmldocCompiler.fs" />
 		<Compile Include="Whitespace.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
-		<Compile Include="BrRemover.fs" />
-		<Compile Include="HrRemover.fs" />
 		<Compile Include="Render.fs" />
 		<Compile Include="HtmlUtils.fs" />
+		<Compile Include="BrRemover.fs" />
+		<Compile Include="HrRemover.fs" />
 
 		<None Include="..\readme.md">
 			<Pack>True</Pack>

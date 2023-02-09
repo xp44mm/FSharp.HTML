@@ -3,9 +3,7 @@
 open System.IO
 
 let solutionPath =
-    DirectoryInfo(
-        __SOURCE_DIRECTORY__
-    )
+    DirectoryInfo( __SOURCE_DIRECTORY__ )
         .Parent
         .FullName
 

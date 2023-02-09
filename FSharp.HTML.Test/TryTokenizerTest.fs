@@ -41,7 +41,6 @@ type TryTokenizerTest(output:ITestOutputHelper) =
         show ys
         Should.equal ys xs
 
-
     [<Fact>]
     member _.``05 = tryUnquotedAttributeValue``() =
         let xs = "=*/"

@@ -17,8 +17,8 @@ type AttributeDFATest(output:ITestOutputHelper) =
         |> Literal.stringify
         |> output.WriteLine
 
-    let solutionPath = DirectoryInfo(__SOURCE_DIRECTORY__).Parent.FullName
-    let sourcePath = Path.Combine(solutionPath, @"FSharp.HTML")
+    //let solutionPath = DirectoryInfo(__SOURCE_DIRECTORY__).Parent.FullName
+    let sourcePath = Dir.projPath // Path.Combine(solutionPath, @"FSharp.HTML")
     let filePath = Path.Combine(sourcePath, @"attribute.fslex") // **input**
     let text = File.ReadAllText(filePath)
     let fslex = FslexFile.parse text

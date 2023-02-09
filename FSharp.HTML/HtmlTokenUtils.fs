@@ -30,6 +30,14 @@ let getTag (token:Position<HtmlToken>) =
     | TAGSTART       _ -> "TAGSTART"
     | TAGEND         _ -> "TAGEND"
 
-//let getLexeme (token:Position<HtmlToken>) = box token
-
+let getLexeme (token:Position<HtmlToken>) = 
+    match token.value with
+    | EOF -> null
+    | DOCTYPE s -> box s
+    | TEXT    s -> box s
+    | COMMENT s -> box s
+    | CDATA   s -> box s
+    | TAGEND  s -> box s
+    | TAGSELFCLOSING (nm,attrs) -> box (nm,attrs)
+    | TAGSTART       (nm,attrs) -> box (nm,attrs)
 

@@ -9,14 +9,11 @@
 	<ItemGroup>
 		<Compile Include="Dir.fs" />
 		<Compile Include="AttributeDFATest.fs" />
-		<Compile Include="NodesParseTableTest.fs" />
 		<Compile Include="HtmldocParseTableTest.fs" />
 		<Compile Include="TryTokenizerTest.fs" />
-		<Compile Include="TokenizerTest.fs" />
 		<Compile Include="HtmlTokenizerTest.fs" />
 		<Compile Include="HtmlTokenUtilsTest.fs" />
-		<Compile Include="UnifyVoidElementTest.fs" />
-		<Compile Include="ParserTest.fs" />
+		<Compile Include="HtmldocCompilerTest.fs" />
 		<Compile Include="WhitespaceTest.fs" />
 		<Compile Include="HtmlCharRefsTest.fs" />
 		<Compile Include="RenderTest.fs" />
