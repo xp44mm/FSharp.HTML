@@ -31,6 +31,7 @@ doctype is a string that is extracted from doctype tag. and nodes is a `HtmlNode
 All parsing processes in a package are public, and you are free to compose them to implement your functional requirements. Parser is highly configurable, see source code [HtmlUtils](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlUtils.fs)
 
 Parse only html structures without changing the content.
+
 ```fsharp
 Parser.parseDoc
 Whitespace.removeWsChildren

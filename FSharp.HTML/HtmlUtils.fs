@@ -7,7 +7,7 @@ let parseDoc (txt:string) =
         |> HtmldocCompiler.compile
     let nodes =
         nodes
-        |> Whitespace.removeWsChildren
+        |> List.map Whitespace.removeWS
         |> Whitespace.trimWhitespace
         |> List.map HtmlCharRefs.unescapseNode
     doctype,nodes

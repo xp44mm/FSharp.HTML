@@ -239,7 +239,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART       (("thead"|"tbody"|"tfoot"),_)
         | TAGSELFCLOSING (("thead"|"tbody"|"tfoot"),_) ->
             let omittedTagends =
-                let tagstarts = 
+                let tagstarts =
                     let sq =
                         states |> iterateTagStarts
                     Iterator(sq.GetEnumerator())
@@ -287,7 +287,7 @@ let compile (txt:string) =
     |> Seq.filter(fun tok ->
         // 删除文件根部的自由空白
         match tok.value with
-        | TEXT x when x.Trim() = "" -> 
+        | TEXT x when x.Trim() = "" ->
             states 
             |> iterateTagStarts 
             |> Seq.isEmpty
@@ -297,6 +297,7 @@ let compile (txt:string) =
     |> Seq.collect(fun tok -> 
         //不可以柯里化，否则会错误地缓存states快照
         insertOmittedTagend states tok)
+
     |> Seq.map(fun tok ->
         tokens <- tok :: tokens
         tok

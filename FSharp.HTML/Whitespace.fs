@@ -1,7 +1,5 @@
 ﻿module FSharp.HTML.Whitespace
 
-open System.Text.RegularExpressions
-
 //its Permitted content contains no textNode.
 let notextElement = set [
     "acronym";
@@ -108,6 +106,9 @@ let blockLevelFamily = set [
     "caption"
 ]
 
+open System.Text.RegularExpressions
+// todo:根据所在元素，来确定空白的处理方式
+
 let rec removeWsChildren (nodes:HtmlNode list) =
     nodes
     |> List.filter(function
@@ -148,11 +149,11 @@ let trimWhitespace elements =
 
             | HtmlElement("pre",_,_) -> forward true (h::acc) t
 
-            | HtmlElement(nm,attrs,subchildren) ->
-                let trimStart = trimStart || blockLevelFamily.Contains nm
+            | HtmlElement(tag,attrs,subchildren) ->
+                let trimStart = trimStart || blockLevelFamily.Contains tag
                 let trimStart,subchildren = forward trimStart [] subchildren
-                let hh = HtmlElement(nm,attrs,subchildren)
-                let trimStart = trimStart || blockLevelFamily.Contains nm
+                let hh = HtmlElement(tag,attrs,subchildren)
+                let trimStart = trimStart || blockLevelFamily.Contains tag
                 forward trimStart (hh::acc) t
 
             | HtmlComment _ -> forward trimStart (h::acc) t
@@ -187,3 +188,4 @@ let trimWhitespace elements =
     elements
     |> forward  true [] |> snd
     |> backward true [] |> snd
+
