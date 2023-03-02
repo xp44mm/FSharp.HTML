@@ -15,7 +15,7 @@ open FslexFsyacc.Yacc
 open FslexFsyacc.Fsyacc
 open FslexFsyacc.Runtime
 
-type HtmldocParseTableTest(output:ITestOutputHelper) =
+type TagLeftParseTableTest(output:ITestOutputHelper) =
     let show res =
         res
         |> Render.stringify
@@ -33,13 +33,13 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
         |> Seq.map symbolRender
         |> String.concat "|"
 
-    let filePath = Path.Combine(Dir.projPath, "htmldoc.fsyacc") // **input**
+    let filePath = Path.Combine(Dir.projPath, "TagLeft.fsyacc") // **input**
     let text = File.ReadAllText(filePath)
     let rawFsyacc = RawFsyaccFile.parse text
     let fsyacc = FlatFsyaccFile.fromRaw rawFsyacc
 
     // **input**
-    let parseTblName = "HtmldocParseTable" 
+    let parseTblName = "TagLeftParseTable" 
     let parseTblPath = Path.Combine(Dir.projPath, $"{parseTblName}.fs")
 
     [<Fact>]
@@ -49,9 +49,9 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
             |> Grammar.from
 
         let tokens = grammar.terminals
-        let res = set ["CDATA";"COMMENT";"DOCTYPE";"EOF";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
+        let res = set ["ATTR_NAME";"ATTR_VALUE";"DIV_RANGLE";"LANGLE";"RANGLE"]
 
-        //show tokens
+        show tokens
         Should.equal tokens res
 
     [<Fact>]
@@ -116,8 +116,8 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
     member _.``08 - valid ParseTable``() =
         let src = fsyacc.toFsyaccParseTableFile()
 
-        Should.equal src.actions HtmldocParseTable.actions
-        Should.equal src.closures HtmldocParseTable.closures
+        Should.equal src.actions TagLeftParseTable.actions
+        Should.equal src.closures TagLeftParseTable.closures
 
         let headerFromFsyacc =
             FSharp.Compiler.SyntaxTreeX.Parser.getDecls("header.fsx",src.header)
@@ -133,21 +133,15 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
         Should.equal headerFromFsyacc header
         Should.equal semansFsyacc semans
 
-    [<Fact>]
-    member _.``06 - first or last token of node``() =
-        let grammar = 
-            fsyacc.getMainProductions()
-            |> Grammar.from
-
-        let last = grammar.lasts.["node"]
-        let first = grammar.firsts.["node"]
-
-        output.WriteLine($"last={clazz last}")
-        output.WriteLine($"first={clazz first}")
 
     [<Fact>]
     member _.``101 - format norm file test``() =
-        let startSymbol = fsyacc.rules.Head |> Triple.first |> List.head
-        //show startSymbol
+        let startSymbol = 
+            fsyacc.rules.Head 
+            |> Triple.first 
+            |> List.head
+
+        show startSymbol
         let fsyacc = fsyacc.start(startSymbol,Set.empty).toRaw()
         output.WriteLine(fsyacc.render())
+

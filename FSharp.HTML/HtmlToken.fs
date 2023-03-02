@@ -6,6 +6,6 @@ type HtmlToken =
     | TEXT           of string
     | COMMENT        of string
     | CDATA          of string
-    | TAGSELFCLOSING of name:string * attrs:list<string*string>
-    | TAGSTART       of name:string * attrs:list<string*string>
-    | TAGEND         of name:string
+    | TAGSELFCLOSING of tag:string * attrs:list<string*string>
+    | TAGSTART       of tag:string * attrs:list<string*string>
+    | TAGEND         of tag:string

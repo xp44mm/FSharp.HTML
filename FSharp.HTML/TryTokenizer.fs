@@ -3,96 +3,65 @@
 open System
 open System.Text.RegularExpressions
 
-open FSharp.Idioms
+open FSharp.Idioms.RegularExpressions
 
 let tryWS =
     Regex @"^\s+"
-    |> tryMatch
+    |> trySearch
 
 let tryLineTerminator =
     Regex @"^(\r?\n|\r)"
-    |> tryMatch
+    |> trySearch
 
-// mixture of text and character references
-let tryText =
-   Regex(@"^[^<]+")
-   |> tryMatch
-
-let tryDOCTYPE =
-    Regex(@"^<!DOCTYPE\s+[^>]*>",RegexOptions.IgnoreCase)
-    |> tryMatch
-
-let tryComment =
-    Regex(@"^<!--[\s\S]*?-->")
-    |> tryMatch
-
-let tryCDATA =
-    Regex(@"^<!\[CDATA\[[\s\S]*?\]\]>",RegexOptions.IgnoreCase)
-    |> tryMatch
-
-let TagNameChar = "[-:\.\w]"
+let TagNameChar = @"[-:\.\w]"
 
 let tryEndTag =
    Regex($"^</{TagNameChar}+\\s*>")
-   |> tryMatch
+   |> trySearch
 
 let tryStartTagOpen =
     Regex($"^<{TagNameChar}+")
-    |> tryMatch
-
-// """, "'", "=", ">", "/"
-let tryAttributeName =
-    Regex(@"^[\S-[""'=>/]]+")
-    |> tryMatch
-
-// """, "'", "=", ">", "<", "`"
-let tryUnquotedAttributeValue =
-    Regex(@"^=\s*[\S-[""'=><`]]+")
-    |> tryMatch
-
-let tryQuotedAttributeValue =
-    Regex(@"^=\s*([""'])[^\1]*?\1")
-    |> tryMatch
+    |> trySearch
 
 ///所有解析失败的标签归类为bogus
 let tryBogusComment =
     Regex(@"^<[?/![^>]*>")
-    |> tryMatch
+    |> trySearch
 
 let tryNamedCharacterReference =
    Regex(@"^&\w+;")
-   |> tryMatch
+   |> trySearch
 
 let tryDecimalNumericCharacterReference =
    Regex(@"^&#\d+;")
-   |> tryMatch
+   |> trySearch
 
 let tryHexadecimalNumericCharacterReference =
    Regex(@"^&#[xX][0-9a-fA-F]+;")
-   |> tryMatch
+   |> trySearch
 
 let trySingleLineComment =
-    Regex @"^//.*"
-    |> tryMatch
+    Regex @"^//[^\r\n]*(\r?\n|\r)"
+    |> trySearch
 
 let tryMultiLineComment =
     Regex @"^/\*[\s\S]*?\*/"
-    |> tryMatch
+    |> trySearch
 
 let trySingleStringLiteral =
     Regex @"^'(\\\\|\\'|[^'])*'"
-    |> tryMatch
+    |> trySearch
 
 let tryDoubleStringLiteral =
     Regex """^"(\\\\|\\"|[^"])*(")"""
-    |> tryMatch
+    |> trySearch
 
 let tryGraveAccent =
     Regex @"^`(\\\\|\\`|[^`])*`"
-    |> tryMatch
+    |> trySearch
 
 let tryRegularExpressionLiteral =
     Regex @"^/(\\\\|\\/|[^/])+/[gimsuy]*"
-    |> tryMatch
+    |> trySearch
 
 

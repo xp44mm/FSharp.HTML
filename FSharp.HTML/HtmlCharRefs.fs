@@ -3,6 +3,8 @@
 open System
 open System.Globalization
 open System.Text.RegularExpressions
+open FSharp.Idioms.ActivePatterns
+open FSharp.Idioms.RegularExpressions
 
 //Named character references
 let refs =
@@ -2260,36 +2262,42 @@ open FSharp.Idioms
 
 let tryCommonText =
     Regex @"^[^&]+"
-    |> tryMatch
+    |> trySearch
 
 let tryNamedCharacterReference =
     Regex @"^&[a-zA-Z]+;?"
-    |> tryMatch
+    |> trySearch
 
 let tryDecimalNumericCharacterReference =
     Regex @"^&#\d+;"
-    |> tryMatch
+    |> trySearch
 
 // Hexadecimal numeric character reference
 let tryHexadecimalNumericCharacterReference = 
     new Regex(@"^&#[xX][a-fA-F\d]+;")
-    |> tryMatch
+    |> trySearch
 
 let rec tokenizeRawText (inp:string) =
     seq {
         match inp with
         | "" -> ()
-        | On tryCommonText (x, rest) ->
-            yield x
+        | On tryCommonText x ->
+            yield x.Value
+            let rest = x.Result("$'")
             yield! tokenizeRawText rest
-        | On tryDecimalNumericCharacterReference (x, rest) ->
-            yield substituteDecimalNumericCharacterReference x
+        | On tryDecimalNumericCharacterReference x ->
+            yield substituteDecimalNumericCharacterReference x.Value
+            let rest = x.Result("$'")
             yield! tokenizeRawText rest
-        | On tryHexadecimalNumericCharacterReference (x, rest) ->
-            yield substituteHexadecimalNumericCharacterReference x
+        | On tryHexadecimalNumericCharacterReference x ->
+            yield substituteHexadecimalNumericCharacterReference x.Value
+            let rest = x.Result("$'")
+
             yield! tokenizeRawText rest
-        | On tryNamedCharacterReference (x, rest) ->
-            yield substituteNamedCharacterReference x
+        | On tryNamedCharacterReference x ->
+            yield substituteNamedCharacterReference x.Value
+            let rest = x.Result("$'")
+
             yield! tokenizeRawText rest
         | _ when inp.[0] = '&' -> 
             yield inp.[0..0]

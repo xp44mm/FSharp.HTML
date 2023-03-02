@@ -59,7 +59,7 @@ type FileTest(output:ITestOutputHelper) =
             HtmlUtils.parseDoc txt
 
         let y = Render.stringifyDoc(doctype,nodes)
-        show y
+        output.WriteLine(y)
 
 
 

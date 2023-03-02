@@ -3,7 +3,7 @@
 	<PropertyGroup>
 		<TargetFramework>netstandard2.0</TargetFramework>
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<Version>1.0.15</Version>
+		<Version>1.0.16</Version>
 		<Description>a parse for HTML5 based on the official W3C specification.</Description>
 		<Company>34696643@qq.com</Company>
 		<Authors>xp44m</Authors>
@@ -21,16 +21,16 @@
 		<Compile Include="SourceText.fs" />
 		<Compile Include="TagNames.fs" />
 		<Compile Include="HtmlNode.fs" />
-		
-		<Compile Include="HtmlToken.fs" />
 		<Compile Include="TryTokenizer.fs" />
-		<None Include="attribute.fslex" />
-		<Compile Include="AttributeDFA.fs" />
-		<Compile Include="Consumption.fs" />
-		<Compile Include="HtmlTokenizer.fs" />
-		<Compile Include="HtmlTokenUtils.fs" />
+		<Compile Include="HtmlToken.fs" />
+		<None Include="TagLeft.fsyacc" />
+		<Compile Include="TagLeftToken.fs" />
+		<Compile Include="TagLeftParseTable.fs" />
+		<Compile Include="TagLeftCompiler.fs" />
 
 		<None Include="htmldoc.fsyacc" />
+
+		<Compile Include="HtmlTokenUtils.fs" />
 
 		<Compile Include="HtmldocParseTable.fs" />
 		<Compile Include="HtmldocCompiler.fs" />
@@ -48,13 +48,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FslexFsyacc.Runtime" Version="1.3.4" />
+		<PackageReference Include="FslexFsyacc.Runtime" Version="1.3.5" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="FSharp.Core" Version="7.0.0" />
+	  <PackageReference Update="FSharp.Core" Version="7.0.200" />
 	</ItemGroup>
 
 </Project>

@@ -46,7 +46,7 @@ type RenderTest(output:ITestOutputHelper) =
             |> HtmlUtils.parseDoc
             |> Render.stringifyDoc
 
-        show y
+        output.WriteLine(y)
 
 
 

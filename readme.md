@@ -30,14 +30,22 @@ doctype is a string that is extracted from doctype tag. and nodes is a `HtmlNode
 
 All parsing processes in a package are public, and you are free to compose them to implement your functional requirements. Parser is highly configurable, see source code [HtmlUtils](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlUtils.fs)
 
-Parse only html structures without changing the content.
+Parse only html structures without changing the content. Please use `HtmldocCompiler.compile`. In fact, the `HtmlUtils.parseDoc` is defined as follows:
 
 ```fsharp
-Parser.parseDoc
-Whitespace.removeWsChildren
-Whitespace.trimWhitespace
-HtmlCharRefs.unescapseNode
+let parseDoc (txt:string) = 
+    let doctype,nodes =
+        txt
+        |> HtmldocCompiler.compile
+    let nodes =
+        nodes
+        |> List.map Whitespace.removeWS
+        |> Whitespace.trimWhitespace
+        |> List.map HtmlCharRefs.unescapseNode
+    doctype,nodes
 ```
+
+Knowing the above code, you can determine the parsing result as your needs.
 
 generate html source text:
 
@@ -65,7 +73,7 @@ The user can parse the string through the functions in the `HtmlUtils` module.
 You can also use a tokenizer to get a token sequence.
 
 ```fsharp
-let tokens = Tokenizer.tokenize txt 
+let tokens = HtmlTokenizer.tokenize txt 
 ```
 
 The main structure types are defined as follows:
