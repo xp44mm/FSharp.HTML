@@ -16,40 +16,21 @@ let parser =
 
 let stateSymbolList = HtmldocParseTable.theoryParser.getStateSymbolPairs()
 
-///从状态中获取开始标签，其未封闭。
-let getTagStarts (states:list<int*obj>) =
-    let iterator =
-        states
-        |> Seq.map(fun(i,o)->stateSymbolList.[i],o)
-        |> Seq.filter(fun(sym,l)->
-            match sym with
-            | "TAGSTART" | "TAGEND" -> true
-            | _ -> false
-        )
-        |> Iterator
+///从状态中获取未封闭开始标签。
+let unclosedTagStarts (states:list<int*obj>) =
+    let states =
+        parser.tryReduce(states,{index=0;length=0;value=COMMENT ""}) // reduce tagstart tagend.
+        |> Option.defaultValue states
 
-    seq {
-        match iterator.tryNext() with
-        | Some (si,li) when si = "TAGEND" ->
-            let enm = unbox<string> li
-            match iterator.tryNext() with
-            | Some (sj,lj) when sj = "TAGSTART" ->
-                let snm,_ = unbox<string*(string*string)list> lj
-                if enm = snm then
-                    ()
-                else
-                    failwith $"unmatched tags:<{snm}></{enm}>"
-            | _ -> failwith $"orphan end tag:</{enm}>"
-        | Some x -> yield x
-        | None -> ()
-        yield! Seq.make iterator.tryNext
-    }
+    states
+    |> Seq.map(fun(i,o)->stateSymbolList.[i],o)
+    |> Seq.filter(fun(sym,l)-> sym = "TAGSTART")
     |> Seq.map(
             snd
             >> unbox<string*(string*string)list>
             >> fst
         )
-
+        
 let newOmittedTagend tok nm = {
     tok with
         length = 0
@@ -63,7 +44,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | EOF ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.map(newOmittedTagend tok)
 
             yield! omittedTagends
@@ -72,7 +53,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             let omittedTagends,found =
                 let tagstarts =
                     states
-                    |> getTagStarts
+                    |> unclosedTagStarts
                     |> Iterator
                 let rec loop acc =
                     match tagstarts.tryNext() with
@@ -94,7 +75,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART ("body",_) | TAGSELFCLOSING ("body",_) ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.truncate 1
                 |> Seq.filter((=)"head")
                 |> Seq.map(newOmittedTagend tok)
@@ -105,7 +86,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART ("li",_) | TAGSELFCLOSING ("li",_) ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.truncate 1
                 |> Seq.filter((=)"li")
                 |> Seq.map(newOmittedTagend tok)
@@ -116,7 +97,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART (("dt"|"dd"),_) | TAGSELFCLOSING (("dt"|"dd"),_) ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.truncate 1
                 |> Seq.filter(function "dt"|"dd" -> true | _ -> false)
                 |> Seq.map(newOmittedTagend tok)
@@ -128,7 +109,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.truncate 1
                 |> Seq.filter((=)"p")
                 |> Seq.map(newOmittedTagend tok)
@@ -138,7 +119,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART (("rt"|"rp"),_) | TAGSELFCLOSING (("rt"|"rp"),_) ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.truncate 1
                 |> Seq.filter(function "rt"|"rp" -> true | _ -> false)
                 |> Seq.map(newOmittedTagend tok)
@@ -149,7 +130,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             let omittedTagends =
                 let tagstarts =
                     states
-                    |> getTagStarts
+                    |> unclosedTagStarts
                     |> Iterator
                 seq {
                     match tagstarts.tryNext() with
@@ -167,7 +148,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART ("option",_) | TAGSELFCLOSING ("option",_) ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.truncate 1
                 |> Seq.filter((=)"option")
                 |> Seq.map(newOmittedTagend tok)
@@ -178,7 +159,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             let omittedTagends =
                 let tagstarts =
                     states
-                    |> getTagStarts
+                    |> unclosedTagStarts
                     |> Iterator
                 [
                     match tagstarts.tryNext() with
@@ -192,7 +173,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             let omittedTagends =
                 let tagstarts =
                     states
-                    |> getTagStarts
+                    |> unclosedTagStarts
                     |> Iterator
                 [
                     // <col>是void元素，已经转化为selfclosing不用补充结束标签
@@ -207,7 +188,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART (("td"|"th"),_) | TAGSELFCLOSING (("td"|"th"),_) ->
             let omittedTagends =
                 states
-                |> getTagStarts
+                |> unclosedTagStarts
                 |> Seq.truncate 1
                 |> Seq.filter(function "td"|"th"|"colgroup"|"caption" -> true | _ -> false)
                 |> Seq.map(newOmittedTagend tok)
@@ -219,7 +200,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             let omittedTagends =
                 let tagstarts =
                     states
-                    |> getTagStarts
+                    |> unclosedTagStarts
                     |> Iterator
                 seq {
                     match tagstarts.tryNext() with
@@ -240,7 +221,7 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
             let omittedTagends =
                 let tagstarts =
                     states
-                    |> getTagStarts
+                    |> unclosedTagStarts
                     |> Iterator
                 seq {
                     //("td"|"th")?"tr"?("thead"|"tbody"|"tfoot"|"caption"|"colgroup")?
@@ -286,7 +267,7 @@ let compile (input:string) =
         match tok.value with
         | TEXT x when x.Trim() = "" ->
             states
-            |> getTagStarts
+            |> unclosedTagStarts
             |> Seq.isEmpty
             |> not
         | _ -> true
