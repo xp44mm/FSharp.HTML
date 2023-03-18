@@ -35,18 +35,51 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
 
     let filePath = Path.Combine(Dir.projPath, "htmldoc.fsyacc") // **input**
     let text = File.ReadAllText(filePath)
-    let rawFsyacc = RawFsyaccFile.parse text
-    let fsyacc = FlatFsyaccFile.fromRaw rawFsyacc
+    //let rawFsyacc = RawFsyaccFile.parse text
+    //let fsyacc = FlatFsyaccFile.fromRaw rawFsyacc
 
     // **input**
     let parseTblName = "HtmldocParseTable" 
+    let moduleName = $"FSharp.HTML.{parseTblName}"
+
     let parseTblPath = Path.Combine(Dir.projPath, $"{parseTblName}.fs")
+
+    let grammar text =
+        text
+        |> FlatFsyaccFileUtils.parse
+        |> FlatFsyaccFileUtils.toGrammar
+
+    let ambiguousCollection text =
+        text
+        |> FlatFsyaccFileUtils.parse
+        |> FlatFsyaccFileUtils.toAmbiguousCollection
+
+    //解析表数据
+    let parseTbl text = 
+        text
+        |> FlatFsyaccFileUtils.parse
+        |> FlatFsyaccFileUtils.toFsyaccParseTableFile
+
+    [<Fact>]
+    member _.``01 - norm fsyacc file``() =
+        let fsyacc = 
+            text
+            |> FlatFsyaccFileUtils.parse
+
+        let s0 = 
+            fsyacc.rules
+            |> FlatFsyaccFileRule.getStartSymbol
+
+        let src = 
+            fsyacc.start(s0, Set.empty)
+            |> RawFsyaccFile2Utils.fromFlat
+            |> RawFsyaccFile2Utils.render
+
+        output.WriteLine(src)
 
     [<Fact>]
     member _.``02 - list all tokens``() =
-        let grammar =
-            fsyacc.getMainProductions()
-            |> Grammar.from
+        let grammar = grammar text
 
         let tokens = grammar.terminals
         let res = set ["CDATA";"COMMENT";"DOCTYPE";"EOF";"TAGEND";"TAGSELFCLOSING";"TAGSTART";"TEXT"]
@@ -56,9 +89,7 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``03 - precedence Of Productions``() =
-        let collection = 
-            fsyacc.getMainProductions() 
-            |> AmbiguousCollection.create
+        let collection = ambiguousCollection text
 
         let terminals = 
             collection.grammar.terminals
@@ -73,30 +104,33 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``04 - list all states``() =
-        let collection =
-            fsyacc.getMainProductions()
-            |> AmbiguousCollection.create
+        let collection = ambiguousCollection text
         
         let text = collection.render()
         output.WriteLine(text)
 
     [<Fact>]
     member _.``05 - list the type annotaitions``() =
-        let grammar =
-            fsyacc.getMainProductions()
-            |> Grammar.from
+        let grammar = grammar text
+        let terminals =
+            grammar.terminals
+            |> Seq.map RenderUtils.renderSymbol
+            |> String.concat " "
+
+        let nonterminals =
+            grammar.nonterminals
+            |> Seq.map RenderUtils.renderSymbol
+            |> String.concat " "
 
         let sourceCode =
             [
                 "// Do not list symbols whose return value is always `null`"
-                "// terminals: ref to the returned type of getLexeme"
-                for i in grammar.terminals do
-                    let i = RenderUtils.renderSymbol i
-                    i + " : \"\""
-                "\r\n// nonterminals"
-                for i in grammar.nonterminals do
-                    let i = RenderUtils.renderSymbol i
-                    i + " : \"\""
+                ""
+                "// terminals: ref to the returned type of `getLexeme`"
+                "%type<> " + terminals
+                ""
+                "// nonterminals"
+                "%type<> " + nonterminals
             ] 
             |> String.concat "\r\n"
 
@@ -104,9 +138,8 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
 
     [<Fact(Skip="once and for all!")>] // 
     member _.``04 - generate parsing table``() =
-        let moduleName = $"FSharp.HTML.{parseTblName}"
 
-        let parseTbl = fsyacc.toFsyaccParseTableFile()
+        let parseTbl = parseTbl text
         let fsharpCode = parseTbl.generateModule(moduleName)
 
         File.WriteAllText(parseTblPath,fsharpCode)
@@ -114,7 +147,7 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
 
     [<Fact>]
     member _.``08 - valid ParseTable``() =
-        let src = fsyacc.toFsyaccParseTableFile()
+        let src = parseTbl text
 
         Should.equal src.actions HtmldocParseTable.actions
         Should.equal src.closures HtmldocParseTable.closures
@@ -134,10 +167,8 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
         Should.equal semansFsyacc semans
 
     [<Fact>]
-    member _.``06 - first or last token of node``() =
-        let grammar = 
-            fsyacc.getMainProductions()
-            |> Grammar.from
+    member _.``101 - first or last token of node``() =
+        let grammar = grammar text
 
         let last = grammar.lasts.["node"]
         let first = grammar.firsts.["node"]
@@ -145,9 +176,3 @@ type HtmldocParseTableTest(output:ITestOutputHelper) =
         output.WriteLine($"last={clazz last}")
         output.WriteLine($"first={clazz first}")
 
-    [<Fact>]
-    member _.``101 - format norm file test``() =
-        let startSymbol = fsyacc.rules.Head |> Triple.first |> List.head
-        //show startSymbol
-        let fsyacc = fsyacc.start(startSymbol,Set.empty).toRaw()
-        output.WriteLine(fsyacc.render())

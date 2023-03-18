@@ -8,6 +8,8 @@
 
 	<ItemGroup>
 		<Compile Include="Dir.fs" />
+		<Compile Include="thead_tbody_tfoot_DFATest.fs" />
+		<Compile Include="thead_tbody_tfoot_DriverTest.fs" />
 		<Compile Include="TagLeftParseTableTest.fs" />
 		<Compile Include="TagLeftCompilerTest.fs" />
 		<Compile Include="HtmldocParseTableTest.fs" />
@@ -25,8 +27,8 @@
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="1.0.7" />
-		<PackageReference Include="FSharp.xUnit" Version="1.2.4" />
-		<PackageReference Include="FslexFsyacc" Version="1.3.5" />
+		<PackageReference Include="FSharp.xUnit" Version="1.2.7" />
+		<PackageReference Include="FslexFsyacc" Version="1.3.9" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
 		<PackageReference Include="xunit" Version="2.4.2" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">

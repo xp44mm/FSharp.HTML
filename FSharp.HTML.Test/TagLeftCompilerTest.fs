@@ -7,7 +7,7 @@ open FSharp.xUnit
 open FslexFsyacc.Runtime
 
 type TagLeftCompilerData() =
-    static let dataSource = TheoryDataSource([
+    static let dataSource = SingleDataSource([
         "<html>",{index= 0;length= 6;value= TAGSTART("html",[])}
         "<meta charset=\"utf-8\">",{index= 0;length= 22;value= TAGSTART("meta",["charset","utf-8"])}
         "<img src='images/firefox-icon.png' alt='My test image'>",{index= 0;length= 55;value= TAGSTART("img",["src","images/firefox-icon.png";"alt","My test image"])}

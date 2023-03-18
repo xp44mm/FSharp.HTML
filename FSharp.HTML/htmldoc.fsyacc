@@ -27,15 +27,23 @@ node :
             failwith $"unmatched tag:<{name}></{s2}>"
     }
 %%
-htmldoc:"string*HtmlNode list"
-DOCTYPE: string
-TAGSELFCLOSING : "string * list<string*string>"
-TAGSTART       : "string * list<string*string>"
-TAGEND : string
-CDATA : string
-COMMENT : string
-TEXT : string
-node : HtmlNode
-node* : "HtmlNode list"
-node+ : "HtmlNode list"
+
+%type<string*HtmlNode list> htmldoc
+%type<string> DOCTYPE TAGEND CDATA COMMENT TEXT
+%type<string * list<string*string>> TAGSELFCLOSING TAGSTART
+%type<HtmlNode> node
+%type<HtmlNode list> node* node+
+
+
+// htmldoc:"string*HtmlNode list"
+// DOCTYPE: string
+// TAGSELFCLOSING : "string * list<string*string>"
+// TAGSTART       : "string * list<string*string>"
+// TAGEND : string
+// CDATA : string
+// COMMENT : string
+// TEXT : string
+// node : HtmlNode
+// node* : "HtmlNode list"
+// node+ : "HtmlNode list"
 

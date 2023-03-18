@@ -23,17 +23,21 @@
 		<Compile Include="HtmlNode.fs" />
 		<Compile Include="TryTokenizer.fs" />
 		<Compile Include="HtmlToken.fs" />
-		<None Include="TagLeft.fsyacc" />
+    
+		<None Include="TagLeft.fsyacc" />    
 		<Compile Include="TagLeftToken.fs" />
 		<Compile Include="TagLeftParseTable.fs" />
 		<Compile Include="TagLeftCompiler.fs" />
 
 		<None Include="htmldoc.fsyacc" />
-
 		<Compile Include="HtmlTokenUtils.fs" />
-
 		<Compile Include="HtmldocParseTable.fs" />
-		<Compile Include="HtmldocCompiler.fs" />
+
+    <None Include="thead_tbody_tfoot.fslex" />
+    <Compile Include="thead_tbody_tfoot_DFA.fs" />
+    <Compile Include="thead_tbody_tfoot_Driver.fs" />
+
+    <Compile Include="HtmldocCompiler.fs" />
 		<Compile Include="Whitespace.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
 		<Compile Include="Render.fs" />
@@ -48,7 +52,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FslexFsyacc.Runtime" Version="1.3.5" />
+		<PackageReference Include="FslexFsyacc.Runtime" Version="1.3.9" />
 		<PackageReference Include="System.Reactive" Version="5.0.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
 	</ItemGroup>

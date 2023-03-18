@@ -14,7 +14,7 @@ let rules:(string list*(obj list->obj))list = [
             let attrs = List.rev s1
             let postok =
                 match angle with
-                | ">" -> TAGSTART(tagname,attrs)
+                | ">"  -> TAGSTART(tagname,attrs)
                 | "/>" -> TAGSELFCLOSING(tagname,attrs)
                 | _ -> failwith ""
             {index=i;length=j-i;value=postok}

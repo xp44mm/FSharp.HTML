@@ -41,7 +41,7 @@ let tryHexadecimalNumericCharacterReference =
    |> trySearch
 
 let trySingleLineComment =
-    Regex @"^//[^\r\n]*(\r?\n|\r)"
+    Regex @"^//[^\r\n]*"
     |> trySearch
 
 let tryMultiLineComment =

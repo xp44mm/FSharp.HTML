@@ -9,40 +9,39 @@ open FSharp.xUnit
 open FslexFsyacc.Runtime
 
 type tokenizeEntry() =
-    static let dataSource = TheoryDataSource([
+    static let dataSource = SingleDataSource [
         "<!DOCTYPE HTML>",{index= 0;length= 15;value= DOCTYPE "HTML"}
         "<!-- Bad -->",{index= 0;length= 12;value= COMMENT " Bad "}
         "<![CDATA[x<y]]>",{index= 0;length= 15;value= CDATA "x<y"}
         "</html>",{index= 0;length= 7;value= TAGEND "html"}
         //"<a",{index= 0;length= 2;value= LANGLE "a"}
         "hello!",{index= 0;length= 6;value= TEXT "hello!"}
-    ])
+    ]
     static member keys = dataSource.keys
     static member get key = dataSource.[key]
 
 type tokenizeRaw() =
-    static let dataSource = TheoryDataSource([
+    static let dataSource = SingleDataSource [
         "</title>", [{index= 0;length= 8;value= TAGEND "title"}]
         ">></title>", [{index= 0;length= 2;value= TEXT ">>"};{index= 2;length= 8;value= TAGEND "title"}]
-
-        ])
+        ]
     static member keys = dataSource.keys
     static member get key = dataSource.[key]
 
 type tokenizeCss() =
-    static let dataSource = TheoryDataSource([
+    static let dataSource = SingleDataSource [
         "</style>", [{index= 0;length= 8;value= TAGEND "style"}]
         "/*abc*/</style>", [{index= 0;length= 7;value= TEXT "/*abc*/"};{index= 7;length= 8;value= TAGEND "style"}]
         ".some{}</style>", [{index= 0;length= 7;value= TEXT ".some{}"};{index= 7;length= 8;value= TAGEND "style"}]
         "\"<>\"</style>", [{index= 0;length= 4;value= TEXT "\"<>\""};{index= 4;length= 8;value= TAGEND "style"}]
         "<<</style>", [{index= 0;length= 1;value= TEXT "<"};{index= 1;length= 1;value= TEXT "<"};{index= 2;length= 8;value= TAGEND "style"}]
 
-        ])
+        ]
     static member keys = dataSource.keys
     static member get key = dataSource.[key]
 
 type tokenizeJavaScript() =
-    static let dataSource = TheoryDataSource([
+    static let dataSource = SingleDataSource [
         "</script>", [{index= 0;length= 9;value= TAGEND "script"}]
         "''</script>", [{index= 0;length= 2;value= TEXT "''"};{index= 2;length= 9;value= TAGEND "script"}]
         "\"\"</script>", [{index= 0;length= 2;value= TEXT "\"\""};{index= 2;length= 9;value= TAGEND "script"}]
@@ -52,15 +51,15 @@ type tokenizeJavaScript() =
         "</</script>", [{index= 0;length= 1;value= TEXT "<"};{index= 1;length= 1;value= TEXT "/"};{index= 2;length= 9;value= TAGEND "script"}]
 
 
-        ])
+        ]
     static member keys = dataSource.keys
     static member get key = dataSource.[key]
 
 type SelfClosing() =
-    static let dataSource = TheoryDataSource([
+    static let dataSource = SingleDataSource [
             "<br/>",[{index= 0;length= 5;value= TAGSELFCLOSING("br",[])};{index= 5;length= 0;value= EOF}]
             "<p><br></br></p>",[{index= 0;length= 3;value= TAGSTART("p",[])};{index= 3;length= 4;value= TAGSELFCLOSING("br",[])};{index= 12;length= 4;value= TAGEND "p"};{index= 16;length= 0;value= EOF}]
-        ])
+        ]
 
     static member keys = dataSource.keys
     static member get key = dataSource.[key]

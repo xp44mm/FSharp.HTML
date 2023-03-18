@@ -19,7 +19,7 @@ let stateSymbolList = HtmldocParseTable.theoryParser.getStateSymbolPairs()
 ///从状态中获取未封闭开始标签。
 let unclosedTagStarts (states:list<int*obj>) =
     let states =
-        parser.tryReduce(states,{index=0;length=0;value=COMMENT ""}) // reduce tagstart tagend.
+        parser.tryReduce(states,{index=0;length=0;value=COMMENT ""}) //use lookahead eof to reduce tagstart tagend.
         |> Option.defaultValue states
 
     states
@@ -219,36 +219,11 @@ let insertOmittedTagend (states:list<int*obj>) (tok:Position<HtmlToken>) =
         | TAGSTART       (("thead"|"tbody"|"tfoot"),_)
         | TAGSELFCLOSING (("thead"|"tbody"|"tfoot"),_) ->
             let omittedTagends =
-                let tagstarts =
-                    states
-                    |> unclosedTagStarts
-                    |> Iterator
-                seq {
-                    //("td"|"th")?"tr"?("thead"|"tbody"|"tfoot"|"caption"|"colgroup")?
-                    match tagstarts.tryNext() with
-                    | Some (("td"|"th") as nm1) ->
-                        yield nm1
-                        match tagstarts.tryNext() with
-                        | Some ("tr" as nm2) ->
-                            yield nm2
-                            match tagstarts.tryNext() with
-                            | Some (("thead"|"tbody"|"tfoot") as nm3) ->
-                                yield nm3
-                            | _ -> ()
-                        | Some (("thead"|"tbody"|"tfoot") as nm3) ->
-                            yield nm3
-                        | _ -> ()
-                    | Some ("tr" as nm2) ->
-                        yield nm2
-                        match tagstarts.tryNext() with
-                        | Some (("thead"|"tbody"|"tfoot") as nm3) ->
-                            yield nm3
-                        | _ -> ()
-                    | Some (("thead"|"tbody"|"tfoot"|"caption"|"colgroup") as nm3) ->
-                        yield nm3
-                    | _ -> ()
-                }
+                states
+                |> unclosedTagStarts
+                |> thead_tbody_tfoot_Driver.getOmittedTagends
                 |> Seq.map(newOmittedTagend tok)
+
             yield! omittedTagends
             yield tok
 
@@ -287,11 +262,11 @@ let compile (input:string) =
         states <- parser.shift(states,tok)
     )
 
-    match parser.tryReduce(states) with
-    | Some reducedstates -> states <- reducedstates
-    | None -> ()
+    //match parser.tryReduce(states) with
+    //| Some reducedstates -> states <- reducedstates
+    //| None -> ()
 
-    match states with
+    match parser.accept states with
     |[1,lxm; 0,null] ->
         HtmldocParseTable.unboxRoot lxm
     | _ ->
