@@ -36,6 +36,15 @@
     <None Include="thead_tbody_tfoot.fslex" />
     <Compile Include="thead_tbody_tfoot_DFA.fs" />
     <Compile Include="thead_tbody_tfoot_Driver.fs" />
+    <None Include="comb1.fslex" />
+    <Compile Include="Comb1DFA.fs" />
+    <None Include="comb2.fslex" />
+    <Compile Include="Comb2DFA.fs" />
+    <None Include="comb2plus1.fslex" />
+    <Compile Include="Comb2plus1DFA.fs" />
+    <None Include="comb3plus1.fslex" />
+    <Compile Include="Comb3plus1DFA.fs" />
+    <Compile Include="OmittedTagend.fs" />
 
     <Compile Include="HtmldocCompiler.fs" />
 		<Compile Include="Whitespace.fs" />

@@ -10,6 +10,11 @@
 		<Compile Include="Dir.fs" />
 		<Compile Include="thead_tbody_tfoot_DFATest.fs" />
 		<Compile Include="thead_tbody_tfoot_DriverTest.fs" />
+		<Compile Include="Comb1DFATest.fs" />
+		<Compile Include="Comb2DFATest.fs" />
+		<Compile Include="Comb2plus1DFATest.fs" />
+		<Compile Include="Comb3plus1DFATest.fs" />
+		<Compile Include="OmittedTagendTest.fs" />
 		<Compile Include="TagLeftParseTableTest.fs" />
 		<Compile Include="TagLeftCompilerTest.fs" />
 		<Compile Include="HtmldocParseTableTest.fs" />

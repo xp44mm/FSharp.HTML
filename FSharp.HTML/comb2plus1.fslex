@@ -1,0 +1,11 @@
+﻿%{
+open FslexFsyacc.Runtime
+type token = string
+%}
+
+%%
+
+k   l ? { lexbuf }
+k ? l   { lexbuf }
+m       { lexbuf }
+n     { [] }
