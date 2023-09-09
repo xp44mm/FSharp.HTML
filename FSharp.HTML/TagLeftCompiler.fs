@@ -2,7 +2,6 @@
 
 open FSharp.Literals.Literal
 open FSharp.Idioms
-open FSharp.Idioms.ActivePatterns
 
 open FslexFsyacc.Runtime
 

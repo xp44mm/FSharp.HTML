@@ -17,23 +17,19 @@ let (|Belong|_|) sq elem =
     sq
     |> Seq.tryFind(fun e -> e = elem)
 
-let boolean (ts:seq<string>) =
+let comb1 (ts:seq<string>) =
     let ts = ts |> Set.ofSeq
     let getTag tok = if ts.Contains tok then "t" else "f"
     let anal (tokens:seq<string>) = Comb1DFA.analyzer.analyze(tokens,getTag)
     getOmittedTagends anal
 
 let comb2 (xs:seq<string>) (ys:seq<string>) =
-    let xs = set xs
-    let ys = set ys
-
     let getTag tok =
-        if xs.Contains tok then "x"
-        elif ys.Contains tok then "y"
-        else "z"
-
+        match tok with
+        | Belong xs _ -> "x"
+        | Belong ys _ -> "y"
+        | _ -> "z"
     let anal (tokens:seq<string>) = Comb2DFA.analyzer.analyze(tokens,getTag)
-
     getOmittedTagends anal
 
 let comb2plus1 (ks:seq<string>) (ls:seq<string>) (ms:seq<string>) =
@@ -99,7 +95,7 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
         | TAGSTART ("body",_) | TAGSELFCLOSING ("body",_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["head"]
+                |> comb1 ["head"]
                 |> Seq.map(newOmittedTagend tok)
 
             yield! omittedTagends
@@ -108,7 +104,7 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
         | TAGSTART ("li",_) | TAGSELFCLOSING ("li",_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["li"]
+                |> comb1 ["li"]
                 |> Seq.map(newOmittedTagend tok)
 
             yield! omittedTagends
@@ -117,7 +113,7 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
         | TAGSTART (("dt"|"dd"),_) | TAGSELFCLOSING (("dt"|"dd"),_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["dt";"dd"]
+                |> comb1 ["dt";"dd"]
                 |> Seq.map(newOmittedTagend tok)
 
             yield! omittedTagends
@@ -127,7 +123,7 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
             ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["p"]
+                |> comb1 ["p"]
                 |> Seq.map(newOmittedTagend tok)
 
             yield! omittedTagends
@@ -135,7 +131,7 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
         | TAGSTART (("rt"|"rp"),_) | TAGSELFCLOSING (("rt"|"rp"),_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["rt";"rp"]
+                |> comb1 ["rt";"rp"]
                 |> Seq.map(newOmittedTagend tok)
 
             yield! omittedTagends
@@ -150,7 +146,7 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
         | TAGSTART ("option",_) | TAGSELFCLOSING ("option",_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["option"]
+                |> comb1 ["option"]
                 |> Seq.map(newOmittedTagend tok)
 
             yield! omittedTagends
@@ -158,14 +154,14 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
         | TAGSTART ("col",_) | TAGSELFCLOSING ("col",_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["caption"] // <col>是void元素，已经转化为selfclosing不用补充结束标签
+                |> comb1 ["caption"] // <col>是void元素，已经转化为selfclosing不用补充结束标签
                 |> Seq.map(newOmittedTagend tok)
             yield! omittedTagends
             yield tok
         | TAGSTART ("colgroup",_) | TAGSELFCLOSING ("colgroup",_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["colgroup";"caption"] // <col>是void元素，已经转化为selfclosing不用补充结束标签
+                |> comb1 ["colgroup";"caption"] // <col>是void元素，已经转化为selfclosing不用补充结束标签
                 |> List.map(newOmittedTagend tok)
             yield! omittedTagends
             yield tok
@@ -173,9 +169,8 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
         | TAGSTART (("td"|"th"),_) | TAGSELFCLOSING (("td"|"th"),_) ->
             let omittedTagends =
                 unclosedTagStarts
-                |> boolean ["td";"th";"colgroup";"caption"]
+                |> comb1 ["td";"th";"colgroup";"caption"]
                 |> Seq.map(newOmittedTagend tok)
-
             yield! omittedTagends
             yield tok
 
@@ -184,7 +179,6 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
                 unclosedTagStarts
                 |> comb2plus1 ["td";"th"] ["tr"] ["colgroup";"caption"]
                 |> Seq.map(newOmittedTagend tok)
-
             yield! omittedTagends
             yield tok
 
@@ -194,7 +188,6 @@ let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>
                 unclosedTagStarts
                 |> comb3plus1 ["td";"th"] ["tr"] ["thead";"tbody";"tfoot"] ["colgroup";"caption"]
                 |> Seq.map(newOmittedTagend tok)
-
             yield! omittedTagends
             yield tok
 

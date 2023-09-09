@@ -72,8 +72,8 @@ type TagLeftParseTableTest(output:ITestOutputHelper) =
 
         let src = 
             fsyacc.start(s0, Set.empty)
-            |> RawFsyaccFile2Utils.fromFlat
-            |> RawFsyaccFile2Utils.render
+            |> RawFsyaccFileUtils.fromFlat
+            |> RawFsyaccFileUtils.render
 
         output.WriteLine(src)
 
@@ -136,7 +136,7 @@ type TagLeftParseTableTest(output:ITestOutputHelper) =
 
         output.WriteLine(sourceCode)
 
-    [<Fact(Skip="once and for all!")>] // 
+    [<Fact()>] // Skip="once and for all!"
     member _.``04 - generate parsing table``() =
         let parseTbl = parseTbl text
         let fsharpCode = parseTbl.generateModule(moduleName)

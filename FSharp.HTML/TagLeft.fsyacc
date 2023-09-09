@@ -39,14 +39,3 @@ closeAngle:
 %type<list<string*string>> attributes
 %type<Position<HtmlToken>> tagleft
 
-
-// ATTR_NAME : string
-// ATTR_VALUE : string
-// DIV_RANGLE : int
-// LANGLE : "int*string"
-// RANGLE : int
-// closeAngle: "int*string"
-// attribute : "string*string"
-// attributes : "list<string*string>"
-// tagleft : "Position<HtmlToken>"
-
