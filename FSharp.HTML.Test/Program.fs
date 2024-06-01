@@ -6,14 +6,14 @@ open System.Text.RegularExpressions
 open Xunit
 open Xunit.Abstractions
 open FSharp.xUnit
-open FSharp.Literals.Literal
+open FSharp.Idioms.Literal
 open FslexFsyacc.Runtime
 open FSharp.Idioms
 open Xunit
 open Xunit.Abstractions
 open System.IO
 
-open FSharp.Literals.Literal
+open FSharp.Idioms.Literal
 open FSharp.xUnit
 open FslexFsyacc.Runtime
 

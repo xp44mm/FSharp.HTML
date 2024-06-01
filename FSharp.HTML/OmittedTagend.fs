@@ -1,6 +1,6 @@
 ﻿module FSharp.HTML.OmittedTagend
 
-open FSharp.Literals.Literal
+open FSharp.Idioms.Literal
 open FSharp.Idioms
 
 open FslexFsyacc.Runtime

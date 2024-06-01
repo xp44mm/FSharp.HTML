@@ -2,7 +2,7 @@
 
 open Xunit
 open Xunit.Abstractions
-open FSharp.Literals
+open FSharp.Idioms.Literal
 open FSharp.xUnit
 open System
 open System.IO
@@ -10,7 +10,7 @@ open System.IO
 type FileTest(output:ITestOutputHelper) =
     let show res =
         res
-        |> Render.stringify
+        |> stringify
         |> output.WriteLine
 
     static member files =

@@ -4,14 +4,14 @@ open Xunit
 open Xunit.Abstractions
 open System.IO
 
-open FSharp.Literals
+open FSharp.Idioms.Literal
 open FSharp.xUnit
 open FslexFsyacc.Runtime
 
 type HtmlTokenizerTest(output:ITestOutputHelper) =
     let show res =
         res
-        |> Render.stringify
+        |> stringify
         |> output.WriteLine
 
     static let folder = Path.Combine(Dir.TestData,"HtmlTokenizer")

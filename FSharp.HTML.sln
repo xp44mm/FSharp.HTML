@@ -5,7 +5,9 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.HTML", "FSharp.HTML\FSharp.HTML.fsproj", "{8DDC6528-DF60-4052-B9A4-8E5EEEDC8030}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.HTML.Test", "FSharp.HTML.Test\FSharp.HTML.Test.fsproj", "{05156953-5895-42F9-92D4-60558354012C}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharp.HTML.Test", "FSharp.HTML.Test\FSharp.HTML.Test.fsproj", "{05156953-5895-42F9-92D4-60558354012C}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.HTML.Generators", "FSharp.HTML.Generators\FSharp.HTML.Generators.fsproj", "{BFE196A6-3B14-4E55-A132-F686B5A14E4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{05156953-5895-42F9-92D4-60558354012C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05156953-5895-42F9-92D4-60558354012C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05156953-5895-42F9-92D4-60558354012C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFE196A6-3B14-4E55-A132-F686B5A14E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFE196A6-3B14-4E55-A132-F686B5A14E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFE196A6-3B14-4E55-A132-F686B5A14E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFE196A6-3B14-4E55-A132-F686B5A14E4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

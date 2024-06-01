@@ -1,11 +1,10 @@
 ﻿module FSharp.HTML.HtmlTokenUtils
-open FSharp.Literals
-open FSharp.Idioms
-open FslexFsyacc.Runtime
-open FslexFsyacc.Runtime
 
+open FSharp.Idioms
 open FSharp.Idioms.RegularExpressions
 open FSharp.Idioms.ActivePatterns
+
+open FslexFsyacc.Runtime
 
 open System.Text.RegularExpressions
 open TryTokenizer

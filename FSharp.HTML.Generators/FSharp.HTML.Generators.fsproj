@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+    <IsTestProject>true</IsTestProject>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Dir.fs" />
+    <None Include="TagLeft.fsyacc" />
+    <Compile Include="TagLeftParseTableTest.fs" />
+    <None Include="htmldoc.fsyacc" />
+    <Compile Include="HtmldocParseTableTest.fs" />
+    <None Include="comb1.fslex" />
+    <Compile Include="Comb1DFATest.fs" />
+    <None Include="comb2.fslex" />
+    <Compile Include="Comb2DFATest.fs" />
+    <None Include="comb2plus1.fslex" />
+    <Compile Include="Comb2plus1DFATest.fs" />
+    <None Include="comb3plus1.fslex" />
+    <Compile Include="Comb3plus1DFATest.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="coverlet.collector" Version="6.0.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="43.8.300" />
+    <PackageReference Include="FSharp.Idioms" Version="1.4.20" />
+    <PackageReference Include="FSharp.xUnit" Version="1.2.27" />
+    <PackageReference Include="FslexFsyacc" Version="1.4.0" />
+    <PackageReference Include="FslexFsyacc.Runtime" Version="1.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageReference Include="xunit" Version="2.8.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FSharp.HTML\FSharp.HTML.fsproj" />
+  </ItemGroup>
+
+</Project>

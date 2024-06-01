@@ -1,20 +1,16 @@
 ﻿module FSharp.HTML.HtmldocCompiler
 
-open FSharp.Literals.Literal
+open FSharp.Idioms.Literal
 open FSharp.Idioms
 
 open FslexFsyacc.Runtime
+open FSharp.HTML.HtmldocParseTable
 
-let parser =
-    Parser<Position<HtmlToken>>(
-        HtmldocParseTable.rules,
-        HtmldocParseTable.actions,
-        HtmldocParseTable.closures,
-
+let parser = app.getParser<Position<HtmlToken>>(
         HtmlTokenUtils.getTag,
         HtmlTokenUtils.getLexeme)
 
-let stateSymbolList = HtmldocParseTable.theoryParser.getStateSymbolPairs()
+let table = app.getTable parser
 
 ///从状态中获取未封闭开始标签。
 let unclosedTagStarts (states:list<int*obj>) =
@@ -23,7 +19,7 @@ let unclosedTagStarts (states:list<int*obj>) =
         |> Option.defaultValue states
 
     states
-    |> Seq.map(fun(i,o)->stateSymbolList.[i],o)
+    |> Seq.map(fun(i,lxm)->table.kernelSymbols.[i],lxm)
     |> Seq.filter(fun(sym,l)-> sym = "TAGSTART")
     |> Seq.map(
         snd
@@ -65,11 +61,11 @@ let compile (input:string) =
         states <- parser.shift(states,tok)
     )
 
-    //match parser.tryReduce(states) with
-    //| Some reducedstates -> states <- reducedstates
-    //| None -> ()
+    match parser.tryReduce(states) with
+    | Some reducedstates -> states <- reducedstates
+    | None -> ()
 
-    match parser.accept states with
+    match states with
     |[1,lxm; 0,null] ->
         HtmldocParseTable.unboxRoot lxm
     | _ ->

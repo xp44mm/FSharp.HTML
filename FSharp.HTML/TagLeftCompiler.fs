@@ -1,6 +1,6 @@
 ﻿module FSharp.HTML.TagLeftCompiler
 
-open FSharp.Literals.Literal
+open FSharp.Idioms.Literal
 open FSharp.Idioms
 
 open FslexFsyacc.Runtime
@@ -9,17 +9,19 @@ open TryTokenizer
 
 open System
 open System.Text.RegularExpressions
+open FSharp.HTML.TagLeftParseTable
 
-let parser =
-    Parser<Position<TagLeftToken>>(
-        TagLeftParseTable.rules,
-        TagLeftParseTable.actions,
-        TagLeftParseTable.closures,
+let parser = app.getParser<Position<TagLeftToken>>(
+        //TagLeftParseTable.rules,
+        //TagLeftParseTable.actions,
+        //TagLeftParseTable.closures,
 
         TagLeftToken.getTag,
         TagLeftToken.getLexeme)
 
-let stateSymbolList = TagLeftParseTable.theoryParser.getStateSymbolPairs()
+let table = app.getTable parser
+
+//let stateSymbolList = TagLeftParseTable.theoryParser.getStateSymbolPairs()
 
 /// 解析文本为结构化数据
 let compile (offset:int) (inp:string) =

@@ -9,7 +9,7 @@ type TagLeftToken =
 
 open FslexFsyacc.Runtime
 
-open FSharp.Literals.Literal
+open FSharp.Idioms.Literal
 
 open FSharp.Idioms
 open FSharp.Idioms.ActivePatterns

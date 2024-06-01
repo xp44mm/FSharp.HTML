@@ -2,13 +2,13 @@
 
 open Xunit
 open Xunit.Abstractions
-open FSharp.Literals
+open FSharp.Idioms.Literal
 open FSharp.xUnit
 
 type BrRemoverTest(output:ITestOutputHelper) =
     let show res =
         res
-        |> Render.stringify
+        |> stringify
         |> output.WriteLine
 
     [<Fact>]
@@ -31,7 +31,7 @@ type BrRemoverTest(output:ITestOutputHelper) =
             match y.[0] with
             | HtmlElement("p",_,children) ->
                 BrRemover.splitByFirstBr children
-            | m -> failwith (Literal.stringify m)
+            | m -> failwith (stringify m)
         
         show z
         let e = [HtmlElement("span",[],[HtmlText "123"]);HtmlElement("span",[],[HtmlText "xyz"])],[HtmlText "uvw";HtmlElement("br",[],[]);HtmlText "abc"]
@@ -54,7 +54,7 @@ type BrRemoverTest(output:ITestOutputHelper) =
             match y.[0] with
             | HtmlElement("p",_,children) ->
                 BrRemover.splitByBr children
-            | m -> failwith (Literal.stringify m)
+            | m -> failwith (stringify m)
         
         show z
         let e = [[HtmlText "xyz"];[HtmlText "uvw"];[HtmlText "abc"]]

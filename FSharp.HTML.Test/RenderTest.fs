@@ -2,13 +2,13 @@
 
 open Xunit
 open Xunit.Abstractions
-open FSharp.Literals
+open FSharp.Idioms.Literal
 open FSharp.xUnit
 
 type RenderTest(output:ITestOutputHelper) =
     let show res =
         res
-        |> Render.stringify
+        |> stringify
         |> output.WriteLine
 
     [<Fact>]
