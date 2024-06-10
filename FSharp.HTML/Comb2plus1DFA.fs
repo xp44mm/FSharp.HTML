@@ -1,6 +1,6 @@
 ﻿module FSharp.HTML.Comb2plus1DFA
 let nextStates = [0u,["k",1u;"l",3u;"m",4u;"n",5u];1u,["l",2u]]
-open FslexFsyacc.Runtime
+open FslexFsyacc
 type token = string
 let rules:list<uint32 list*uint32 list*(list<token>->_)> = [
     [1u;2u],[],fun (lexbuf: list<_>) ->

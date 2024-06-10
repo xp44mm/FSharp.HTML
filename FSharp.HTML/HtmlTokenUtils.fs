@@ -4,7 +4,7 @@ open FSharp.Idioms
 open FSharp.Idioms.RegularExpressions
 open FSharp.Idioms.ActivePatterns
 
-open FslexFsyacc.Runtime
+open FslexFsyacc
 
 open System.Text.RegularExpressions
 open TryTokenizer

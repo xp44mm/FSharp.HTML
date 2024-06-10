@@ -3,7 +3,7 @@
 open FSharp.Idioms.Literal
 open FSharp.Idioms
 
-open FslexFsyacc.Runtime
+open FslexFsyacc
 open FSharp.HTML.HtmldocParseTable
 
 let parser = app.getParser<Position<HtmlToken>>(

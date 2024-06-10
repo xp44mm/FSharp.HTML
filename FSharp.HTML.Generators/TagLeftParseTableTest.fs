@@ -15,9 +15,9 @@ open FSharp.Idioms.Literal
 
 //open FslexFsyacc.Yacc
 open FslexFsyacc.Fsyacc
-open FslexFsyacc.Runtime
-open FslexFsyacc.Runtime.Precedences
-open FslexFsyacc.Runtime.YACCs
+open FslexFsyacc
+open FslexFsyacc.Precedences
+open FslexFsyacc.YACCs
 
 type TagLeftParseTableTest(output:ITestOutputHelper) =
 
@@ -46,11 +46,11 @@ type TagLeftParseTableTest(output:ITestOutputHelper) =
     let text = File.ReadAllText(filePath)
     let rawFsyacc =
         text
-        |> FsyaccCompiler.compile
+        |> FsyaccCompiler2.compile
 
     let fsyacc =
         rawFsyacc
-        |> FslexFsyacc.Runtime.YACCs.FlatFsyaccFile.from
+        |> FlatFsyaccFile.from
 
     let coder = FsyaccParseTableCoder.from fsyacc
 

@@ -1,6 +1,6 @@
 ﻿%{
 open FSharp.HTML
-open FslexFsyacc.Runtime
+open FslexFsyacc
 %}
 
 tagleft: 

@@ -7,7 +7,7 @@ open Xunit
 open Xunit.Abstractions
 open FSharp.xUnit
 open FSharp.Idioms.Literal
-open FslexFsyacc.Runtime
+open FslexFsyacc
 open FSharp.Idioms
 open Xunit
 open Xunit.Abstractions
@@ -15,7 +15,7 @@ open System.IO
 
 open FSharp.Idioms.Literal
 open FSharp.xUnit
-open FslexFsyacc.Runtime
+open FslexFsyacc
 
 
 [<EntryPoint>]

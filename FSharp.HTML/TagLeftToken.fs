@@ -7,7 +7,7 @@ type TagLeftToken =
     | ATTR_NAME of string
     | ATTR_VALUE of string
 
-open FslexFsyacc.Runtime
+open FslexFsyacc
 
 open FSharp.Idioms.Literal
 

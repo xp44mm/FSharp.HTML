@@ -3,7 +3,7 @@
 open FSharp.Idioms.Literal
 open FSharp.Idioms
 
-open FslexFsyacc.Runtime
+open FslexFsyacc
 
 open TryTokenizer
 

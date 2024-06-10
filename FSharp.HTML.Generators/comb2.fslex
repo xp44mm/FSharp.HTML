@@ -1,5 +1,5 @@
 %{
-open FslexFsyacc.Runtime
+open FslexFsyacc
 type token = string
 %}
 

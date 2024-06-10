@@ -8,13 +8,13 @@ let rules : list<string list*(obj list->obj)> = [
     ["";"htmldoc"], fun(ss:obj list)-> ss.[0]
     ["htmldoc";"DOCTYPE";"{node*}";"EOF"], fun(ss:obj list)->
         let s0 = unbox<string> ss.[0]
-        let s1 = unbox<HtmlNode list> ss.[1]
-        let result:string*HtmlNode list =
+        let s1 = unbox<list<HtmlNode>> ss.[1]
+        let result:string*list<HtmlNode> =
             s0,List.rev s1
         box result
     ["htmldoc";"{node*}";"EOF"], fun(ss:obj list)->
-        let s0 = unbox<HtmlNode list> ss.[0]
-        let result:string*HtmlNode list =
+        let s0 = unbox<list<HtmlNode>> ss.[0]
+        let result:string*list<HtmlNode> =
             "html",List.rev s0
         box result
     ["node";"CDATA"], fun(ss:obj list)->
@@ -28,14 +28,14 @@ let rules : list<string list*(obj list->obj)> = [
             HtmlComment s0
         box result
     ["node";"TAGSELFCLOSING"], fun(ss:obj list)->
-        let s0 = unbox<string * list<string*string>> ss.[0]
+        let s0 = unbox<string*list<string*string>> ss.[0]
         let result:HtmlNode =
             let name,attrs = s0
             HtmlElement(name, attrs,[])
         box result
     ["node";"TAGSTART";"{node*}";"TAGEND"], fun(ss:obj list)->
-        let s0 = unbox<string * list<string*string>> ss.[0]
-        let s1 = unbox<HtmlNode list> ss.[1]
+        let s0 = unbox<string*list<string*string>> ss.[0]
+        let s1 = unbox<list<HtmlNode>> ss.[1]
         let s2 = unbox<string> ss.[2]
         let result:HtmlNode =
             let name,attrs = s0
@@ -50,29 +50,29 @@ let rules : list<string list*(obj list->obj)> = [
             HtmlText s0
         box result
     ["{node*}"], fun(ss:obj list)->
-        let result:HtmlNode list =
+        let result:list<HtmlNode> =
             []
         box result
     ["{node*}";"{node+}"], fun(ss:obj list)->
-        let s0 = unbox<HtmlNode list> ss.[0]
-        let result:HtmlNode list =
+        let s0 = unbox<list<HtmlNode>> ss.[0]
+        let result:list<HtmlNode> =
             s0
         box result
     ["{node+}";"node"], fun(ss:obj list)->
         let s0 = unbox<HtmlNode> ss.[0]
-        let result:HtmlNode list =
+        let result:list<HtmlNode> =
             [s0]
         box result
     ["{node+}";"{node+}";"node"], fun(ss:obj list)->
-        let s0 = unbox<HtmlNode list> ss.[0]
+        let s0 = unbox<list<HtmlNode>> ss.[0]
         let s1 = unbox<HtmlNode> ss.[1]
-        let result:HtmlNode list =
+        let result:list<HtmlNode> =
             s1::s0
         box result
 ]
 let unboxRoot =
-    unbox<string*HtmlNode list>
-let app: FslexFsyacc.Runtime.ParseTableApp = {
+    unbox<string*list<HtmlNode>>
+let app: FslexFsyacc.ParseTableApp = {
     tokens        = tokens
     kernels       = kernels
     kernelSymbols = kernelSymbols

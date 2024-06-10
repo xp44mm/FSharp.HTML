@@ -3,7 +3,7 @@
 open FSharp.Idioms.Literal
 open FSharp.Idioms
 
-open FslexFsyacc.Runtime
+open FslexFsyacc
 
 let getOmittedTagends anal (startTags:seq<string>) =
     if Seq.isEmpty startTags then

@@ -6,7 +6,7 @@ open System.IO
 
 open FSharp.Idioms.Literal
 open FSharp.xUnit
-open FslexFsyacc.Runtime
+open FslexFsyacc
 
 type tokenizeEntry() =
     static let dataSource = SingleDataSource [

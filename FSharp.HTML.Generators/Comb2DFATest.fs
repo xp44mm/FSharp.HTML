@@ -29,7 +29,7 @@ type Comb2DFATest(output:ITestOutputHelper) =
         Assert.True(y.unused.IsEmpty)
 
     [<Fact(
-    //Skip="once and for all!"
+    Skip="once and for all!"
     )>]
     member _.``04 - generate DFA``() =
         let y = 

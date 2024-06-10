@@ -4,7 +4,7 @@ let kernels = [[0,0];[0,1];[-1,1;-2,1];[-2,2];[-4,1;-7,2];[-4,2];[-5,1];[-6,1];[
 let kernelSymbols = ["";"tagleft";"ATTR_NAME";"ATTR_VALUE";"attributes";"attribute";"DIV_RANGLE";"RANGLE";"LANGLE";"closeAngle"]
 let actions = [["LANGLE",8;"tagleft",1];["",0];["ATTR_NAME",-1;"ATTR_VALUE",3;"DIV_RANGLE",-1;"RANGLE",-1];["ATTR_NAME",-2;"DIV_RANGLE",-2;"RANGLE",-2];["ATTR_NAME",2;"DIV_RANGLE",6;"RANGLE",7;"attribute",5;"closeAngle",9];["ATTR_NAME",-4;"DIV_RANGLE",-4;"RANGLE",-4];["",-5];["",-6];["ATTR_NAME",-3;"DIV_RANGLE",-3;"RANGLE",-3;"attributes",4];["",-7]]
 open FSharp.HTML
-open FslexFsyacc.Runtime
+open FslexFsyacc
 let rules : list<string list*(obj list->obj)> = [
     ["";"tagleft"], fun(ss:obj list)-> ss.[0]
     ["attribute";"ATTR_NAME"], fun(ss:obj list)->
@@ -56,7 +56,7 @@ let rules : list<string list*(obj list->obj)> = [
 ]
 let unboxRoot =
     unbox<Position<HtmlToken>>
-let app: FslexFsyacc.Runtime.ParseTableApp = {
+let app: FslexFsyacc.ParseTableApp = {
     tokens        = tokens
     kernels       = kernels
     kernelSymbols = kernelSymbols
