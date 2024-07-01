@@ -1,4 +1,4 @@
-﻿module FSharp.HTML.SourceText
+﻿module FSharp.HTML.EncodeUtils
 
 open System.Text
 open System.Net.Http

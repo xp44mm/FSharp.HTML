@@ -8,7 +8,7 @@ open FSharp.Idioms.RegularExpressions
 
 //Named character references
 let refs =
-    Map.ofArray [|
+    Map [
         "&Aacute;", "\u00C1";
         "&Aacute", "\u00C1";
         "&aacute;", "\u00E1";
@@ -2240,8 +2240,7 @@ let refs =
         "&zscr;", "\uD835\uDCCF";
         "&zwj;", "\u200D";
         "&zwnj;", "\u200C";
-
-    |]
+    ]
 
 let substituteNamedCharacterReference(orig:string) =
     refs

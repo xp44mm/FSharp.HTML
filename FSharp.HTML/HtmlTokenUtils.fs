@@ -9,7 +9,7 @@ open FslexFsyacc
 open System.Text.RegularExpressions
 open TryTokenizer
 
-let unifyVoidElement(token:Position<HtmlToken>) =    
+let unifyVoidElement(token:PositionWith<HtmlToken>) =    
     match token.value with
     | TAGSTART (name,attrs) when 
         TagNames.voidElements.Contains name ->
@@ -24,7 +24,7 @@ let unifyVoidElement(token:Position<HtmlToken>) =
     | _ -> 
         Some token
 
-let getTag (token:Position<HtmlToken>) =
+let getTag (token:PositionWith<HtmlToken>) =
     match token.value with
     | EOF -> "EOF"
     | DOCTYPE        _ -> "DOCTYPE"
@@ -35,7 +35,7 @@ let getTag (token:Position<HtmlToken>) =
     | TAGSTART       _ -> "TAGSTART"
     | TAGEND         _ -> "TAGEND"
 
-let getLexeme (token:Position<HtmlToken>) = 
+let getLexeme (token:PositionWith<HtmlToken>) = 
     match token with
     | {value=EOF       } -> null
     | {value=DOCTYPE s } -> box s
@@ -85,7 +85,7 @@ let tokenizeRaw (restloop) (offset:int) (inp:string) =
         let pt2 = { index=offset+gps.[2].Index;length= gps.[2].Length;value= TAGEND tagName }
         yield pt2
 
-        yield! restloop pt2.nextIndex (m.Result("$'"))
+        yield! restloop pt2.adjacent (m.Result("$'"))
     }
 
 ///
@@ -97,19 +97,19 @@ let tokenizeCss (restloop) (offset:int) (inp:string) =
             | Search(Regex(@"^</style\s*>",RegexOptions.IgnoreCase)) m ->
                 let postok = { index= i;length= m.Length;value= TAGEND "style" }
                 yield postok
-                yield! restloop postok.nextIndex rest.[postok.length..]
+                yield! restloop postok.adjacent rest.[postok.length..]
 
             | On tryMultiLineComment m
             | On tryDoubleStringLiteral m
             | Rgx "^[^/\"<]+" m -> 
                 let postok = { index= i;length= m.Length;value= TEXT m.Value }
                 yield postok
-                yield! loop postok.nextIndex rest.[postok.length..]
+                yield! loop postok.adjacent rest.[postok.length..]
 
             | x -> 
                 let postok = { index= i;length= 1;value= TEXT x.[0..0] }
                 yield postok
-                yield! loop postok.nextIndex rest.[postok.length..]
+                yield! loop postok.adjacent rest.[postok.length..]
 
         }
     loop offset inp
@@ -123,7 +123,7 @@ let tokenizeJavaScript (restloop) (offset:int) (inp:string) =
             | Search(Regex(@"^</script\s*>",RegexOptions.IgnoreCase)) m ->
                 let postok = { index= i;length= m.Length;value= TAGEND "script" }
                 yield postok
-                yield! restloop postok.nextIndex rest.[postok.length..]
+                yield! restloop postok.adjacent rest.[postok.length..]
 
             | On tryDoubleStringLiteral m
             | On trySingleStringLiteral m
@@ -133,12 +133,12 @@ let tokenizeJavaScript (restloop) (offset:int) (inp:string) =
             | Rgx "^[^\"'`/<]+" m -> 
                 let postok = { index= i;length= m.Length;value= TEXT m.Value }
                 yield postok
-                yield! loop postok.nextIndex rest.[postok.length..]
+                yield! loop postok.adjacent rest.[postok.length..]
 
             | x -> 
                 let postok = { index= i;length= 1;value= TEXT x.[0..0] }
                 yield postok
-                yield! loop postok.nextIndex rest.[postok.length..]
+                yield! loop postok.adjacent rest.[postok.length..]
         }
     loop offset inp
 
@@ -151,13 +151,13 @@ let tokenize getTagLeft (offset:int) (input:string) =
             match postok.value with
             | EOF -> ()
             | TAGSTART(("textarea" | "title"),_) ->
-                yield! tokenizeRaw loop postok.nextIndex rest.[postok.length..]
+                yield! tokenizeRaw loop postok.adjacent rest.[postok.length..]
             | TAGSTART("script",_) -> 
-                yield! tokenizeJavaScript loop postok.nextIndex rest.[postok.length..]
+                yield! tokenizeJavaScript loop postok.adjacent rest.[postok.length..]
             | TAGSTART("style",_)  -> 
-                yield! tokenizeCss loop postok.nextIndex rest.[postok.length..]
+                yield! tokenizeCss loop postok.adjacent rest.[postok.length..]
             | _ ->
-                yield! loop postok.nextIndex rest.[postok.length..]
+                yield! loop postok.adjacent rest.[postok.length..]
         }
 
     loop offset input

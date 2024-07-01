@@ -6,7 +6,7 @@ open FSharp.Idioms
 open FslexFsyacc
 open FSharp.HTML.HtmldocParseTable
 
-let parser = app.getParser<Position<HtmlToken>>(
+let parser = app.getParser<PositionWith<HtmlToken>>(
         HtmlTokenUtils.getTag,
         HtmlTokenUtils.getLexeme)
 

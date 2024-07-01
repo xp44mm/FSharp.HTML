@@ -37,5 +37,5 @@ closeAngle:
 %type<int*string> LANGLE closeAngle
 %type<string*string> attribute
 %type<list<string*string>> attributes
-%type<Position<HtmlToken>> tagleft
+%type<PositionWith<HtmlToken>> tagleft
 

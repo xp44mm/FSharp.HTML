@@ -2,6 +2,9 @@
 
 A parse for HTML5 based on the official W3C specification.
 
+todo: html table -> markdown
+
+
 ## Usage
 
 the html source text is:

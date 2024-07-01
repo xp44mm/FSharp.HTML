@@ -42,7 +42,7 @@ let rules : list<string list*(obj list->obj)> = [
         let s0 = unbox<int*string> ss.[0]
         let s1 = unbox<list<string*string>> ss.[1]
         let s2 = unbox<int*string> ss.[2]
-        let result:Position<HtmlToken> =
+        let result:PositionWith<HtmlToken> =
             let i,tagname = s0
             let j,angle = s2
             let attrs = List.rev s1
@@ -55,7 +55,7 @@ let rules : list<string list*(obj list->obj)> = [
         box result
 ]
 let unboxRoot =
-    unbox<Position<HtmlToken>>
+    unbox<PositionWith<HtmlToken>>
 let app: FslexFsyacc.ParseTableApp = {
     tokens        = tokens
     kernels       = kernels

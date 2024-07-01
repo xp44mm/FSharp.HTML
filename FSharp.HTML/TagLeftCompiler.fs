@@ -11,7 +11,7 @@ open System
 open System.Text.RegularExpressions
 open FSharp.HTML.TagLeftParseTable
 
-let parser = app.getParser<Position<TagLeftToken>>(
+let parser = app.getParser<PositionWith<TagLeftToken>>(
         //TagLeftParseTable.rules,
         //TagLeftParseTable.actions,
         //TagLeftParseTable.closures,

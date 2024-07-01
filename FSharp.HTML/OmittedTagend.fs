@@ -60,7 +60,7 @@ let newOmittedTagend tok nm = {
 }
 
 //todo: match states pattern using fslex
-let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:Position<HtmlToken>) =
+let insertOmittedTagend (unclosedTagStarts:seq<string>) (tok:PositionWith<HtmlToken>) =
     seq {
         match tok.value with
         | EOF ->

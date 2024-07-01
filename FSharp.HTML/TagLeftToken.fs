@@ -16,7 +16,7 @@ open FSharp.Idioms.ActivePatterns
 open TryTokenizer
 
 module TagLeftToken =
-    let getTag (token:Position<TagLeftToken>) =
+    let getTag (token:PositionWith<TagLeftToken>) =
         match token.value with
         | LANGLE _ -> "LANGLE"
         | RANGLE -> "RANGLE"
@@ -24,13 +24,13 @@ module TagLeftToken =
         | ATTR_NAME _ -> "ATTR_NAME"
         | ATTR_VALUE _ -> "ATTR_VALUE"
 
-    let getLexeme (token:Position<TagLeftToken>) = 
+    let getLexeme (token:PositionWith<TagLeftToken>) = 
         match token with
         | {index=i;value=LANGLE tagname }-> box(i,tagname)
         | {value=ATTR_NAME  s }-> box s
         | {value=ATTR_VALUE s }-> box s
-        | {value=RANGLE      } as postok -> box postok.nextIndex
-        | {value=DIV_RANGLE  } as postok -> box postok.nextIndex
+        | {value=RANGLE      } as postok -> box postok.adjacent
+        | {value=DIV_RANGLE  } as postok -> box postok.adjacent
 
     let tokenize (offset:int) (inp:string) = // (restloop) 
         let rec loop (i:int) (rest:string) = seq {

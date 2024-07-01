@@ -18,7 +18,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="SourceText.fs" />
+		<Compile Include="EncodeUtils.fs" />
 		<Compile Include="TagNames.fs" />
 		<Compile Include="HtmlNode.fs" />
 		<Compile Include="TryTokenizer.fs" />
@@ -50,7 +50,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.Idioms" Version="1.4.20" />
-		<PackageReference Include="FslexFsyacc" Version="1.5.1" />
+		<PackageReference Include="FslexFsyacc" Version="1.5.2" />
 		<PackageReference Include="System.Reactive" Version="6.0.1" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
 	</ItemGroup>
