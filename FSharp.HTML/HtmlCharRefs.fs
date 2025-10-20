@@ -2257,7 +2257,6 @@ let substituteHexadecimalNumericCharacterReference(orig:string) =
     let num = Int32.Parse(num, NumberStyles.AllowHexSpecifier, CultureInfo.InvariantCulture)
     Char.ConvertFromUtf32 num
 
-open FSharp.Idioms
 
 let tryCommonText =
     Regex @"^[^&]+"

@@ -1,0 +1,72 @@
+﻿{
+module FSharp.HTML.HtmlLexer
+open System
+open FSharp.Idioms
+open FSharp.LexYacc
+}
+
+let a = [ 'a' 'A' ]
+let b = [ 'b' 'B' ]
+let c = [ 'c' 'C' ]
+let d = [ 'd' 'D' ]
+let e = [ 'e' 'E' ]
+let f = [ 'f' 'F' ]
+let g = [ 'g' 'G' ]
+let h = [ 'h' 'H' ]
+let i = [ 'i' 'I' ]
+let j = [ 'j' 'J' ]
+let k = [ 'k' 'K' ]
+let l = [ 'l' 'L' ]
+let m = [ 'm' 'M' ]
+let n = [ 'n' 'N' ]
+let o = [ 'o' 'O' ]
+let p = [ 'p' 'P' ]
+let q = [ 'q' 'Q' ]
+let r = [ 'r' 'R' ]
+let s = [ 's' 'S' ]
+let t = [ 't' 'T' ]
+let u = [ 'u' 'U' ]
+let v = [ 'v' 'V' ]
+let w = [ 'w' 'W' ]
+let x = [ 'x' 'X' ]
+let y = [ 'y' 'Y' ]
+let z = [ 'z' 'Z' ]
+
+rule comment cdata attribute : char list -> HtmlToken list =
+'<' '!' '-' '-' {
+    let c = comment()
+    [COMMENT c]
+}
+
+'<' '!' d o c t y p e ' '+ [^ '>' ]* '>' {
+    let str = String(buff |> List.skip 10 |> Array.ofList)
+    [DOCTYPE(str.Substring(0, str.Length - 1).Trim())]
+}
+
+'<' '!' '[' c d a t a '[' {
+    let c = cdata()
+    [CDATA c]
+}
+
+'<' '/' [^ '>' ]* '>' {
+    let str = String(buff |> List.skip 2 |> Array.ofList)
+    [TAGEND (str.Substring(0, str.Length - 1).Trim())]
+}
+
+'<' [^ '/' '!' '>' ] [^ '>' ]* '>' { [attribute buff] }
+
+[^ '<' ]+ {
+    [
+    if List.forall Char.IsWhiteSpace buff then
+        WS
+    else
+        TEXT (String.fromChars buff)
+    ]
+}
+
+_ { failwithf "html lexer: %c"  buff.[0] }
+
+
+
+
+

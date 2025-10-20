@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net9.0</TargetFramework>
 		<IsPackable>false</IsPackable>
 		<GenerateProgramFile>false</GenerateProgramFile>
 	</PropertyGroup>
@@ -17,21 +17,26 @@
 		<Compile Include="RenderTest.fs" />
 		<Compile Include="BrRemoverTest.fs" />
 		<Compile Include="FileTest.fs" />
+		<Compile Include="AttributeTest.fs" />
+		<Compile Include="CommentLexerTailerTest.fs" />
+		<Compile Include="CdataLexerTailerTest.fs" />
+		<Compile Include="HtmlLexerTailerTest.fs" />
 		
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="43.8.300" />
-		<PackageReference Include="FSharp.xUnit" Version="1.2.27" />
-		<PackageReference Include="FslexFsyacc" Version="1.5.2" />
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
-		<PackageReference Include="xunit" Version="2.8.1" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
+		<PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="43.9.300" />
+		<PackageReference Include="FSharp.LexYacc" Version="0.0.5" />
+		<PackageReference Include="FSharp.xUnit" Version="1.2.33" />
+		<PackageReference Include="FslexFsyacc" Version="1.5.6" />
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+		<PackageReference Include="xunit" Version="2.9.3" />
+		<PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="coverlet.collector" Version="6.0.2">
+		<PackageReference Include="coverlet.collector" Version="6.0.4">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
@@ -42,7 +47,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="FSharp.Core" Version="8.0.300" />
+	  <PackageReference Update="FSharp.Core" Version="9.0.303" />
 	</ItemGroup>
 
 </Project>

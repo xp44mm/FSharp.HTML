@@ -1,0 +1,32 @@
+{
+module FSharp.HTML.AttributeLexer
+open System
+open FSharp.Idioms
+open FSharp.Idioms.Literal
+open FSharp.LexYacc
+open FSharp.HTML
+}
+
+let digit = [ '0'-'9' ]
+let hex_digit = [ digit 'a'-'f' 'A'-'F' ]
+let lowercase = [ 'a'-'z' ]
+let uppercase = [ 'A'-'Z' ]
+let letter = [ lowercase uppercase ]
+let alphanumeric = [ letter digit ]
+
+let whitespace = [ ' ' '\t' '\r' '\n' ]
+let dot = [^ '\r' '\n' ]
+
+let identifier_start = [ letter '_' ]
+let identifier_continue = [ identifier_start digit '-' '.' ':' ]
+
+rule : char list -> JsonToken list =
+whitespace+ {[]}
+'<' { [LT] }
+'>' { [GT] }
+'/' '>' { [SOL_GT] }
+'=' { [EQUALS] }
+'"' [^ '"']* '"' { [QUOTED(String.fromChars buff)] }
+'\'' [^ '\'']* '\'' { [QUOTED(String.fromChars buff)] }
+identifier_start identifier_continue* {[ID(String.fromChars buff)]}
+_ { failwith(stringify buff.[0]) }

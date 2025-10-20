@@ -22,26 +22,39 @@
 		<Compile Include="TagNames.fs" />
 		<Compile Include="HtmlNode.fs" />
 		<Compile Include="TryTokenizer.fs" />
-		<Compile Include="HtmlToken.fs" />    
+		<Compile Include="HtmlToken.fs" />
 		<Compile Include="TagLeftToken.fs" />
 		<Compile Include="TagLeftParseTable.fs" />
 		<Compile Include="TagLeftCompiler.fs" />
 		<Compile Include="HtmlTokenUtils.fs" />
 		<Compile Include="HtmldocParseTable.fs" />
-    <Compile Include="Comb1DFA.fs" />
-    <Compile Include="Comb2DFA.fs" />
-    <Compile Include="Comb2plus1DFA.fs" />
-    <Compile Include="Comb3plus1DFA.fs" />
-    <Compile Include="OmittedTagend.fs" />
+		<Compile Include="Comb1DFA.fs" />
+		<Compile Include="Comb2DFA.fs" />
+		<Compile Include="Comb2plus1DFA.fs" />
+		<Compile Include="Comb3plus1DFA.fs" />
+		<Compile Include="OmittedTagend.fs" />
 
-    <Compile Include="HtmldocCompiler.fs" />
+		<Compile Include="HtmldocCompiler.fs" />
 		<Compile Include="Whitespace.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
 		<Compile Include="Render.fs" />
 		<Compile Include="HtmlUtils.fs" />
 		<Compile Include="BrRemover.fs" />
 		<Compile Include="HrRemover.fs" />
-
+		<Compile Include="attributes\AttributeToken.fs" />
+		<Compile Include="attributes\AttributeLexer.fs" />
+		<Compile Include="attributes\AttributeLexerTailer.fs" />
+		<Compile Include="attributes\AttributeYacc.fs" />
+		<Compile Include="attributes\AttributeCompiler.fs" />
+		<Compile Include="CommentLexer.fs" />
+		<Compile Include="CommentLexerTailer.fs" />
+		<Compile Include="CdataLexer.fs" />
+		<Compile Include="CdataLexerTailer.fs" />
+		<Compile Include="HtmlLexer.fs" />
+		<Compile Include="HtmlLexerTailer.fs" />
+		
+		
+		
 		<None Include="..\readme.md">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
@@ -49,14 +62,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Idioms" Version="1.4.20" />
-		<PackageReference Include="FslexFsyacc" Version="1.5.2" />
-		<PackageReference Include="System.Reactive" Version="6.0.1" />
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="FSharp.Idioms" Version="1.4.38" />
+		<PackageReference Include="FSharp.LexYacc" Version="0.0.5" />
+		<PackageReference Include="FslexFsyacc" Version="1.5.6" />
+		<PackageReference Include="System.Reactive" Version="6.1.0" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.10" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Update="FSharp.Core" Version="8.0.300" />
+		<PackageReference Update="FSharp.Core" Version="9.0.303" />
 	</ItemGroup>
 
 </Project>

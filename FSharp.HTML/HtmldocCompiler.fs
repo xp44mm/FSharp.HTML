@@ -50,12 +50,6 @@ let compile (input:string) =
         |> unclosedTagStarts
         |> OmittedTagend.insertOmittedTagend <| tok
     )
-    //|> Seq.map(fun lookahead ->
-    //    match parser.tryReduce(states,lookahead) with
-    //    | Some reducedstates -> states <- reducedstates
-    //    | None -> ()
-    //    lookahead
-    //)
     |> Seq.iter(fun tok ->
         tokens <- tok :: tokens
         states <- parser.shift(states,tok)

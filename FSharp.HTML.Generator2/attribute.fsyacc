@@ -1,0 +1,38 @@
+{
+module FSharp.HTML.AttributeYacc
+open FslexFsyacc
+open FSharp.LexYacc
+}
+
+tag: 
+    | "<" ID attributes close {
+    let name = s1
+    let attributes = List.rev s2
+    if s3 then
+        TAGSTART(name,attributes)
+    else
+        TAGSELFCLOSING(name,attributes)
+    }
+
+attributes :
+    | attributes attribute {s1::s0}
+    | (* empty *) {[]}
+
+attribute :
+    | ID {s0,""}
+    | ID "=" attributeValue {s0,s2}
+
+attributeValue :
+    | ID {s0}
+    | QUOTED {s0}
+ 
+close:
+    | ">"  {true}
+    | "/>" {false}
+
+%type<string> ID QUOTED attributeValue
+%type<string*string> attribute
+%type<list<string*string>> attributes
+%type<HtmlToken> tag
+%type<bool> close
+

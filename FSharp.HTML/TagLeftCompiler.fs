@@ -12,16 +12,11 @@ open System.Text.RegularExpressions
 open FSharp.HTML.TagLeftParseTable
 
 let parser = app.getParser<PositionWith<TagLeftToken>>(
-        //TagLeftParseTable.rules,
-        //TagLeftParseTable.actions,
-        //TagLeftParseTable.closures,
-
         TagLeftToken.getTag,
         TagLeftToken.getLexeme)
 
 let table = app.getTable parser
 
-//let stateSymbolList = TagLeftParseTable.theoryParser.getStateSymbolPairs()
 
 /// 解析文本为结构化数据
 let compile (offset:int) (inp:string) =

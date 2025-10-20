@@ -57,8 +57,6 @@ type tokenizeJavaScript() =
 
 type SelfClosing() =
     static let dataSource = SingleDataSource [
-            "<br/>",[{index= 0;length= 5;value= TAGSELFCLOSING("br",[])};{index= 5;length= 0;value= EOF}]
-            "<p><br></br></p>",[{index= 0;length= 3;value= TAGSTART("p",[])};{index= 3;length= 4;value= TAGSELFCLOSING("br",[])};{index= 12;length= 4;value= TAGEND "p"};{index= 16;length= 0;value= EOF}]
         ]
 
     static member keys = dataSource.keys

@@ -15,14 +15,14 @@ open System.IO
 
 open FSharp.Idioms.Literal
 open FSharp.xUnit
-open FslexFsyacc
+open FSharp.LexYacc
 
 
 [<EntryPoint>]
 let main _ = 
-    let x = "<style>"
-    let postok = TagLeftCompiler.compile 0 x
-    Console.WriteLine(stringify postok)
-
+    let buff = [ '<'; '/'; 'd'; 'i'; 'v'; '>' ]
+    let str = String(buff |> List.skip 2 |> Array.ofList)
+    let name = str.Substring(0, str.Length - 1)
+    Console.WriteLine($"{name}")
 
     0

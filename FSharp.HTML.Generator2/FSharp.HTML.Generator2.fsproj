@@ -1,27 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
     <GenerateProgramFile>false</GenerateProgramFile>
-    <IsTestProject>true</IsTestProject>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="Dir.fs" />
-    <None Include="TagLeft.fsyacc" />
-    <Compile Include="TagLeftParseTableTest.fs" />
-    <None Include="htmldoc.fsyacc" />
-    <Compile Include="HtmldocParseTableTest.fs" />
-    <None Include="comb1.fslex" />
-    <Compile Include="Comb1DFATest.fs" />
-    <None Include="comb2.fslex" />
-    <Compile Include="Comb2DFATest.fs" />
-    <None Include="comb2plus1.fslex" />
-    <Compile Include="Comb2plus1DFATest.fs" />
-    <None Include="comb3plus1.fslex" />
-    <Compile Include="Comb3plus1DFATest.fs" />
+    <None Include="attribute.fslex" />
+    <None Include="attribute.fsyacc" />
+    <Compile Include="AttributeLexerTest.fs" />
+    <Compile Include="AttributeYaccTest.fs" />
+    <None Include="comment.fslex" />
+    <Compile Include="CommentLexerTest.fs" />
+    <None Include="cdata.fslex" />
+    <Compile Include="CdataLexerTest.fs" />
+    <None Include="html.fslex" />
+    <Compile Include="HtmlLexerTest.fs" />
+    <None Include="html.fsyacc" />
+    <Compile Include="TokenGenerationTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
 
@@ -30,11 +28,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="43.9.300" />
-    <PackageReference Include="FSharp.Idioms" Version="1.4.38" />
+    <PackageReference Include="FSharp.LexYacc" Version="0.0.5" />
+    <PackageReference Include="FSharp.LexYacc.ToolBox" Version="0.0.2" />
     <PackageReference Include="FSharp.xUnit" Version="1.2.33" />
-    <PackageReference Include="FslexFsyacc" Version="1.5.6" />
-    <PackageReference Include="FslexFsyacc.Bootstrap" Version="1.5.6" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
     <PackageReference Include="xunit" Version="2.9.3" />
     <PackageReference Include="xunit.runner.visualstudio" Version="3.1.5">
@@ -45,10 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FSharp.HTML\FSharp.HTML.fsproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="9.0.303" />
   </ItemGroup>
 
 </Project>

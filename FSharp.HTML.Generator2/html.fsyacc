@@ -1,0 +1,34 @@
+﻿{
+module FSharp.HTML.HtmlYacc
+}
+
+nodes :
+    | require_nodes {s0}
+    | (*empty*) {[]}
+
+require_nodes :
+    | require_nodes node {s1::s0}
+    | node {[s0]}
+
+node :
+    | WS {HtmlText ""}
+    | TEXT {HtmlText s0}
+    | COMMENT {HtmlComment s0}
+    | CDATA {HtmlCData s0}
+    | TAGSELFCLOSING {
+        let name, attrs = s0
+        HtmlElement(name, attrs, [])
+    }
+    | TAGSTART nodes TAGEND {
+        let name, attrs = s0
+        if name = s2 then
+            HtmlElement(name, attrs, List.rev s1)
+        else
+            failwith $"unmatched tag:<{name}></{s2}>"
+    }
+    | DOCTYPE {HtmlDoctype s0}
+
+%type<HtmlNode list> nodes require_nodes
+%type<string> DOCTYPE TAGEND CDATA COMMENT TEXT
+%type<string * list<string*string>> TAGSELFCLOSING TAGSTART
+%type<HtmlNode> node

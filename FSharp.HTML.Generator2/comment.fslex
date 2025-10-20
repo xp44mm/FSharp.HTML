@@ -1,0 +1,9 @@
+{
+module FSharp.HTML.CommentLexer
+open System
+open FSharp.LexYacc
+}
+
+rule : char list -> char list =
+'-' '-' '>' { buff }
+_ { buff }
