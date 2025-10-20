@@ -1,6 +1,6 @@
 ﻿module FSharp.HTML.AttributeYacc
-open FslexFsyacc
 open FSharp.LexYacc
+let stateSymbols: string[] = [|"";"tag";"ID";"=";"attributeValue";"ID";"QUOTED";"attributes";"attribute";"/>";">";"<";"ID";"close"|]
 let actions: (string * int) list list = [["<",11;"tag",1];["",0];["/>",-1;"=",3;">",-1;"ID",-1];["ID",5;"QUOTED",6;"attributeValue",4];["/>",-2;">",-2;"ID",-2];["/>",-3;">",-3;"ID",-3];["/>",-4;">",-4;"ID",-4];["/>",9;">",10;"ID",2;"attribute",8;"close",13];["/>",-6;">",-6;"ID",-6];["",-7];["",-8];["ID",12];["/>",-5;">",-5;"ID",-5;"attributes",7];["",-9]]
 let rules: list<string list*(obj list->obj)> = [
     ["";"tag"], fun (ss:obj list) -> ss.[0]
@@ -50,7 +50,7 @@ let rules: list<string list*(obj list->obj)> = [
         let result:HtmlToken =
             let name = s1
             let attributes = List.rev s2
-            if s3 then
+            if s3 && not (TagNames.voidElements.Contains name) then
                 TAGSTART(name,attributes)
             else
                 TAGSELFCLOSING(name,attributes)

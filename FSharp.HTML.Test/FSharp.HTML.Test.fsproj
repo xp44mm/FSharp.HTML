@@ -21,13 +21,14 @@
 		<Compile Include="CommentLexerTailerTest.fs" />
 		<Compile Include="CdataLexerTailerTest.fs" />
 		<Compile Include="HtmlLexerTailerTest.fs" />
+		<Compile Include="HtmlCompilerTest.fs" />
 		
 		<Compile Include="Program.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.Compiler.SyntaxTreeX" Version="43.9.300" />
-		<PackageReference Include="FSharp.LexYacc" Version="0.0.5" />
+		<PackageReference Include="FSharp.LexYacc" Version="0.0.6" />
 		<PackageReference Include="FSharp.xUnit" Version="1.2.33" />
 		<PackageReference Include="FslexFsyacc" Version="1.5.6" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />

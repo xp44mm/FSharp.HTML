@@ -22,7 +22,7 @@ let actions comment cdata attribute: Map<byte,  char list -> HtmlToken list > = 
         if List.forall Char.IsWhiteSpace buff then
             WS
         else
-            TEXT (String.fromChars buff)
+            TEXT (String(Array.ofList buff))
         ]
     6uy, fun buff -> failwithf "html lexer: %c"  buff.[0]
     ]

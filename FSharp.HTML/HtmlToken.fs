@@ -9,6 +9,7 @@ type HtmlToken =
     | TAGSTART of tag: string * attrs: list<string * string>
     | TEXT of string
     | WS
+    | EOF
 
 module HtmlToken =
     let index (tok: HtmlToken) =
@@ -21,6 +22,7 @@ module HtmlToken =
         | HtmlToken.TAGSTART _ -> 5
         | HtmlToken.TEXT _ -> 6
         | HtmlToken.WS -> 7
+        | HtmlToken.EOF -> 8
     let tag (tok: HtmlToken) =
         match tok with
         | HtmlToken.CDATA _ -> "CDATA"
@@ -31,6 +33,7 @@ module HtmlToken =
         | HtmlToken.TAGSTART _ -> "TAGSTART"
         | HtmlToken.TEXT _ -> "TEXT"
         | HtmlToken.WS -> "WS"
+        | HtmlToken.EOF -> "EOF"
     let tagToValue (tag: string) =
         match tag with
         | "CDATA" -> 0
@@ -41,15 +44,16 @@ module HtmlToken =
         | "TAGSTART" -> 5
         | "TEXT" -> 6
         | "WS" -> 7
+        | "EOF" -> 8
         | _ -> failwith tag
-
     let lexeme (tok: HtmlToken) =
         match tok with
         | HtmlToken.CDATA x -> box x
         | HtmlToken.COMMENT x -> box x
         | HtmlToken.DOCTYPE x -> box x
         | HtmlToken.TAGEND x -> box x
-        | HtmlToken.TAGSELFCLOSING(nm, attrs) -> box(nm, attrs)
-        | HtmlToken.TAGSTART(nm, attrs) -> box(nm, attrs)
+        | HtmlToken.TAGSELFCLOSING(a, b) -> box(a, b)
+        | HtmlToken.TAGSTART(a, b) -> box(a, b)
         | HtmlToken.TEXT x -> box x
         | HtmlToken.WS -> null
+        | HtmlToken.EOF -> null

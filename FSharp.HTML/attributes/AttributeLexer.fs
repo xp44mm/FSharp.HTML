@@ -11,8 +11,12 @@ let actions : Map<byte,  char list -> AttributeToken list > = Map [
     2uy, fun buff -> [GT]
     3uy, fun buff -> [SOL_GT]
     4uy, fun buff -> [EQUALS]
-    5uy, fun buff -> [QUOTED(String.fromChars buff)]
-    6uy, fun buff -> [QUOTED(String.fromChars buff)]
+    5uy, fun buff -> 
+        let str = String(buff |> List.skip 1 |> Array.ofList)
+        [QUOTED(str.Substring(0, str.Length - 1))]
+    6uy, fun buff -> 
+        let str = String(buff |> List.skip 1 |> Array.ofList)
+        [QUOTED(str.Substring(0, str.Length - 1))]
     7uy, fun buff -> [ID(String.fromChars buff)]
     8uy, fun buff -> failwith(stringify buff.[0])
     ]

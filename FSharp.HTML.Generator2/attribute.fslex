@@ -20,13 +20,17 @@ let dot = [^ '\r' '\n' ]
 let identifier_start = [ letter '_' ]
 let identifier_continue = [ identifier_start digit '-' '.' ':' ]
 
-rule : char list -> JsonToken list =
+rule : char list -> AttributeToken list =
 whitespace+ {[]}
 '<' { [LT] }
 '>' { [GT] }
 '/' '>' { [SOL_GT] }
 '=' { [EQUALS] }
-'"' [^ '"']* '"' { [QUOTED(String.fromChars buff)] }
-'\'' [^ '\'']* '\'' { [QUOTED(String.fromChars buff)] }
+'"' [^ '"']* '"' { 
+    let str = String(buff |> List.skip 1 |> Array.ofList)
+    [QUOTED(str.Substring(0, str.Length - 1))] }
+'\'' [^ '\'']* '\'' { 
+    let str = String(buff |> List.skip 1 |> Array.ofList)
+    [QUOTED(str.Substring(0, str.Length - 1))] }
 identifier_start identifier_continue* {[ID(String.fromChars buff)]}
 _ { failwith(stringify buff.[0]) }

@@ -1,7 +1,9 @@
 ﻿{
 module FSharp.HTML.HtmlYacc
-}
+open FSharp.LexYacc
 
+}
+html: nodes EOF {List.rev s0}
 nodes :
     | require_nodes {s0}
     | (*empty*) {[]}
@@ -28,7 +30,7 @@ node :
     }
     | DOCTYPE {HtmlDoctype s0}
 
-%type<HtmlNode list> nodes require_nodes
+%type<HtmlNode list> nodes require_nodes html
 %type<string> DOCTYPE TAGEND CDATA COMMENT TEXT
 %type<string * list<string*string>> TAGSELFCLOSING TAGSTART
 %type<HtmlNode> node

@@ -60,7 +60,7 @@ rule comment cdata attribute : char list -> HtmlToken list =
     if List.forall Char.IsWhiteSpace buff then
         WS
     else
-        TEXT (String.fromChars buff)
+        TEXT (String(Array.ofList buff))
     ]
 }
 

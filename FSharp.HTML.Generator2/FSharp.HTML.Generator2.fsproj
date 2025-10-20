@@ -19,6 +19,7 @@
     <None Include="html.fslex" />
     <Compile Include="HtmlLexerTest.fs" />
     <None Include="html.fsyacc" />
+    <Compile Include="HtmlYaccTest.fs" />
     <Compile Include="TokenGenerationTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
@@ -28,7 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="FSharp.LexYacc" Version="0.0.5" />
+    <PackageReference Include="FSharp.LexYacc" Version="0.0.6" />
     <PackageReference Include="FSharp.LexYacc.ToolBox" Version="0.0.2" />
     <PackageReference Include="FSharp.xUnit" Version="1.2.33" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />

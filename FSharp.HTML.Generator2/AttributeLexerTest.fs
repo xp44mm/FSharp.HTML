@@ -24,7 +24,7 @@ type AttributeLexerTest(output: ITestOutputHelper) as this =
     member _.``生成``() =
         let printer = FslexFilePrinter.forChar text
         let src = printer.print()
-        output.WriteLine(src)
+        //output.WriteLine(src)
 
         let path = Path.Combine(Dir.attributes, name + ".fs")
         File.WriteAllText(path, src, Encoding.UTF8)

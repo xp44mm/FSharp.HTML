@@ -52,6 +52,8 @@
 		<Compile Include="CdataLexerTailer.fs" />
 		<Compile Include="HtmlLexer.fs" />
 		<Compile Include="HtmlLexerTailer.fs" />
+		<Compile Include="HtmlYacc.fs" />
+		<Compile Include="HtmlCompiler.fs" />
 		
 		
 		
@@ -63,7 +65,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.Idioms" Version="1.4.38" />
-		<PackageReference Include="FSharp.LexYacc" Version="0.0.5" />
+		<PackageReference Include="FSharp.LexYacc" Version="0.0.6" />
 		<PackageReference Include="FslexFsyacc" Version="1.5.6" />
 		<PackageReference Include="System.Reactive" Version="6.1.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.10" />
