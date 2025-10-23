@@ -1,10 +1,10 @@
 ﻿module FSharp.HTML.HtmlYacc
 open FSharp.LexYacc
-let stateSymbols: string[] = [|"";"html";"nodes";"CDATA";"COMMENT";"DOCTYPE";"TAGSELFCLOSING";"TAGSTART";"nodes";"TAGEND";"TEXT";"WS";"require_nodes";"node";"node"|]
-let actions: (string * int) list list = [["",-9;"CDATA",3;"COMMENT",4;"DOCTYPE",5;"TAGSELFCLOSING",6;"TAGSTART",7;"TEXT",10;"WS",11;"html",1;"node",13;"nodes",2;"require_nodes",12];["",0];["",-1];["",-2;"CDATA",-2;"COMMENT",-2;"DOCTYPE",-2;"TAGEND",-2;"TAGSELFCLOSING",-2;"TAGSTART",-2;"TEXT",-2;"WS",-2];["",-3;"CDATA",-3;"COMMENT",-3;"DOCTYPE",-3;"TAGEND",-3;"TAGSELFCLOSING",-3;"TAGSTART",-3;"TEXT",-3;"WS",-3];["",-4;"CDATA",-4;"COMMENT",-4;"DOCTYPE",-4;"TAGEND",-4;"TAGSELFCLOSING",-4;"TAGSTART",-4;"TEXT",-4;"WS",-4];["",-5;"CDATA",-5;"COMMENT",-5;"DOCTYPE",-5;"TAGEND",-5;"TAGSELFCLOSING",-5;"TAGSTART",-5;"TEXT",-5;"WS",-5];["CDATA",3;"COMMENT",4;"DOCTYPE",5;"TAGEND",-9;"TAGSELFCLOSING",6;"TAGSTART",7;"TEXT",10;"WS",11;"node",13;"nodes",8;"require_nodes",12];["TAGEND",9];["",-6;"CDATA",-6;"COMMENT",-6;"DOCTYPE",-6;"TAGEND",-6;"TAGSELFCLOSING",-6;"TAGSTART",-6;"TEXT",-6;"WS",-6];["",-7;"CDATA",-7;"COMMENT",-7;"DOCTYPE",-7;"TAGEND",-7;"TAGSELFCLOSING",-7;"TAGSTART",-7;"TEXT",-7;"WS",-7];["",-8;"CDATA",-8;"COMMENT",-8;"DOCTYPE",-8;"TAGEND",-8;"TAGSELFCLOSING",-8;"TAGSTART",-8;"TEXT",-8;"WS",-8];["",-10;"CDATA",3;"COMMENT",4;"DOCTYPE",5;"TAGEND",-10;"TAGSELFCLOSING",6;"TAGSTART",7;"TEXT",10;"WS",11;"node",14];["",-11;"CDATA",-11;"COMMENT",-11;"DOCTYPE",-11;"TAGEND",-11;"TAGSELFCLOSING",-11;"TAGSTART",-11;"TEXT",-11;"WS",-11];["",-12;"CDATA",-12;"COMMENT",-12;"DOCTYPE",-12;"TAGEND",-12;"TAGSELFCLOSING",-12;"TAGSTART",-12;"TEXT",-12;"WS",-12]]
+let stateSymbols: string[] = [|"";"html";"nodes";"EOF";"CDATA";"COMMENT";"DOCTYPE";"TAGSELFCLOSING";"TAGSTART";"nodes";"TAGEND";"TEXT";"WS";"require_nodes";"node";"node"|]
+let actions: (string * int) list list = [["CDATA",4;"COMMENT",5;"DOCTYPE",6;"EOF",-9;"TAGSELFCLOSING",7;"TAGSTART",8;"TEXT",11;"WS",12;"html",1;"node",14;"nodes",2;"require_nodes",13];["",0];["EOF",3];["",-1];["CDATA",-2;"COMMENT",-2;"DOCTYPE",-2;"EOF",-2;"TAGEND",-2;"TAGSELFCLOSING",-2;"TAGSTART",-2;"TEXT",-2;"WS",-2];["CDATA",-3;"COMMENT",-3;"DOCTYPE",-3;"EOF",-3;"TAGEND",-3;"TAGSELFCLOSING",-3;"TAGSTART",-3;"TEXT",-3;"WS",-3];["CDATA",-4;"COMMENT",-4;"DOCTYPE",-4;"EOF",-4;"TAGEND",-4;"TAGSELFCLOSING",-4;"TAGSTART",-4;"TEXT",-4;"WS",-4];["CDATA",-5;"COMMENT",-5;"DOCTYPE",-5;"EOF",-5;"TAGEND",-5;"TAGSELFCLOSING",-5;"TAGSTART",-5;"TEXT",-5;"WS",-5];["CDATA",4;"COMMENT",5;"DOCTYPE",6;"TAGEND",-9;"TAGSELFCLOSING",7;"TAGSTART",8;"TEXT",11;"WS",12;"node",14;"nodes",9;"require_nodes",13];["TAGEND",10];["CDATA",-6;"COMMENT",-6;"DOCTYPE",-6;"EOF",-6;"TAGEND",-6;"TAGSELFCLOSING",-6;"TAGSTART",-6;"TEXT",-6;"WS",-6];["CDATA",-7;"COMMENT",-7;"DOCTYPE",-7;"EOF",-7;"TAGEND",-7;"TAGSELFCLOSING",-7;"TAGSTART",-7;"TEXT",-7;"WS",-7];["CDATA",-8;"COMMENT",-8;"DOCTYPE",-8;"EOF",-8;"TAGEND",-8;"TAGSELFCLOSING",-8;"TAGSTART",-8;"TEXT",-8;"WS",-8];["CDATA",4;"COMMENT",5;"DOCTYPE",6;"EOF",-10;"TAGEND",-10;"TAGSELFCLOSING",7;"TAGSTART",8;"TEXT",11;"WS",12;"node",15];["CDATA",-11;"COMMENT",-11;"DOCTYPE",-11;"EOF",-11;"TAGEND",-11;"TAGSELFCLOSING",-11;"TAGSTART",-11;"TEXT",-11;"WS",-11];["CDATA",-12;"COMMENT",-12;"DOCTYPE",-12;"EOF",-12;"TAGEND",-12;"TAGSELFCLOSING",-12;"TAGSTART",-12;"TEXT",-12;"WS",-12]]
 let rules: list<string list*(obj list->obj)> = [
     ["";"html"], fun (ss:obj list) -> ss.[0]
-    ["html";"nodes"], fun(ss:obj list)->
+    ["html";"nodes";"EOF"], fun(ss:obj list)->
         let s0 = unbox<HtmlNode list> ss.[0]
         let result:HtmlNode list =
             List.rev s0
@@ -47,8 +47,9 @@ let rules: list<string list*(obj list->obj)> = [
             HtmlText s0
         box result
     ["node";"WS"], fun(ss:obj list)->
+        let s0 = unbox<string> ss.[0]
         let result:HtmlNode =
-            HtmlText ""
+            HtmlWS s0
         box result
     ["nodes"], fun(ss:obj list)->
         let result:HtmlNode list =

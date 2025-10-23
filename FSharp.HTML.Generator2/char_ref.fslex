@@ -1,0 +1,33 @@
+﻿{
+module FSharp.HTML.CharRefLexer
+open System
+open FSharp.LexYacc
+open FSharp.Idioms
+}
+
+let digit = [ '0'-'9' ]
+let hex_digit = [ digit 'a'-'f' 'A'-'F' ]
+let lowercase = [ 'a'-'z' ]
+let uppercase = [ 'A'-'Z' ]
+let letter = [ lowercase uppercase ]
+
+rule : char list -> string =
+'&' letter+ ';'? { 
+    let str = String(buff |> List.skip 1 |> Array.ofList)
+    let str = str.TrimEnd(';')
+    match HtmlSchema.namedCharRefs.TryFind(str) with
+    | Some c -> c
+    | None -> String(Array.ofList buff)
+}
+'&' '#' digit+ ';' {
+    let str = buff |> List.skip 2
+    let d,_,_ = Decimal.takeDigitsValueAndCount str
+    String([|char d|])
+}
+'&' '#' [ 'x' 'X'] hex_digit+ ';' { 
+    let buff1 = buff |> List.skip 3
+    let buff2 = buff1 |> List.take (buff1.Length - 1)
+    let d = Hexadecimal.getValue buff2
+    String([|char d|])
+}
+_ { String(Array.ofList buff) }

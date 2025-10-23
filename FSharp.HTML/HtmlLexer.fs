@@ -18,11 +18,12 @@ let actions comment cdata attribute: Map<byte,  char list -> HtmlToken list > = 
         [TAGEND (str.Substring(0, str.Length - 1).Trim())]
     4uy, fun buff -> [attribute buff]
     5uy, fun buff -> 
+        let s = String(Array.ofList buff)
         [
-        if List.forall Char.IsWhiteSpace buff then
-            WS
-        else
-            TEXT (String(Array.ofList buff))
+            if String.IsNullOrWhiteSpace s then
+                WS s
+            else
+                TEXT s
         ]
     6uy, fun buff -> failwithf "html lexer: %c"  buff.[0]
     ]

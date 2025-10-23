@@ -1,4 +1,4 @@
-{
+﻿{
 module FSharp.HTML.AttributeLexer
 open System
 open FSharp.Idioms
@@ -17,8 +17,7 @@ let alphanumeric = [ letter digit ]
 let whitespace = [ ' ' '\t' '\r' '\n' ]
 let dot = [^ '\r' '\n' ]
 
-let identifier_start = [ letter '_' ]
-let identifier_continue = [ identifier_start digit '-' '.' ':' ]
+let control = [ '\x00'-'\x1f' '\x7f']
 
 rule : char list -> AttributeToken list =
 whitespace+ {[]}
@@ -26,11 +25,11 @@ whitespace+ {[]}
 '>' { [GT] }
 '/' '>' { [SOL_GT] }
 '=' { [EQUALS] }
-'"' [^ '"']* '"' { 
+'"' [^ '"' ]* '"' { 
     let str = String(buff |> List.skip 1 |> Array.ofList)
     [QUOTED(str.Substring(0, str.Length - 1))] }
 '\'' [^ '\'']* '\'' { 
     let str = String(buff |> List.skip 1 |> Array.ofList)
     [QUOTED(str.Substring(0, str.Length - 1))] }
-identifier_start identifier_continue* {[ID(String.fromChars buff)]}
+[^ control ' ' '<' '!' '/' '>' '=' '"' '`' '\'' '\\' ]+ {[ID(String(Array.ofList buff))]}
 _ { failwith(stringify buff.[0]) }

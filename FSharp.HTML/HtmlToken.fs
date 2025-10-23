@@ -8,7 +8,7 @@ type HtmlToken =
     | TAGSELFCLOSING of tag: string * attrs: list<string * string>
     | TAGSTART of tag: string * attrs: list<string * string>
     | TEXT of string
-    | WS
+    | WS of string
     | EOF
 
 module HtmlToken =
@@ -21,7 +21,7 @@ module HtmlToken =
         | HtmlToken.TAGSELFCLOSING _ -> 4
         | HtmlToken.TAGSTART _ -> 5
         | HtmlToken.TEXT _ -> 6
-        | HtmlToken.WS -> 7
+        | HtmlToken.WS _ -> 7
         | HtmlToken.EOF -> 8
     let tag (tok: HtmlToken) =
         match tok with
@@ -32,7 +32,7 @@ module HtmlToken =
         | HtmlToken.TAGSELFCLOSING _ -> "TAGSELFCLOSING"
         | HtmlToken.TAGSTART _ -> "TAGSTART"
         | HtmlToken.TEXT _ -> "TEXT"
-        | HtmlToken.WS -> "WS"
+        | HtmlToken.WS _ -> "WS"
         | HtmlToken.EOF -> "EOF"
     let tagToValue (tag: string) =
         match tag with
@@ -55,5 +55,5 @@ module HtmlToken =
         | HtmlToken.TAGSELFCLOSING(a, b) -> box(a, b)
         | HtmlToken.TAGSTART(a, b) -> box(a, b)
         | HtmlToken.TEXT x -> box x
-        | HtmlToken.WS -> null
+        | HtmlToken.WS x -> box x
         | HtmlToken.EOF -> null

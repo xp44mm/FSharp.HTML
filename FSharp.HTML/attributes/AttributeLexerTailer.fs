@@ -8,6 +8,5 @@ let tokenize (iter: LexicalIterator<char * int>) =
     iter
     |> AttributeLexer.anal.split
     |> Seq.collect(fun (rule_id, buff) -> 
-        Console.WriteLine($"Attribute:{rule_id}:{buff}")
         AttributeLexer.actions.[rule_id] buff
         )

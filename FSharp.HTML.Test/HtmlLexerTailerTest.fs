@@ -27,7 +27,7 @@ type HtmlLexerTailerTest(output: ITestOutputHelper) =
     member this.``parse html tokens``(i: int) =
         let cases = [
             // 0. 原始测试用例
-            "   <!DOCTYPE html>", [WS; DOCTYPE "html"]
+            "   <!DOCTYPE html>", [WS"   "; DOCTYPE "html"]
             
             // 1. 注释测试
             "<!-- This is a comment -->", [COMMENT " This is a comment "]
@@ -48,13 +48,13 @@ type HtmlLexerTailerTest(output: ITestOutputHelper) =
             "Hello World", [TEXT "Hello World"]
             
             // 7. 空白文本测试
-            "   \t\n\r", [WS]
+            "   \t\n\r", [WS"   \t\n\r"]
             
             // 8. 混合内容和标签
             "Text<div>More text</div>", [TEXT "Text"; TAGSTART ("div", []); TEXT "More text"; TAGEND "div"]
             
             // 9. 复杂属性
-            "<input type=\"text\" value=\"test\" disabled>", [TAGSTART ("input", [("type", "text"); ("value", "test"); ("disabled", "")])]
+            "<input type=\"text\" value=\"test\" disabled>", [TAGSELFCLOSING ("input", [("type", "text"); ("value", "test"); ("disabled", "")])]
             
             // 10. 大写标签名
             "<DIV CLASS=\"test\">", [TAGSTART ("DIV", [("CLASS", "test")])]
@@ -66,11 +66,11 @@ type HtmlLexerTailerTest(output: ITestOutputHelper) =
             "<svg:path d=\"M0 0\"/>", [TAGSELFCLOSING ("svg:path", [("d", "M0 0")])]
             
             // 13. 布尔属性
-            "<input checked>", [TAGSTART ("input", [("checked", "")])]
+            "<input checked>", [TAGSELFCLOSING("input",["checked",""])]
                         
             // 14. 复杂的混合场景
             "  <div class=\"main\">Hello<!--comment-->World<br/></div>  ", 
-            [WS; TAGSTART ("div", [("class", "main")]); TEXT "Hello"; COMMENT "comment"; TEXT "World"; TAGSELFCLOSING ("br", []); TAGEND "div"; WS]
+            [WS"  "; TAGSTART ("div", [("class", "main")]); TEXT "Hello"; COMMENT "comment"; TEXT "World"; TAGSELFCLOSING ("br", []); TAGEND "div"; WS "  "]
         ]
         
         let x, e = cases.[i]
@@ -100,8 +100,7 @@ type HtmlLexerTailerTest(output: ITestOutputHelper) =
   </body>
 </html>
 """
-        let expected = [WS;DOCTYPE "html";WS;COMMENT " Comment ";WS;CDATA "cdata content";WS;TAGSTART("html",["lang","en"]);WS;TAGSTART("head",[]);WS;TAGSTART("title",[]);TEXT "Test";TAGEND "title";WS;TAGSELFCLOSING("meta",["charset","UTF-8"]);WS;TAGEND "head";WS;TAGSTART("body",[]);TEXT "\r\n    Hello World\r\n    ";TAGSTART("div",["class","container"]);TEXT "\r\n      Text content\r\n    ";TAGEND "div";WS;TAGEND "body";WS;TAGEND "html";WS]
-        
+        let expected = [WS "\r\n";DOCTYPE "html";WS "\r\n";COMMENT " Comment ";WS "\r\n";CDATA "cdata content";WS "\r\n";TAGSTART("html",["lang","en"]);WS "\r\n  ";TAGSTART("head",[]);WS "\r\n    ";TAGSTART("title",[]);TEXT "Test";TAGEND "title";WS "\r\n    ";TAGSELFCLOSING("meta",["charset","UTF-8"]);WS "\r\n  ";TAGEND "head";WS "\r\n  ";TAGSTART("body",[]);TEXT "\r\n    Hello World\r\n    ";TAGSTART("div",["class","container"]);TEXT "\r\n      Text content\r\n    ";TAGEND "div";WS "\r\n  ";TAGEND "body";WS "\r\n";TAGEND "html";WS "\r\n"]
         let iter = LexicalIterator.forChar html
         let actual = HtmlLexerTailer.tokenize iter |> List.ofSeq
         output.WriteLine($"Input: {html}")
@@ -116,13 +115,13 @@ type HtmlLexerTailerTest(output: ITestOutputHelper) =
     member this.``edge cases``(i: int) =
         let cases = [
             // 0. 只有空白
-            "   \t\n  \r   ", [WS]
+            "   \t\n  \r   ", [WS "   \t\n  \r   "]
             
             // 1. 只有文本
             "Just some text without tags", [TEXT "Just some text without tags"]
             
             // 2. 多个连续空白
-            "   \t\n\r   <div>  \t  </div>  ", [WS; TAGSTART ("div", []); WS; TAGEND "div"; WS]
+            "   \t\n\r   <div>  \t  </div>  ", [WS "   \t\n\r   "; TAGSTART ("div", []); WS"  \t  "; TAGEND "div"; WS"  "]
         ]
         
         let x, e = cases.[i]

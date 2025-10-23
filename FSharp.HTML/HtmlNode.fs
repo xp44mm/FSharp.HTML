@@ -10,3 +10,4 @@ type HtmlNode =
     | HtmlCData of string
     | HtmlText of string
     | HtmlDoctype of string
+    | HtmlWS of string

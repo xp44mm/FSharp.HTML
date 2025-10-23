@@ -1,60 +1,90 @@
 ﻿module FSharp.HTML.Render
 
 open System
+open System.Text.RegularExpressions
+open System.Text
+open FSharp.Idioms.Literal
+
+let quoteAttrValue (valuestring: string) =
+    let tokens = Regex.Split(valuestring, "([&\"])")
+    tokens
+    |> Array.map(
+        function
+        | "&" -> "&amp;"
+        | "\"" -> "&quot;"
+        | x -> x
+    )
+    |> String.concat ""
+    |> sprintf "\"%s\""
+
+let encodeNormalText (text: string) =
+    let tokens = Regex.Split(text, "([&<])")
+    let sb = StringBuilder()
+
+    tokens
+    |> Array.map(
+        function
+        | "&" -> "&amp;"
+        | "<" -> "&lt;"
+        | x -> x
+    )
+    |> Array.iter(fun x -> sb.Append(x) |> ignore)
+    sb.ToString()
 
 let stringifyAttributes attributes =
     attributes
-    |> List.map(fun(name, value) ->
-        $" {name}={HtmlCharRefs.quoteAttrValue value}"
-    )
+    |> List.map(fun (name, value) -> $" {name}={quoteAttrValue value}")
     |> String.concat ""
 
-let startTag name attributes =
-    $"<{name}{stringifyAttributes attributes}>"
+let openingTag name attributes = $"<{name}{stringifyAttributes attributes}>"
 
-let endTag name = $"</{name}>"
+let selfClosingTag name attributes =
+    $"<{name}{stringifyAttributes attributes}/>"
 
-let stringifyComment str = $"<!--{str}-->"
+let closingTag name = $"</{name}>"
 
-let stringifyCData str = $"<![CDATA[{str}]]>"
+let comment str = $"<!--{str}-->"
 
-let rec stringifyNode (node:HtmlNode) =
+let cdata str = $"<![CDATA[{str}]]>"
+
+let rec stringifyNode (node: HtmlNode) =
     match node with
-    | HtmlElement(name, attributes, []) ->
-        $"<{name}{stringifyAttributes attributes}/>"
-
-    | HtmlElement(("script"| "style"|"title"|"textarea") as name, attributes, elements) ->
-        let content =
-            match elements with
-            | [] -> ""
-            | [HtmlText x] -> x
-            | _ -> failwithf "rawtext:%A" node
-        $"{startTag name attributes}{content}{endTag name}"
-
-    | HtmlElement(name, attributes, elements) ->
-        let content =
-            elements 
-            |> List.map stringifyNode
-            |> String.concat ""
-        $"{startTag name attributes}{content}{endTag name}"
-                    
-    | HtmlText str -> 
-        HtmlCharRefs.escapeNormalText str
-    | HtmlComment str ->
-        stringifyComment str
-    | HtmlCData str ->
-        stringifyCData str
-
-let stringifyDoc (docType, elements) =
-    let dec =
-        if String.IsNullOrEmpty docType then 
+    | HtmlDoctype docType ->
+        if String.IsNullOrEmpty docType then
             "<!DOCTYPE html>"
         else
             $"<!DOCTYPE {docType}>"
-    let nodes =
-        elements 
-        |> List.map(stringifyNode)
+    | HtmlElement(name, attributes, []) ->
+        if HtmlSchema.voidElements.Contains name then
+            openingTag name attributes
+        else
+            selfClosingTag name attributes
+    | HtmlElement(("script" | "style" | "title" | "textarea") as name,
+                  attributes,
+                  elements) ->
+        let content =
+            let sb = StringBuilder()
+            for elem in elements do
+                match elem with
+                |  HtmlText x |  HtmlWS x -> sb.Append(x) |> ignore
+                | _ -> failwith(stringify elem)
+            sb.ToString()
+        $"{openingTag name attributes}{content}{closingTag name}"
 
-    dec::nodes
-    |> String.concat Environment.NewLine
+    | HtmlElement(name, attributes, elements) ->
+        let content =
+            elements
+            |> List.map stringifyNode
+            |> String.concat ""
+        $"{openingTag name attributes}{content}{closingTag name}"
 
+    | HtmlText str -> encodeNormalText str
+    | HtmlWS str -> str
+    | HtmlComment str -> comment str
+    | HtmlCData str -> cdata str
+
+let stringifyDocument (nodes: HtmlNode list) =
+    let sb = StringBuilder()
+    for node in nodes do
+        sb.Append(stringifyNode node) |> ignore
+    sb.ToString()

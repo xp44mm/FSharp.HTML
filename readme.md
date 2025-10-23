@@ -1,9 +1,6 @@
-# FSharp.HTML
+﻿# FSharp.HTML
 
 A parse for HTML5 based on the official W3C specification.
-
-todo: html table -> markdown
-
 
 ## Usage
 
@@ -25,61 +22,43 @@ the html source text is:
 we can use this code to parse html source to `HtmlNode list`:
 
 ```fsharp
-let sourceText = ...
-let doctype,nodes = HtmlUtils.parseDoc sourceText
+let sourceText = <html>...</html>
+let nodes: HtmlNode list = HtmlUtils.parseDoc sourceText
 ```
 
 doctype is a string that is extracted from doctype tag. and nodes is a `HtmlNode list`.
 
+```fsharp
+type HtmlNode =
+    | HtmlElement of
+        name: string *
+        attributes: list<string * string> *
+        elements: HtmlNode list
+    | HtmlComment of string
+    | HtmlCData of string
+    | HtmlText of string
+    | HtmlDoctype of string
+    | HtmlWS of string
+```
+
 All parsing processes in a package are public, and you are free to compose them to implement your functional requirements. Parser is highly configurable, see source code [HtmlUtils](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlUtils.fs)
 
-Parse only html structures without changing the content. Please use `HtmldocCompiler.compile`. In fact, the `HtmlUtils.parseDoc` is defined as follows:
-
-```fsharp
-let parseDoc (txt:string) = 
-    let doctype,nodes =
-        txt
-        |> HtmldocCompiler.compile
-    let nodes =
-        nodes
-        |> List.map Whitespace.removeWS
-        |> Whitespace.trimWhitespace
-        |> List.map HtmlCharRefs.unescapseNode
-    doctype,nodes
-```
-
-Knowing the above code, you can determine the parsing result as your needs.
-
-generate html source text:
-
 ```Fsharp
-Render.stringifyNode
-Render.stringifyDoc
+module FSharp.HTML.HtmlUtils
 
-HtmlUtils.stringifyNode
-HtmlUtils.stringifyDoc
+let parseDoc (txt: string) =
+    txt
+    |> HtmlCompiler.compileText
+    |> Whitespace.trimWhitespace
+    |> List.map CharacterReference.processCharRefs
 ```
 
-some transform:
-
-```fsharp
-BrRemover.splitByBr
-HrRemover.splitByHr
-```
 
 ## API
 
 The user can parse the string through the functions in the `HtmlUtils` module.
 
 [HtmlUtils](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlUtils.fs)
-
-You can also use a tokenizer to get a token sequence.
-
-```fsharp
-let tokens = HtmlTokenizer.tokenize txt 
-```
-
-The main structure types are defined as follows:
 
 - The type `HtmlNode` see to [HtmlNode](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlNode.fs).
 

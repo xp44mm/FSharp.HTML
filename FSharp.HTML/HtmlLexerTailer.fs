@@ -22,7 +22,6 @@ let tokenize (iter: LexicalIterator<char * int>) =
             match tryNext() with
             | None -> ()
             | Some(rule_id, buff) ->
-                Console.WriteLine($"html:{rule_id},{buff}")
                 let action = actions.[rule_id]
                 let tok = action buff
                 yield! tok

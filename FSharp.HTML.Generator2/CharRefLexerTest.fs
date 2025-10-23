@@ -11,12 +11,12 @@ open FSharp.LexYacc
 open System.IO
 open System.Text
 
-type AttributeLexerTest(output: ITestOutputHelper) as this =
+type CharRefLexerTest(output: ITestOutputHelper) as this =
     let name =
         let x = this.GetType().Name
         x.Substring(0, x.Length - 4)
 
-    let srcPath = Path.Combine(__SOURCE_DIRECTORY__, "attribute.fslex")
+    let srcPath = Path.Combine(__SOURCE_DIRECTORY__, "char_ref.fslex")
 
     let text = File.ReadAllText(srcPath, Encoding.UTF8)
 
@@ -26,8 +26,9 @@ type AttributeLexerTest(output: ITestOutputHelper) as this =
         let src = printer.print()
         //output.WriteLine(src)
 
-        let path = Path.Combine(Dir.attributes, name + ".fs")
+        let path = Path.Combine(Dir.html, name + ".fs")
         File.WriteAllText(path, src, Encoding.UTF8)
         output.WriteLine($"output:\r\n{path}")
 
         ()
+

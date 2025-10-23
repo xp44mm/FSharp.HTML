@@ -43,10 +43,10 @@ type RenderTest(output:ITestOutputHelper) =
 
         let y = 
             x
-            |> HtmlUtils.parseDoc
-            |> Render.stringifyDoc
+            |> HtmlCompiler.compileText
+            //|> Render.stringifyDoc
 
-        output.WriteLine(y)
+        output.WriteLine(stringify y)
 
 
 

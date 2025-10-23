@@ -1,4 +1,4 @@
-{
+﻿{
 module FSharp.HTML.CdataLexer
 open System
 open FSharp.LexYacc

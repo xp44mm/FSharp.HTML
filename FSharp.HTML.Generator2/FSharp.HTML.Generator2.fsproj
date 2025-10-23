@@ -20,6 +20,8 @@
     <Compile Include="HtmlLexerTest.fs" />
     <None Include="html.fsyacc" />
     <Compile Include="HtmlYaccTest.fs" />
+    <None Include="char_ref.fslex" />
+    <Compile Include="CharRefLexerTest.fs" />
     <Compile Include="TokenGenerationTest.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>

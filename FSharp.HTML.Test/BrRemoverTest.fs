@@ -24,7 +24,7 @@ type BrRemoverTest(output:ITestOutputHelper) =
         </p>
 """
 
-        let _,y = HtmlUtils.parseDoc x
+        let y = HtmlCompiler.compileText x |> Whitespace.trimWhitespace
         show y
 
         let z = 
@@ -48,7 +48,10 @@ type BrRemoverTest(output:ITestOutputHelper) =
         </p>
         """
 
-        let _,y = HtmlUtils.parseDoc x
+        let y = 
+            HtmlCompiler.compileText x
+            |> Whitespace.trimWhitespace
+
         show y
         let z = 
             match y.[0] with

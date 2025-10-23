@@ -50,7 +50,7 @@ let rules: list<string list*(obj list->obj)> = [
         let result:HtmlToken =
             let name = s1
             let attributes = List.rev s2
-            if s3 && not (TagNames.voidElements.Contains name) then
+            if s3 && not (HtmlSchema.voidElements.Contains name) then
                 TAGSTART(name,attributes)
             else
                 TAGSELFCLOSING(name,attributes)

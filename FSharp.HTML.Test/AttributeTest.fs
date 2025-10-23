@@ -16,7 +16,7 @@ type AttributeTest(output: ITestOutputHelper) =
         let cases = [
             "<div>", TAGSTART("div", [])
             "<br/>", TAGSELFCLOSING("br", [])
-            "<span id=\"\">", TAGSTART("span", [ "id", "\"\"" ])
+            "<span id=\"\">", TAGSTART("span", [ "id", "" ])
         ]
         let x, e = cases.[i]
         let iter = LexicalIterator.forChar x
@@ -31,10 +31,10 @@ type AttributeTest(output: ITestOutputHelper) =
     [<InlineData(3)>]
     member this.``parse tags with attributes``(i: int) =
         let cases = [
-            "<div id=\"test\">", TAGSTART("div", [ "id", "\"test\"" ])
-            "<span class=\"container\" data-value=\"123\">", TAGSTART("span", [ "class", "\"container\""; "data-value", "\"123\"" ])
-            "<input type=\"text\" disabled>", TAGSTART("input", [ "type", "\"text\""; "disabled", "" ])
-            "<img src=\"image.jpg\"/>", TAGSELFCLOSING("img", [ "src", "\"image.jpg\"" ])
+            "<div id=\"test\">", TAGSTART("div", [ "id", "test" ])
+            "<span class=\"container\" data-value=\"123\">", TAGSTART("span", [ "class", "container"; "data-value", "123" ])
+            "<input type=\"text\" disabled>", TAGSELFCLOSING("input", [ "type", "text"; "disabled", "" ])
+            "<img src=\"image.jpg\"/>", TAGSELFCLOSING("img", [ "src", "image.jpg" ])
         ]
         let x, e = cases.[i]
         let iter = LexicalIterator.forChar x
@@ -49,8 +49,8 @@ type AttributeTest(output: ITestOutputHelper) =
     member this.``parse self closing tags``(i: int) =
         let cases = [
             "<br/>", TAGSELFCLOSING("br", [])
-            "<input type=\"submit\" value=\"OK\"/>", TAGSELFCLOSING("input", [ "type", "\"submit\""; "value", "\"OK\"" ])
-            "<meta name=\"viewport\" content=\"width=device-width\"/>", TAGSELFCLOSING("meta", [ "name", "\"viewport\""; "content", "\"width=device-width\"" ])
+            "<input type=\"submit\" value=\"OK\"/>", TAGSELFCLOSING("input", [ "type", "submit"; "value", "OK" ])
+            "<meta name=\"viewport\" content=\"width=device-width\"/>", TAGSELFCLOSING("meta", [ "name", "viewport"; "content", "width=device-width" ])
         ]
         let x, e = cases.[i]
         let iter = LexicalIterator.forChar x
@@ -64,9 +64,9 @@ type AttributeTest(output: ITestOutputHelper) =
     [<InlineData(2)>]
     member this.``parse tags with empty and single quoted values``(i: int) =
         let cases = [
-            "<div id=\"\">", TAGSTART("div", [ "id", "\"\"" ])
-            "<span data-empty=\"\">", TAGSTART("span", [ "data-empty", "\"\"" ])
-            "<div id='test'>", TAGSTART("div", [ "id", "'test'" ])
+            "<div id=\"\">", TAGSTART("div", [ "id", "" ])
+            "<span data-empty=\"\">", TAGSTART("span", [ "data-empty", "" ])
+            "<div id='test'>", TAGSTART("div", [ "id", "test" ])
         ]
         let x, e = cases.[i]
         let iter = LexicalIterator.forChar x
@@ -82,10 +82,10 @@ type AttributeTest(output: ITestOutputHelper) =
     [<InlineData(4)>]
     member this.``parse various html tags``(i: int) =
         let cases = [
-            "<meta charset=\"utf-8\">", TAGSTART("meta", [ "charset", "\"utf-8\"" ])
-            "<link rel=\"stylesheet\" href=\"style.css\"/>", TAGSELFCLOSING("link", [ "rel", "\"stylesheet\""; "href", "\"style.css\"" ])
-            "<input type=\"checkbox\" checked>", TAGSTART("input", [ "type", "\"checkbox\""; "checked", "" ])
-            "<img src=\"test.jpg\" alt=\"test image\"/>", TAGSELFCLOSING("img", [ "src", "\"test.jpg\""; "alt", "\"test image\"" ])
+            "<meta charset=\"utf-8\">", TAGSELFCLOSING("meta", [ "charset", "utf-8" ])
+            "<link rel=\"stylesheet\" href=\"style.css\"/>", TAGSELFCLOSING("link", [ "rel", "stylesheet"; "href", "style.css" ])
+            "<input type=\"checkbox\" checked>", TAGSELFCLOSING("input", [ "type", "checkbox"; "checked", "" ])
+            "<img src=\"test.jpg\" alt=\"test image\"/>", TAGSELFCLOSING("img", [ "src", "test.jpg"; "alt", "test image" ])
             "<span>", TAGSTART("span", [])
         ]
         let x, e = cases.[i]

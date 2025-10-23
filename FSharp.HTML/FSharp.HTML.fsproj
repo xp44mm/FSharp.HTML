@@ -18,11 +18,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="EncodeUtils.fs" />
-		<Compile Include="TagNames.fs" />
-		<Compile Include="HtmlNode.fs" />
 		<Compile Include="TryTokenizer.fs" />
-		<Compile Include="HtmlToken.fs" />
 		<Compile Include="TagLeftToken.fs" />
 		<Compile Include="TagLeftParseTable.fs" />
 		<Compile Include="TagLeftCompiler.fs" />
@@ -35,12 +31,12 @@
 		<Compile Include="OmittedTagend.fs" />
 
 		<Compile Include="HtmldocCompiler.fs" />
-		<Compile Include="Whitespace.fs" />
 		<Compile Include="HtmlCharRefs.fs" />
+		<Compile Include="EncodeUtils.fs" />
+		<Compile Include="HtmlSchema.fs" />
+		<Compile Include="HtmlNode.fs" />
+		<Compile Include="HtmlToken.fs" />
 		<Compile Include="Render.fs" />
-		<Compile Include="HtmlUtils.fs" />
-		<Compile Include="BrRemover.fs" />
-		<Compile Include="HrRemover.fs" />
 		<Compile Include="attributes\AttributeToken.fs" />
 		<Compile Include="attributes\AttributeLexer.fs" />
 		<Compile Include="attributes\AttributeLexerTailer.fs" />
@@ -54,6 +50,11 @@
 		<Compile Include="HtmlLexerTailer.fs" />
 		<Compile Include="HtmlYacc.fs" />
 		<Compile Include="HtmlCompiler.fs" />
+		<Compile Include="Whitespace.fs" />
+		<Compile Include="CharRefLexer.fs" />
+		<Compile Include="CharRefLexerTailer.fs" />
+		<Compile Include="CharacterReference.fs" />
+		<Compile Include="HtmlUtils.fs" />
 		
 		
 		
@@ -61,12 +62,19 @@
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
 		</None>
+		
+		
+		
+		<Compile Include="HrRemover.fs" />
+		
+		
+		
+		<Compile Include="BrRemover.fs" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FSharp.Idioms" Version="1.4.38" />
 		<PackageReference Include="FSharp.LexYacc" Version="0.0.6" />
-		<PackageReference Include="FslexFsyacc" Version="1.5.6" />
 		<PackageReference Include="System.Reactive" Version="6.1.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.10" />
 	</ItemGroup>

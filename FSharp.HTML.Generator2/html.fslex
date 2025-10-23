@@ -53,14 +53,15 @@ rule comment cdata attribute : char list -> HtmlToken list =
     [TAGEND (str.Substring(0, str.Length - 1).Trim())]
 }
 
-'<' [^ '/' '!' '>' ] [^ '>' ]* '>' { [attribute buff] }
+'<' [^ '!' '/' '>' ] [^ '>' ]* '>' { [attribute buff] }
 
 [^ '<' ]+ {
+    let s = String(Array.ofList buff)
     [
-    if List.forall Char.IsWhiteSpace buff then
-        WS
-    else
-        TEXT (String(Array.ofList buff))
+        if String.IsNullOrWhiteSpace s then
+            WS s
+        else
+            TEXT s
     ]
 }
 
