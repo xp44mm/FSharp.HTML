@@ -63,3 +63,5 @@ The user can parse the string through the functions in the `HtmlUtils` module.
 - The type `HtmlNode` see to [HtmlNode](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlNode.fs).
 
 - The type `HtmlToken` see to [HtmlToken](https://github.com/xp44mm/FSharp.HTML/blob/master/FSharp.HTML/HtmlToken.fs).
+
+EncodeUtils

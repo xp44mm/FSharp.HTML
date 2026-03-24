@@ -1,9 +1,0 @@
-%{
-open FslexFsyacc
-type token = string
-%}
-
-%%
-
-t { lexbuf }
-f { [] }

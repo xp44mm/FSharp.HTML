@@ -1,7 +1,7 @@
 ﻿namespace FSharp.HTML
 
 open Xunit
-open Xunit.Abstractions
+
 
 open FSharp.xUnit
 open FSharp.Idioms.Literal
@@ -21,8 +21,8 @@ type HtmlYaccTest(output: ITestOutputHelper) as this =
 
     let text = File.ReadAllText(srcPath, Encoding.UTF8)
 
-    [<Fact>] // (Skip = "生成")
-    member _.``生成Yacc文件``() =
+    [<Fact(Skip = "没有改变，不必重复生成")>] //
+    member _.``生成``() =
         let rawFsyacc = FsyaccCompiler.compile text
         let fsyacc = FlatFsyaccFile.from rawFsyacc
         let printer = FsyaccFilePrinter.from fsyacc
@@ -35,3 +35,31 @@ type HtmlYaccTest(output: ITestOutputHelper) as this =
         output.WriteLine($"output:\r\n{path}")
 
         ()
+
+
+    [<Fact>]
+    member _.``验证``() =
+        // actual
+        let stateSymbols = HtmlYacc.stateSymbols
+        let actions = HtmlYacc.actions
+        let rules = HtmlYacc.rules
+
+        // expect
+        let rawFsyacc = FsyaccCompiler.compile text
+        let flatFsyacc = FlatFsyaccFile.from rawFsyacc
+        let yaccFile = FsyaccFilePrinter.from flatFsyacc
+
+        // compare
+        Should.equal yaccFile.stateSymbols stateSymbols
+        Should.equal yaccFile.actions actions
+
+        let productions1 = yaccFile.rules |> List.map fst
+        let productions2 = rules |> List.map fst
+        Should.equal productions1 productions2
+
+        // todo: header 比较
+        // todo: actions 比较
+
+        ()
+
+

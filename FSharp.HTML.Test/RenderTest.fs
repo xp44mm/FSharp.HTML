@@ -1,9 +1,9 @@
 ﻿namespace FSharp.HTML
 
 open Xunit
-open Xunit.Abstractions
-open FSharp.Idioms.Literal
 open FSharp.xUnit
+
+open FSharp.Idioms.Literal
 
 type RenderTest(output:ITestOutputHelper) =
     let show res =

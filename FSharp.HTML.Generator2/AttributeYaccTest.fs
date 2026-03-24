@@ -1,8 +1,6 @@
 ﻿namespace FSharp.HTML
 
 open Xunit
-open Xunit.Abstractions
-
 open FSharp.xUnit
 open FSharp.Idioms.Literal
 open FSharp.LexYacc
@@ -21,7 +19,7 @@ type AttributeYaccTest(output: ITestOutputHelper) as this =
 
     let text = File.ReadAllText(srcPath, Encoding.UTF8)
 
-    [<Fact>] // (Skip = "生成")
+    [<Fact(Skip = "没有改变，不必重复生成")>] //
     member _.``生成Yacc文件``() =
         let rawFsyacc = FsyaccCompiler.compile text
         let flatFsyacc = FlatFsyaccFile.from rawFsyacc
@@ -34,5 +32,30 @@ type AttributeYaccTest(output: ITestOutputHelper) as this =
             Path.Combine(Dir.attributes, name + ".fs")
         File.WriteAllText(path, src, Encoding.UTF8)
         output.WriteLine($"output:\r\n{path}")
+
+        ()
+        
+    [<Fact>]
+    member _.``验证``() =
+        // actual
+        let stateSymbols = AttributeYacc.stateSymbols
+        let actions = AttributeYacc.actions
+        let rules = AttributeYacc.rules
+
+        // expect
+        let rawFsyacc = FsyaccCompiler.compile text
+        let flatFsyacc = FlatFsyaccFile.from rawFsyacc
+        let yaccFile = FsyaccFilePrinter.from flatFsyacc
+
+        // compare
+        Should.equal yaccFile.stateSymbols stateSymbols
+        Should.equal yaccFile.actions actions
+
+        let productions1 = yaccFile.rules |> List.map fst
+        let productions2 = rules |> List.map fst
+        Should.equal productions1 productions2
+
+        // todo: header 比较
+        // todo: actions 比较
 
         ()

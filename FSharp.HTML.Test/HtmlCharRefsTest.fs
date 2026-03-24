@@ -1,7 +1,7 @@
 ﻿namespace FSharp.HTML
 
 open Xunit
-open Xunit.Abstractions
+
 open FSharp.Idioms.Literal
 open FSharp.xUnit
 

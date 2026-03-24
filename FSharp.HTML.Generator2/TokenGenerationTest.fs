@@ -1,12 +1,7 @@
 ﻿namespace FSharp.HTML
 
 open Xunit
-open Xunit.Abstractions
-
 open FSharp.LexYacc
-open FSharp.LexYacc.Bootstrap
-open System
-open Microsoft.FSharp.Reflection
 
 type TokenGenerationTest(output: ITestOutputHelper) =
 
