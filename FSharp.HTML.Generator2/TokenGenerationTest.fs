@@ -14,12 +14,14 @@ type TokenGenerationTest(output: ITestOutputHelper) =
                 AttributeToken.GT, ">"
                 AttributeToken.LT, "<"
             ]
-        let src = DiscriminatedUnions.generate symbols
+        //let src = DiscriminatedUnions.generate symbols
+        let src = DiscriminatedUnions.generate_module symbols
+
         output.WriteLine(src)
 
     [<Fact>]
     member _.``生成-HtmlToken``() =
         let symbols: (HtmlToken * string) list = []
-        let src = DiscriminatedUnions.generate symbols
+        let src = DiscriminatedUnions.generate_module symbols
         output.WriteLine(src)
 

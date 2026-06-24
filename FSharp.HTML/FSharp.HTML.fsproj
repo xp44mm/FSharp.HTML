@@ -18,20 +18,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Compile Include="TryTokenizer.fs" />
-		<Compile Include="TagLeftToken.fs" />
-		<Compile Include="TagLeftParseTable.fs" />
-		<Compile Include="TagLeftCompiler.fs" />
-		<Compile Include="HtmlTokenUtils.fs" />
-		<Compile Include="HtmldocParseTable.fs" />
-		<Compile Include="Comb1DFA.fs" />
-		<Compile Include="Comb2DFA.fs" />
-		<Compile Include="Comb2plus1DFA.fs" />
-		<Compile Include="Comb3plus1DFA.fs" />
-		<Compile Include="OmittedTagend.fs" />
-
-		<Compile Include="HtmldocCompiler.fs" />
-		<Compile Include="HtmlCharRefs.fs" />
 		<Compile Include="EncodeUtils.fs" />
 		<Compile Include="HtmlSchema.fs" />
 		<Compile Include="HtmlNode.fs" />
@@ -77,14 +63,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="FSharp.Idioms" Version="1.5.5" />
-		<PackageReference Include="FSharp.LexYacc" Version="0.0.6" />
+		<PackageReference Include="FSharp.Idioms" Version="1.5.10" />
+		<PackageReference Include="FSharp.LexYacc" Version="0.0.8" />
 		<PackageReference Include="System.Reactive" Version="6.1.0" />
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.5" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="10.0.9" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Update="FSharp.Core" Version="10.1.201" />
+		<PackageReference Update="FSharp.Core" Version="10.1.301" />
 	</ItemGroup>
 
 </Project>

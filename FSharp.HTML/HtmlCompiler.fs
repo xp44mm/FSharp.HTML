@@ -1,19 +1,17 @@
 ﻿module FSharp.HTML.HtmlCompiler
 
 open System
-
 open FSharp.Idioms
 open FSharp.Idioms.Literal
 open FSharp.LexYacc
 
-let tokenRow tok =
-    { token = tok; tag = HtmlToken.tag tok; lexeme = HtmlToken.lexeme tok }
+let tokenRow tok = { token = tok; tag = HtmlToken.tag tok; lexeme = HtmlToken.lexeme tok }
 
 let getSymbols states =
     states
     |> List.map(fun s -> HtmlYacc.stateSymbols.[s.state])
 
-/// 不检查错误的reduce, todo add to ParseTable
+/// HtmlYacc.parser.tryReduceBeforeShift
 let reduce states token =
     let tok = Some token
     let rec loop states =
@@ -22,13 +20,13 @@ let reduce states token =
         | NextParseAction.Shifted _ -> states
         | _ -> states
     loop states
-
-/// 强制reduce 用node 的一个合法follow Token，其实也是node的first token。
-let forceReduce (states: StateInParseStack list) =
+/// 强制 reduce 用 node 的一个合法 follow Token，其实也是 node 的 first token。
+let forceReduce (states: YaccState list) =
     let ws = tokenRow(HtmlToken.TEXT "")
     reduce states ws
 
-let getOpeningsAll (states: StateInParseStack list) =
+///获取所有开标签的名称
+let getOpeningsAll (states: YaccState list) =
     let states = forceReduce states
 
     states
@@ -40,8 +38,9 @@ let getOpeningsAll (states: StateInParseStack list) =
             None
     )
 
-let getOpenings (name: string) (states: StateInParseStack list) =
-    let rec loop openings (states: StateInParseStack list) =
+/// 获取指定name下的开标签名称
+let getOpenings (name: string) (states: YaccState list) =
+    let rec loop (openings:string list) (states: YaccState list) =
         match states with
         | s :: tail ->
             if HtmlYacc.stateSymbols.[s.state] = "TAGSTART" then
@@ -60,9 +59,10 @@ let getOpenings (name: string) (states: StateInParseStack list) =
 
 let parseTokens (tokens: seq<HtmlToken>) =
     tokens
-    |> Seq.map(fun tok ->
-        { token = tok; tag = HtmlToken.tag tok; lexeme = HtmlToken.lexeme tok }
-    )
+    |> Seq.map(fun tok -> 
+        //{ token = tok; tag = HtmlToken.tag tok; lexeme = HtmlToken.lexeme tok }
+        tokenRow tok
+        )
     |> Iterator
     |> HtmlYacc.parser.parse
 
@@ -74,20 +74,21 @@ let compile (iter: LexicalIterator<char * int>) =
     |> HtmlYacc.unboxRoot
 
 let compileText (input: string) =
-    let tokens =
+    
+    let tokens = // LexicalIterator.forChar input
         input.ToCharArray()
         |> Array.map(fun ch -> ch, int ch)
         |> ArrayStack
         |> LexicalIterator.ofArrayStack
         |> HtmlLexerTailer.tokenize
-
+    
     let mutable states = [ { state = 0; lexeme = null } ]
 
     seq {
         yield! tokens
         yield EOF
     }
-    |> Seq.collect(fun tok ->
+    |> Seq.collect(fun tok -> //补充tagend
         match tok with
         | EOF ->
             let closingTags =
@@ -105,19 +106,18 @@ let compileText (input: string) =
     )
     |> Seq.map(fun tok ->
         //Console.WriteLine($"token:{stringify tok}")
-        { token = tok; tag = HtmlToken.tag tok; lexeme = HtmlToken.lexeme tok }
-    )
+        //{ token = tok; tag = HtmlToken.tag tok; lexeme = HtmlToken.lexeme tok }
+        tokenRow tok
+        )
     |> Seq.iter(fun tok -> states <- HtmlYacc.parser.shift states tok)
 
     //Console.WriteLine($"states:{stringify symbols}")
-
     match HtmlYacc.parser.tryReduceBeforeAccept(states) with
     | Some reducedstates -> states <- reducedstates
     | None -> ()
 
     match states with
-    | [ { state = 1; lexeme = lxm }; { state = 0; lexeme = null } ] ->
-        HtmlYacc.unboxRoot lxm
-    | _ -> 
+    | [ { state = 1; lexeme = lxm }; { state = 0; lexeme = null } ] -> HtmlYacc.unboxRoot lxm
+    | _ ->
         let symbols = getSymbols states
         failwith $"{stringify symbols}"
